@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(uuid()) @db.Uuid
+  name           String
+  email          String          @unique
+  password       String
+  role           String          // 'admin', 'vendor', 'customer'
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  shops          Shop[]
+  orders         Order[]
+  reviews        Review[]  
+  followedShops  ShopFollower[]  // Renamed for clarity
+  shopFollowers  Shop[]          @relation("ShopFollowers")  // Added this relation field
+   payments       Payment[] 
+}
+
+model Shop {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String
+  description String?
+  logo        String?
+  vendorId    String
+  vendor      User      @relation(fields: [vendorId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+  orders      Order[]
+  followers   User[]    @relation("ShopFollowers")
+  
+  shopFollowers ShopFollower[]  // Added the reverse relation here
+}
+
+model ShopFollower {
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String
+  shopId      String
+  user        User      @relation(fields: [userId], references: [id])
+  shop        Shop      @relation(fields: [shopId], references: [id])
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, shopId]) // Prevent duplicate entries
+  @@index([userId])
+  @@index([shopId])
+}
+
+model Product {
+  id          String    @id @default(uuid()) @db.Uuid
+  name        String
+  description String
+  price       Float
+  category    String
+  inventory   Int
+  shopId      String    // Changed to String (UUID)
+  shop        Shop      @relation(fields: [shopId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  images      ProductImage[]
+  reviews     Review[]
+  orderItems  OrderItem[]
+}
+
+model ProductImage {
+  id          String    @id @default(uuid()) @db.Uuid
+  imageUrl    String
+  productId   String    // Changed to String (UUID)
+  product     Product   @relation(fields: [productId], references: [id])
+  createdAt   DateTime  @default(now())
+}
+
+model Order {
+  id          String    @id @default(uuid()) @db.Uuid  // Change to String (UUID)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id])
+  shopId      String
+  shop        Shop      @relation(fields: [shopId], references: [id])
+  totalAmount Float
+  status      String    // 'pending', 'completed', 'canceled'
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  items       OrderItem[]
+  payments    Payment[]
+  @@index([shopId])    // Add index for shopId
+  @@index([userId])    // Add index for userId
+}
+
+
+model OrderItem {
+  id          String    @id @default(uuid()) @db.Uuid // Change to String (UUID)
+  productId   String
+  product     Product   @relation(fields: [productId], references: [id])
+  orderId     String
+  order       Order     @relation(fields: [orderId], references: [id])
+  quantity    Int
+  price       Float
+
+  @@index([orderId])   // Add index for orderId
+  @@index([productId]) // Add index for productId
+}
+
+
+model Review {
+  id          String    @id @default(uuid()) @db.Uuid  // Change to String (UUID)
+  userId      String    // Change to String (UUID)
+  user        User      @relation(fields: [userId], references: [id])
+  productId   String    // Change to String (UUID)
+  product     Product   @relation(fields: [productId], references: [id])
+  rating      Int       // 1-5
+  comment     String?
+  createdAt   DateTime  @default(now())
+
+  @@index([userId])     // Add index for userId
+  @@index([productId])  // Add index for productId
+}
+
+model Coupon {
+  id          Int       @id @default(autoincrement())
+  code        String    @unique
+  discount    Float     // Percentage or fixed amount
+  validFrom   DateTime
+  validUntil  DateTime
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+
+model Payment {
+  id            String    @id @default(uuid()) @db.Uuid
+  orderId       String    // The order this payment is associated with
+  order         Order     @relation(fields: [orderId], references: [id])  // Relation to Order
+  userId        String    // The user who made the payment
+  user          User      @relation(fields: [userId], references: [id])  // Relation to User
+  amount        Float     // The amount paid
+  paymentMethod String    // The payment method (e.g., 'Credit Card', 'Stripe', 'PayPal', etc.)
+  status        String    // Payment status (e.g., 'pending', 'completed', 'failed', 'canceled')
+  transactionId String?   // Transaction ID from the payment gateway (optional)
+  createdAt     DateTime  @default(now())  // Timestamp for when the payment was made
+  updatedAt     DateTime  @updatedAt       // Automatically updated on changes
+
+  @@index([orderId])  // Index to speed up queries related to orders
+  @@index([userId])   // Index to speed up queries related to users
+  @@index([status])   // Index to speed up queries by payment status
+}
