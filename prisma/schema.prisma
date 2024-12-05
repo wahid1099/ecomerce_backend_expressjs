@@ -16,17 +16,30 @@ datasource db {
 model User {
   id             String          @id @default(uuid()) @db.Uuid
   name           String
+  username       String         @unique
   email          String          @unique
   password       String
+  profileImage   String?         // Optional profile image URL
+  phone          String?         // Optional phone number
+  addressBook    String?         // Optional address details
+  zipCode        String?         // Optional ZIP code
+  city           String?         // Optional city
+  state          String?         // Optional state
+  country        String?         // Optional country
   role           String          // 'admin', 'vendor', 'customer'
+  isSuspended    Boolean         @default(false)
+  isDeleted      Boolean         @default(false)
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
+  lastLoginAt      DateTime?    // Stores the timestamp of the last login
+  lastLoginDevice  String?     // Stores the device info (e.g., User-Agent string)
+  lastLoginLocation String?     // Stores the location (e.g., IP-based geolocation)
   shops          Shop[]
   orders         Order[]
   reviews        Review[]  
-  followedShops  ShopFollower[]  // Renamed for clarity
+  followedShops  ShopFollower[]  
   shopFollowers  Shop[]          @relation("ShopFollowers")  // Added this relation field
-   payments       Payment[] 
+  payments       Payment[] 
 }
 
 model Shop {
@@ -36,6 +49,7 @@ model Shop {
   logo        String?
   vendorId    String
   vendor      User      @relation(fields: [vendorId], references: [id])
+  isBlacklisted Boolean @default(false) 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    Product[]
