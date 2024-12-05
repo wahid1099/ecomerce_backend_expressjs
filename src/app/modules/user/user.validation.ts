@@ -65,7 +65,7 @@ const UserSchemaUpdate = z.object({
   isDeleted: z.boolean().optional(),
 });
 
-export const MemberValidationSchema = {
+export const  UserValidationSchema = {
   UserSchemaCreate,
   UserSchemaUpdate,
 };

@@ -26,7 +26,7 @@ model User {
   city           String?         // Optional city
   state          String?         // Optional state
   country        String?         // Optional country
-  role           String          // 'admin', 'vendor', 'customer'
+  role           UserRole          // 'admin', 'vendor', 'customer'
   isSuspended    Boolean         @default(false)
   isDeleted      Boolean         @default(false)
   createdAt      DateTime        @default(now())
@@ -34,6 +34,7 @@ model User {
   lastLoginAt      DateTime?    // Stores the timestamp of the last login
   lastLoginDevice  String?     // Stores the device info (e.g., User-Agent string)
   lastLoginLocation String?     // Stores the location (e.g., IP-based geolocation)
+  passwordChangedAt DateTime     @default(now())
   shops          Shop[]
   orders         Order[]
   reviews        Review[]  
@@ -168,4 +169,11 @@ model Payment {
   @@index([orderId])  // Index to speed up queries related to orders
   @@index([userId])   // Index to speed up queries related to users
   @@index([status])   // Index to speed up queries by payment status
+}
+
+
+enum UserRole {
+  Admin
+  Vendor
+  Customer
 }

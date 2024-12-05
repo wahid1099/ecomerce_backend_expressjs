@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
+import ApiError from "../../errors/ApiErros";
 
 const inserUserIntoDB = catchAsync(async (req: Request, res: Response) => {
   const result = await UserService.createUser(req.body);
@@ -16,7 +17,7 @@ const inserUserIntoDB = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllUsersfromDb = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.getAllUser();
+  const result = await UserService.getAllUsers();
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -25,9 +26,9 @@ const getAllUsersfromDb = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const getSingleUserfromDb = catchAsync(async (req: Request, res: Response) => {
+const getMyprofilefromDb = catchAsync(async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const result = await UserService.getSingleUser(userId);
+  const result = await UserService.getMyProfileService(userId);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -57,10 +58,30 @@ const deleteUserfromDb = async (req: Request, res: Response) => {
   });
 };
 
+const suspendVendor = catchAsync(async (req: Request, res: Response) => {
+  const { vendorId } = req.params;
+  const { isSuspended } = req.body;
+
+  // Validate that `isSuspended` is provided and is a boolean
+  if (typeof isSuspended !== "boolean") {
+    throw new ApiError(httpStatus.BAD_REQUEST, "isSuspended must be a boolean");
+  }
+
+  const result = await UserService.suspendVendor(vendorId, isSuspended);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: `Vendor ${isSuspended ? "suspended" : "unsuspended"} successfully`,
+    data: result,
+  });
+});
+
 export const UserController = {
   inserUserIntoDB,
   getAllUsersfromDb,
-  getSingleUserfromDb,
+  getMyprofilefromDb,
   updateUserIntoDb,
   deleteUserfromDb,
+  suspendVendor,
 };

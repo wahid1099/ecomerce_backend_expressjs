@@ -37,7 +37,7 @@ const createUser = async (userData: IUser) => {
       role,
       city: userData.city || null,
       state: userData.state || null,
-      zip: userData.zip || null,
+      zip: userData.zipCode || null,
       country: userData.country || null,
       phone: userData.phone || null,
     },
@@ -67,24 +67,86 @@ const updateUser = async (UserId: string, payload: Partial<IUserUpdate>) => {
   return updatedUser;
 };
 
-const deleteUser = async (UserId: string) => {
-  const user = await prisma.member.findUnique({
-    where: { memberId: UserId },
-  });
-  if (!user) {
-    throw new ApiError(httpStatus.NOT_FOUND, "User Not found");
-  }
-  const result = await prisma.member.delete({
-    where: { memberId: UserId },
+const getMyProfileService = async (userId: string) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId, isDeleted: false },
+    include: {
+      shops: true,
+      orders: true,
+      reviews: true,
+      followedShops: true,
+      shopFollowers: true,
+      payments: true,
+    },
   });
 
-  return result;
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  return user;
+};
+
+const getAllUsers = async () => {
+  const users = await prisma.user.findMany({
+    include: {
+      shops: true,
+      orders: true,
+      reviews: true,
+      followedShops: true,
+      shopFollowers: true,
+      payments: true,
+    },
+  });
+
+  return users;
+};
+
+const deleteUser = async (userId: string) => {
+  const userExists = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!userExists) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: { isDeleted: true },
+  });
+
+  return updatedUser;
+};
+
+const suspendVendor = async (vendorId: string, isSuspended: boolean) => {
+  // Check if the user exists and is a vendor
+  const user = await prisma.user.findUnique({
+    where: { id: vendorId },
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Vendor not found");
+  }
+
+  if (user.role !== "vendor") {
+    throw new ApiError(httpStatus.BAD_REQUEST, "User is not a vendor");
+  }
+
+  // Update the `isSuspended` status
+  const updatedUser = await prisma.user.update({
+    where: { id: vendorId },
+    data: { isSuspended },
+  });
+
+  return updatedUser;
 };
 
 export const UserService = {
   createUser,
-  getAllUser,
-  getSingleUser,
+  getAllUsers,
+  getMyProfileService,
   updateUser,
   deleteUser,
+  suspendVendor,
 };
