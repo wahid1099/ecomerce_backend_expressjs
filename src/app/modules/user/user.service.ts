@@ -142,6 +142,21 @@ const suspendVendor = async (vendorId: string, isSuspended: boolean) => {
   return updatedUser;
 };
 
+const getUserFollowedShops = async (userId: string) => {
+  const followedShops = await prisma.shopFollower.findMany({
+    where: { userId },
+    include: {
+      shop: true, // Include shop details
+    },
+  });
+
+  return followedShops.map((record: any) => ({
+    id: record.shop.id,
+    name: record.shop.name,
+    description: record.shop.description,
+  }));
+};
+
 export const UserService = {
   createUser,
   getAllUsers,
@@ -149,4 +164,5 @@ export const UserService = {
   updateUser,
   deleteUser,
   suspendVendor,
+  getUserFollowedShops,
 };

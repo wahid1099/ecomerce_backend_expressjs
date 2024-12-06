@@ -77,6 +77,17 @@ const suspendVendor = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getUserFollowedShops = catchAsync(async (req: Request, res: Response) => {
+  const userId = req.user?.id; // Assuming user ID is in the request
+
+  const result = await UserService.getUserFollowedShops(userId);
+
+  res.status(httpStatus.OK).json({
+    success: true,
+    data: result,
+  });
+});
+
 export const UserController = {
   inserUserIntoDB,
   getAllUsersfromDb,
@@ -84,4 +95,5 @@ export const UserController = {
   updateUserIntoDb,
   deleteUserfromDb,
   suspendVendor,
+  getUserFollowedShops,
 };

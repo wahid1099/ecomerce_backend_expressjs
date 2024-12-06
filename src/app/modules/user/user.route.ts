@@ -26,6 +26,11 @@ router.get(
   UserController.getMyprofilefromDb
 );
 
+router.get(
+  "/followed-shops",
+  Auth(UserRole.Customer),
+  UserController.getUserFollowedShops
+);
 router.patch(
   "/update-my-profile/:userId",
   Auth(UserRole.Admin, UserRole.Customer, UserRole.Vendor),
