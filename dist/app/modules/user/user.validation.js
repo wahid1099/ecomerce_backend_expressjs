@@ -14,7 +14,7 @@ const UserSchemaCreate = zod_1.z.object({
         .string()
         .min(6, { message: "Password must be at least 6 characters long" })
         .max(100, { message: "Password must be less than 100 characters" }),
-    role: zod_1.z.enum(["admin", "vendor", "customer"], { message: "Invalid role" }),
+    role: zod_1.z.enum(["Admin", "Vendor", "Customer"], { message: "Invalid role" }),
     profileImage: zod_1.z
         .string()
         .url({ message: "Invalid profile image URL" })

@@ -12,7 +12,7 @@ const UserSchemaCreate = z.object({
     .string()
     .min(6, { message: "Password must be at least 6 characters long" })
     .max(100, { message: "Password must be less than 100 characters" }),
-  role: z.enum(["admin", "vendor", "customer"], { message: "Invalid role" }),
+  role: z.enum(["Admin", "Vendor", "Customer"], { message: "Invalid role" }),
   profileImage: z
     .string()
     .url({ message: "Invalid profile image URL" })
@@ -65,7 +65,7 @@ const UserSchemaUpdate = z.object({
   isDeleted: z.boolean().optional(),
 });
 
-export const  UserValidationSchema = {
+export const UserValidationSchema = {
   UserSchemaCreate,
   UserSchemaUpdate,
 };
