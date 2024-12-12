@@ -1,4 +1,4 @@
-import { IPayment } from "../Payment/payment.interface";
+import { IPayment } from "../payment/payment.interface";
 import { IProduct } from "../products/product.interface";
 import { IUser } from "../user/user.interface";
 import { IShop } from "../shop/shop.interface";

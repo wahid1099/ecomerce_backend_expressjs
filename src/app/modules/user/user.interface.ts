@@ -1,4 +1,4 @@
-import { IPayment } from "../Payment/payment.interface";
+import { IPayment } from "../payment/payment.interface";
 import { IShop, IShopFollower } from "../shop/shop.interface";
 import { IOrder } from "../order/order.interface";
 import { IReview } from "../reviews/review.interface";

@@ -1,15 +1,17 @@
 import { IOrder } from "../order/order.interface";
 import { IUser } from "../user/user.interface";
+import { Types } from "mongoose";
+
 export type IPayment = {
   id: string;
-  orderId: string;
+  orderId: Types.ObjectId;
   order?: IOrder;
-  userId: string;
+  userId: Types.ObjectId;
   user?: IUser;
   amount: number;
   method: "card" | "bank_transfer" | "cash_on_delivery";
   status: "success" | "failed" | "pending";
-  transactionId?: string;
+  transactionId?: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
 };
