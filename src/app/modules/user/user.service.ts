@@ -39,18 +39,21 @@ const updateUser = async (userId: string, payload: Partial<IUserUpdate>) => {
 };
 
 const getMyProfileService = async (email: string) => {
-  const user = await User.findOne({ email: email, isDeleted: false })
-    .populate("shops")
-    .populate("orders")
-    .populate("reviews")
-    .populate("followedShops")
-    .populate("shopFollowers")
-    .populate("payments");
+  const user = await User.findOne({ email, isDeleted: false })
+    .populate("shops") // Populating the 'shops' field (assuming it's an array of ObjectIds referencing the Shop model)
+    .populate("orders") // Populating the 'orders' field (assuming it's an array of ObjectIds referencing the Order model)
+    .populate("reviews") // Populating the 'reviews' field (assuming it's an array of ObjectIds referencing the Review model)
+    .populate("followedShops") // Populating the 'followedShops' field (assuming it's an array of ObjectIds referencing the Shop model)
+    .populate("shopFollowers") // Populating the 'shopFollowers' field (assuming it's an array of ObjectIds referencing the Shop model)
+    .populate("payments"); // Populating the 'payments' field (assuming it's an array of ObjectIds referencing the Payment model)
 
+  // Check if the user was found
   if (!user) {
+    // Throw a custom error if user not found
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 
+  // Return the user with populated data
   return user;
 };
 

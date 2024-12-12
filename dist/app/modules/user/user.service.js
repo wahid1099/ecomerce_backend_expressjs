@@ -40,16 +40,19 @@ const updateUser = (userId, payload) => __awaiter(void 0, void 0, void 0, functi
     return existingUser;
 });
 const getMyProfileService = (email) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findOne({ email: email, isDeleted: false })
-        .populate("shops")
-        .populate("orders")
-        .populate("reviews")
-        .populate("followedShops")
-        .populate("shopFollowers")
-        .populate("payments");
+    const user = yield user_model_1.User.findOne({ email, isDeleted: false })
+        .populate("shops") // Populating the 'shops' field (assuming it's an array of ObjectIds referencing the Shop model)
+        .populate("orders") // Populating the 'orders' field (assuming it's an array of ObjectIds referencing the Order model)
+        .populate("reviews") // Populating the 'reviews' field (assuming it's an array of ObjectIds referencing the Review model)
+        .populate("followedShops") // Populating the 'followedShops' field (assuming it's an array of ObjectIds referencing the Shop model)
+        .populate("shopFollowers") // Populating the 'shopFollowers' field (assuming it's an array of ObjectIds referencing the Shop model)
+        .populate("payments"); // Populating the 'payments' field (assuming it's an array of ObjectIds referencing the Payment model)
+    // Check if the user was found
     if (!user) {
+        // Throw a custom error if user not found
         throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found");
     }
+    // Return the user with populated data
     return user;
 });
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
