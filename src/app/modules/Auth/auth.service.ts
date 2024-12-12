@@ -13,17 +13,20 @@ const loginUser = async (payload: { email: string; password: string }) => {
   if (!user) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid credentials!");
   }
+  // Check if the provided password matches the hashed password in the database
 
   const isPasswordValid = await bcrypt.compare(payload.password, user.password);
   if (!isPasswordValid) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid credentials!");
   }
+  // Generate JWT tokens
 
   const accessToken = jwtHelpers.generateToken(
     { email: user.email, role: user.role },
     config.jwt.jwt_secret as Secret,
     config.jwt.expires_in as string
   );
+  // Generate refresh tokens
 
   const refreshToken = jwtHelpers.generateToken(
     { email: user.email, role: user.role },
@@ -31,6 +34,9 @@ const loginUser = async (payload: { email: string; password: string }) => {
     config.jwt.refresh_token_expires_in as string
   );
 
+  // Update user's last login timestamp
+  user.lastLoginAt = new Date(); // Set the current date and time
+  await user.save(); // Save the updated user document
   return {
     accessToken,
     refreshToken,

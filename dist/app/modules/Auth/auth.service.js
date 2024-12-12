@@ -48,12 +48,18 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (!user) {
         throw new ApiErros_1.default(http_status_1.default.UNAUTHORIZED, "Invalid credentials!");
     }
+    // Check if the provided password matches the hashed password in the database
     const isPasswordValid = yield bcrypt.compare(payload.password, user.password);
     if (!isPasswordValid) {
         throw new ApiErros_1.default(http_status_1.default.UNAUTHORIZED, "Invalid credentials!");
     }
+    // Generate JWT tokens
     const accessToken = jwthelpers_1.jwtHelpers.generateToken({ email: user.email, role: user.role }, config_1.default.jwt.jwt_secret, config_1.default.jwt.expires_in);
+    // Generate refresh tokens
     const refreshToken = jwthelpers_1.jwtHelpers.generateToken({ email: user.email, role: user.role }, config_1.default.jwt.refresh_token_secret, config_1.default.jwt.refresh_token_expires_in);
+    // Update user's last login timestamp
+    user.lastLoginAt = new Date(); // Set the current date and time
+    yield user.save(); // Save the updated user document
     return {
         accessToken,
         refreshToken,

@@ -26,16 +26,20 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "geoip-lite": "^1.4.10",
     "http-status": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.4",
     "nodemailer": "^6.9.16",
     "ts-node-dev": "^2.0.0",
+    "useragent": "^2.3.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/geoip-lite": "^1.4.4",
     "@types/node": "^22.10.1",
+    "@types/useragent": "^2.3.4",
     "nodemon": "^3.1.7",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
