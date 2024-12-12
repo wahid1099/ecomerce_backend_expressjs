@@ -1,6 +1,8 @@
-import { IOrderItem } from "../Orders/order.interface";
+import { IOrderItem } from "../order/order.interface";
 import { IReview } from "../reviews/review.interface";
 import { IShop } from "../shop/shop.interface";
+import { Types } from "mongoose";
+
 export type IProduct = {
   id: string; // UUID
   name: string;
@@ -8,19 +10,19 @@ export type IProduct = {
   price: number;
   category: string;
   inventory: number;
-  shopId: string; // Shop ID
+  shopId: Types.ObjectId; // Shop ID
   shop?: IShop; // Populated if needed
   createdAt: Date;
   updatedAt: Date;
-  images?: IProductImage[]; // Optional
-  reviews?: IReview[]; // Optional
-  orderItems?: IOrderItem[]; // Optional
+  images?: Types.ObjectId[] | IProductImage[];
+  reviews?: Types.ObjectId[] | IReview[];
+  orderItems?: Types.ObjectId[] | IOrderItem[];
 };
 
 export type IProductImage = {
   id: string; // UUID
   imageUrl: string;
-  productId: string; // Product ID
+  productId: Types.ObjectId;
   product?: IProduct; // Populated if needed
   createdAt: Date;
 };

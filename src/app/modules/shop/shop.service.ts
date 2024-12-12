@@ -1,4 +1,5 @@
-import prisma from "../../../shared/prisma";
+import { Shop, ShopFollower } from "./shop.model";
+import { Order } from "../order/order.model";
 import ApiError from "../../errors/ApiErros";
 import httpStatus from "http-status";
 
@@ -6,11 +7,9 @@ const createShop = async (
   vendorId: string,
   shopData: { name: string; logo?: string; description?: string }
 ) => {
-  const shop = await prisma.shop.create({
-    data: {
-      ...shopData,
-      ownerId: vendorId,
-    },
+  const shop = await Shop.create({
+    ...shopData,
+    vendorId,
   });
   return shop;
 };
@@ -20,14 +19,12 @@ const updateShop = async (
   vendorId: string,
   shopData: { name?: string; logo?: string; description?: string }
 ) => {
-  const shop = await prisma.shop.updateMany({
-    where: {
-      id: shopId,
-      ownerId: vendorId,
-    },
-    data: shopData,
-  });
-  if (!shop.count) {
+  const shop = await Shop.findOneAndUpdate(
+    { _id: shopId, vendorId },
+    shopData,
+    { new: true }
+  );
+  if (!shop) {
     throw new ApiError(
       httpStatus.NOT_FOUND,
       "Shop not found or you don't have permission to edit this shop."
@@ -37,57 +34,41 @@ const updateShop = async (
 };
 
 const getVendorShops = async (vendorId: string) => {
-  const shops = await prisma.shop.findMany({
-    where: {
-      ownerId: vendorId,
-    },
-  });
+  const shops = await Shop.find({ vendorId });
   return shops;
 };
 
 const deleteShop = async (shopId: string, vendorId: string) => {
-  const deletedShop = await prisma.shop.deleteMany({
-    where: {
-      id: shopId,
-      ownerId: vendorId,
-    },
-  });
-  if (!deletedShop.count) {
+  const shop = await Shop.findOneAndDelete({ _id: shopId, vendorId });
+  if (!shop) {
     throw new ApiError(
       httpStatus.NOT_FOUND,
-      "Shop not found or you don't have permission to edit this shop."
+      "Shop not found or you don't have permission to delete this shop."
     );
   }
-  return deletedShop;
+  return shop;
 };
 
 const getShopOrderHistory = async (shopId: string, vendorId: string) => {
-  const orders = await prisma.order.findMany({
-    where: {
-      shopId,
-      shop: { ownerId: vendorId },
-    },
-  });
+  const orders = await Order.find({ shopId, vendorId });
   return orders;
 };
 
 const followShop = async (userId: string, shopId: string) => {
   // Check if shop exists
-  const shop = await prisma.shop.findUniqueOrThrow({
-    where: { id: shopId },
-  });
+  const shop = await Shop.findById(shopId);
+  if (!shop) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found.");
+  }
 
-  if (!shop.count) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found .");
+  // Check if already following
+  const isAlreadyFollowing = await ShopFollower.findOne({ userId, shopId });
+  if (isAlreadyFollowing) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Already following this shop.");
   }
 
   // Add the shop to the user's followedShops
-  await prisma.shopFollower.create({
-    data: {
-      userId,
-      shopId,
-    },
-  });
+  await ShopFollower.create({ userId, shopId });
 
   return {
     message: `You are now following the shop ${shop.name}.`,
@@ -96,23 +77,13 @@ const followShop = async (userId: string, shopId: string) => {
 
 const unfollowShop = async (userId: string, shopId: string) => {
   // Check if the user is following the shop
-  const followRecord = await prisma.shopFollower.findFirst({
-    where: {
-      userId,
-      shopId,
-    },
-  });
-
+  const followRecord = await ShopFollower.findOne({ userId, shopId });
   if (!followRecord) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found .");
+    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found.");
   }
 
   // Remove the follow relationship
-  await prisma.shopFollower.delete({
-    where: {
-      id: followRecord.id,
-    },
-  });
+  await ShopFollower.findByIdAndDelete(followRecord._id);
 
   return {
     message: `You have unfollowed the shop.`,
@@ -120,18 +91,13 @@ const unfollowShop = async (userId: string, shopId: string) => {
 };
 
 const getShopFollowers = async (shopId: string) => {
-  const followers = await prisma.shopFollower.findMany({
-    where: { shopId },
-    include: {
-      user: true, // Include user details
-    },
-  });
+  const followers = await ShopFollower.find({ shopId }).populate("user");
 
-  return followers.map((follower: any) => ({
-    id: follower.user.id,
-    name: follower.user.name,
-    email: follower.user.email,
-    profileImage: follower.user.profileImage,
+  return followers.map((follower) => ({
+    id: follower.user?._id,
+    name: follower.user?.name,
+    email: follower.user?.email,
+    profileImage: follower.user?.profileImage,
   }));
 };
 

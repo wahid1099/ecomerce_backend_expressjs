@@ -1,12 +1,14 @@
 import { IProduct } from "./../products/product.interface";
-import { IOrder } from "../Orders/order.interface";
+import { IOrder } from "../order/order.interface";
 import { IUser } from "../user/user.interface";
+import { Types } from "mongoose";
+
 export type IShop = {
   id: string; // UUID
   name: string;
   description?: string;
   logo?: string;
-  vendorId: string; // User ID
+  vendorId: Types.ObjectId;
   vendor?: IUser; // Populated if needed
   isBlacklisted: boolean;
   createdAt: Date;
@@ -19,8 +21,8 @@ export type IShop = {
 
 export type IShopFollower = {
   id: string; // UUID
-  userId: string; // User ID
-  shopId: string; // Shop ID
+  userId: Types.ObjectId;
+  shopId: Types.ObjectId;
   user?: IUser; // Populated if needed
   shop?: IShop; // Populated if needed
   isBlacklisted?: boolean;

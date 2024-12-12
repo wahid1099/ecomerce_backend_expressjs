@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req: Request, res: Response) => {
   res.send({
-    Message: "Library Management System..",
+    Message: "Multi Vendor Ecomerce  System..",
   });
 });
 

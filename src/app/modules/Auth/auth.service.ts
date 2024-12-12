@@ -1,5 +1,5 @@
 import { jwtHelpers } from "../../../helpers/jwthelpers";
-import prisma from "../../../shared/prisma";
+import { User } from "../user/user.model";
 import * as bcrypt from "bcrypt";
 import config from "../../../config";
 import { Secret } from "jsonwebtoken";
@@ -8,9 +8,7 @@ import ApiError from "../../errors/ApiErros";
 import httpStatus from "http-status";
 
 const loginUser = async (payload: { email: string; password: string }) => {
-  const user = await prisma.user.findUnique({
-    where: { email: payload.email, isDeleted: false },
-  });
+  const user = await User.findOne({ email: payload.email, isDeleted: false });
 
   if (!user) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid credentials!");
@@ -36,7 +34,6 @@ const loginUser = async (payload: { email: string; password: string }) => {
   return {
     accessToken,
     refreshToken,
-    needPasswordChange: user.needPasswordChange,
   };
 };
 
@@ -50,8 +47,9 @@ const refreshToken = async (token: string) => {
     throw new ApiError(httpStatus.FORBIDDEN, "Invalid refresh token!");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: decodedData.email, isDeleted: false },
+  const user = await User.findOne({
+    email: decodedData.email,
+    isDeleted: false,
   });
 
   if (!user) {
@@ -64,15 +62,16 @@ const refreshToken = async (token: string) => {
     config.jwt.expires_in as string
   );
 
-  return { accessToken, needPasswordChange: user.needPasswordChange };
+  return { accessToken };
 };
 
 const changePassword = async (
   user: { email: string },
   payload: { oldPassword: string; newPassword: string }
 ) => {
-  const existingUser = await prisma.user.findUnique({
-    where: { email: user.email, isDeleted: false },
+  const existingUser = await User.findOne({
+    email: user.email,
+    isDeleted: false,
   });
 
   if (!existingUser) {
@@ -87,20 +86,14 @@ const changePassword = async (
     throw new ApiError(httpStatus.UNAUTHORIZED, "Old password is incorrect!");
   }
 
-  const hashedPassword = await bcrypt.hash(payload.newPassword, 12);
-
-  await prisma.user.update({
-    where: { email: user.email },
-    data: { password: hashedPassword, needPasswordChange: false },
-  });
+  existingUser.password = payload.newPassword; // Will be hashed automatically by pre-save hook
+  await existingUser.save();
 
   return { message: "Password changed successfully!" };
 };
 
 const forgotPassword = async (payload: { email: string }) => {
-  const user = await prisma.user.findUnique({
-    where: { email: payload.email, isDeleted: false },
-  });
+  const user = await User.findOne({ email: payload.email, isDeleted: false });
 
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found!");
@@ -141,20 +134,14 @@ const resetPassword = async (
     throw new ApiError(httpStatus.FORBIDDEN, "Invalid reset password token!");
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: payload.id, isDeleted: false },
-  });
+  const user = await User.findOne({ _id: payload.id, isDeleted: false });
 
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found!");
   }
 
-  const hashedPassword = await bcrypt.hash(payload.password, 12);
-
-  await prisma.user.update({
-    where: { id: user.id },
-    data: { password: hashedPassword },
-  });
+  user.password = payload.password; // Will be hashed automatically by pre-save hook
+  await user.save();
 
   return { message: "Password reset successfully!" };
 };

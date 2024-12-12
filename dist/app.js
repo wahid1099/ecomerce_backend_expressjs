@@ -15,7 +15,7 @@ app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
     res.send({
-        Message: "Library Management System..",
+        Message: "Multi Vendor Ecomerce  System..",
     });
 });
 app.use("/api", routes_1.default);

@@ -13,130 +13,103 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
-const prisma_1 = __importDefault(require("../../../shared/prisma"));
+const user_model_1 = require("./user.model");
 const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
 const http_status_1 = __importDefault(require("http-status"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
 const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () {
     const { name, email, username, password, role } = userData;
     if (!name || !email || !username || !password || !role) {
         throw new ApiErros_1.default(http_status_1.default.BAD_REQUEST, "Missing required fields");
     }
     // Check for duplicate email or username
-    const existingUser = yield prisma_1.default.user.findFirst({
-        where: {
-            OR: [{ email }, { username }],
-        },
+    const existingUser = yield user_model_1.User.findOne({
+        $or: [{ email }, { username }],
     });
     if (existingUser) {
         throw new ApiErros_1.default(http_status_1.default.CONFLICT, "User with this email or username already exists");
     }
-    // Hash the password
-    const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-    // Create the user
-    const newUser = yield prisma_1.default.user.create({
-        data: {
-            name,
-            email,
-            username,
-            password: hashedPassword,
-            role,
-            city: userData.city || null,
-            state: userData.state || null,
-            zip: userData.zipCode || null,
-            country: userData.country || null,
-            phone: userData.phone || null,
-        },
+    // Create the user (password will be hashed by the pre-save hook)
+    const newUser = new user_model_1.User({
+        name,
+        email,
+        username,
+        password, // Raw password is passed here; the hook will hash it.
+        role,
+        city: userData.city || null,
+        state: userData.state || null,
+        zipCode: userData.zipCode || null,
+        country: userData.country || null,
+        phone: userData.phone || null,
     });
+    yield newUser.save(); // Pre-save hook automatically hashes the password
     return newUser;
 });
-const updateUser = (UserId, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const existingUser = yield prisma_1.default.user.findUnique({
-        where: {
-            id: UserId,
-        },
-    });
+const updateUser = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const existingUser = yield user_model_1.User.findById(userId);
     if (!existingUser) {
         throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found");
     }
-    const updatedUser = yield prisma_1.default.user.update({
-        where: {
-            id: UserId,
-        },
-        data: payload,
-    });
-    return updatedUser;
+    Object.assign(existingUser, payload);
+    yield existingUser.save();
+    return existingUser;
 });
 const getMyProfileService = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield prisma_1.default.user.findUnique({
-        where: { id: userId, isDeleted: false },
-        include: {
-            shops: true,
-            orders: true,
-            reviews: true,
-            followedShops: true,
-            shopFollowers: true,
-            payments: true,
-        },
-    });
+    const user = yield user_model_1.User.findOne({ _id: userId, isDeleted: false })
+        .populate("shops")
+        .populate("orders")
+        .populate("reviews")
+        .populate("followedShops")
+        .populate("shopFollowers")
+        .populate("payments");
     if (!user) {
         throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found");
     }
     return user;
 });
 const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
-    const users = yield prisma_1.default.user.findMany({
-        include: {
-            shops: true,
-            orders: true,
-            reviews: true,
-            followedShops: true,
-            shopFollowers: true,
-            payments: true,
-        },
-    });
+    const users = yield user_model_1.User.find()
+        .populate("shops")
+        .populate("orders")
+        .populate("reviews")
+        .populate("followedShops")
+        .populate("shopFollowers")
+        .populate("payments");
     return users;
 });
 const deleteUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const userExists = yield prisma_1.default.user.findUnique({
-        where: { id: userId },
-    });
-    if (!userExists) {
+    const user = yield user_model_1.User.findById(userId);
+    if (!user) {
         throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found");
     }
-    const updatedUser = yield prisma_1.default.user.update({
-        where: { id: userId },
-        data: { isDeleted: true },
-    });
-    return updatedUser;
+    user.isDeleted = true;
+    yield user.save();
+    return user;
 });
 const suspendVendor = (vendorId, isSuspended) => __awaiter(void 0, void 0, void 0, function* () {
     // Check if the user exists and is a vendor
-    const user = yield prisma_1.default.user.findUnique({
-        where: { id: vendorId },
-    });
+    const user = yield user_model_1.User.findById(vendorId);
     if (!user) {
         throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "Vendor not found");
     }
-    if (user.role !== "vendor") {
+    if (user.role !== "Vendor") {
         throw new ApiErros_1.default(http_status_1.default.BAD_REQUEST, "User is not a vendor");
     }
-    // Update the `isSuspended` status
-    const updatedUser = yield prisma_1.default.user.update({
-        where: { id: vendorId },
-        data: { isSuspended },
-    });
-    return updatedUser;
+    user.isSuspended = isSuspended;
+    yield user.save();
+    return user;
 });
 const getUserFollowedShops = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const followedShops = yield prisma_1.default.shopFollower.findMany({
-        where: { userId },
-        include: {
-            shop: true, // Include shop details
+    const user = yield user_model_1.User.findById(userId).populate({
+        path: "followedShops",
+        populate: {
+            path: "shop",
         },
     });
-    return followedShops.map((record) => ({
-        id: record.shop.id,
+    if (!user || !user.followedShops) {
+        return [];
+    }
+    return user.followedShops.map((record) => ({
+        id: record.shop._id,
         name: record.shop.name,
         description: record.shop.description,
     }));

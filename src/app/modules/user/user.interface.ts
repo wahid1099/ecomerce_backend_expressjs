@@ -1,10 +1,17 @@
 import { IPayment } from "../Payment/payment.interface";
 import { IShop, IShopFollower } from "../shop/shop.interface";
-import { IOrder } from "../Orders/order.interface";
+import { IOrder } from "../order/order.interface";
 import { IReview } from "../reviews/review.interface";
+import { Model } from "mongoose";
+
+export enum UserRole {
+  Admin = "Admin",
+  Vendor = "Vendor",
+  Customer = "Customer",
+}
 
 export type IUser = {
-  id: string; // UUID, unique identifier
+  _id: string; // UUID, unique identifier
   name: string; // User's full name
   username?: string; // Optional username
   email: string; // Unique email address
@@ -70,8 +77,14 @@ export type IUserUpdate = {
   passwordChangedAt?: Date; // Optional: Update when the password was changed
 };
 
-export enum UserRole {
-  Admin = "Admin",
-  Vendor = "Vendor",
-  Customer = "Customer",
+// Extend Mongoose Document to include IUser
+interface IUserDocument extends IUser, Document {}
+
+// Define static methods
+export interface IUserModel extends Model<IUserDocument> {
+  isUserExistByEmail(email: string): Promise<IUserDocument | null>;
+  isPasswordMatched(
+    plainTextPassword: string,
+    hashedPassword: string
+  ): Promise<boolean>;
 }

@@ -1,4 +1,4 @@
-import { IOrder } from "../Orders/order.interface";
+import { IOrder } from "../order/order.interface";
 import { IUser } from "../user/user.interface";
 export type IPayment = {
   id: string;

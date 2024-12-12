@@ -1,8 +1,7 @@
 import { IUser, IUserUpdate } from "./user.interface";
-import prisma from "../../../shared/prisma";
+import { User } from "./user.model";
 import ApiError from "../../errors/ApiErros";
 import httpStatus from "http-status";
-import bcrypt from "bcrypt";
 
 const createUser = async (userData: IUser) => {
   const { name, email, username, password, role } = userData;
@@ -11,10 +10,8 @@ const createUser = async (userData: IUser) => {
   }
 
   // Check for duplicate email or username
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      OR: [{ email }, { username }],
-    },
+  const existingUser = await User.findOne({
+    $or: [{ email }, { username }],
   });
 
   if (existingUser) {
@@ -24,61 +21,45 @@ const createUser = async (userData: IUser) => {
     );
   }
 
-  // Hash the password
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  // Create the user
-  const newUser = await prisma.user.create({
-    data: {
-      name,
-      email,
-      username,
-      password: hashedPassword,
-      role,
-      city: userData.city || null,
-      state: userData.state || null,
-      zip: userData.zipCode || null,
-      country: userData.country || null,
-      phone: userData.phone || null,
-    },
+  // Create the user (password will be hashed by the pre-save hook)
+  const newUser = new User({
+    name,
+    email,
+    username,
+    password, // Raw password is passed here; the hook will hash it.
+    role,
+    city: userData.city || null,
+    state: userData.state || null,
+    zipCode: userData.zipCode || null,
+    country: userData.country || null,
+    phone: userData.phone || null,
   });
 
+  await newUser.save(); // Pre-save hook automatically hashes the password
   return newUser;
 };
 
-const updateUser = async (UserId: string, payload: Partial<IUserUpdate>) => {
-  const existingUser = await prisma.user.findUnique({
-    where: {
-      id: UserId,
-    },
-  });
+const updateUser = async (userId: string, payload: Partial<IUserUpdate>) => {
+  const existingUser = await User.findById(userId);
 
   if (!existingUser) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  const updatedUser = await prisma.user.update({
-    where: {
-      id: UserId,
-    },
-    data: payload,
-  });
+  Object.assign(existingUser, payload);
+  await existingUser.save();
 
-  return updatedUser;
+  return existingUser;
 };
 
 const getMyProfileService = async (userId: string) => {
-  const user = await prisma.user.findUnique({
-    where: { id: userId, isDeleted: false },
-    include: {
-      shops: true,
-      orders: true,
-      reviews: true,
-      followedShops: true,
-      shopFollowers: true,
-      payments: true,
-    },
-  });
+  const user = await User.findOne({ _id: userId, isDeleted: false })
+    .populate("shops")
+    .populate("orders")
+    .populate("reviews")
+    .populate("followedShops")
+    .populate("shopFollowers")
+    .populate("payments");
 
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
@@ -88,70 +69,62 @@ const getMyProfileService = async (userId: string) => {
 };
 
 const getAllUsers = async () => {
-  const users = await prisma.user.findMany({
-    include: {
-      shops: true,
-      orders: true,
-      reviews: true,
-      followedShops: true,
-      shopFollowers: true,
-      payments: true,
-    },
-  });
+  const users = await User.find()
+    .populate("shops")
+    .populate("orders")
+    .populate("reviews")
+    .populate("followedShops")
+    .populate("shopFollowers")
+    .populate("payments");
 
   return users;
 };
 
 const deleteUser = async (userId: string) => {
-  const userExists = await prisma.user.findUnique({
-    where: { id: userId },
-  });
+  const user = await User.findById(userId);
 
-  if (!userExists) {
+  if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 
-  const updatedUser = await prisma.user.update({
-    where: { id: userId },
-    data: { isDeleted: true },
-  });
+  user.isDeleted = true;
+  await user.save();
 
-  return updatedUser;
+  return user;
 };
 
 const suspendVendor = async (vendorId: string, isSuspended: boolean) => {
   // Check if the user exists and is a vendor
-  const user = await prisma.user.findUnique({
-    where: { id: vendorId },
-  });
+  const user = await User.findById(vendorId);
 
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "Vendor not found");
   }
 
-  if (user.role !== "vendor") {
+  if (user.role !== "Vendor") {
     throw new ApiError(httpStatus.BAD_REQUEST, "User is not a vendor");
   }
 
-  // Update the `isSuspended` status
-  const updatedUser = await prisma.user.update({
-    where: { id: vendorId },
-    data: { isSuspended },
-  });
+  user.isSuspended = isSuspended;
+  await user.save();
 
-  return updatedUser;
+  return user;
 };
 
 const getUserFollowedShops = async (userId: string) => {
-  const followedShops = await prisma.shopFollower.findMany({
-    where: { userId },
-    include: {
-      shop: true, // Include shop details
+  const user = await User.findById(userId).populate({
+    path: "followedShops",
+    populate: {
+      path: "shop",
     },
   });
 
-  return followedShops.map((record: any) => ({
-    id: record.shop.id,
+  if (!user || !user.followedShops) {
+    return [];
+  }
+
+  return user.followedShops.map((record: any) => ({
+    id: record.shop._id,
     name: record.shop.name,
     description: record.shop.description,
   }));
