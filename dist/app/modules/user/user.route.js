@@ -19,5 +19,5 @@ router.get("/followed-shops", (0, Auth_1.default)(user_interface_1.UserRole.Cust
 router.patch("/update-my-profile/:userId", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(user_validation_1.UserValidationSchema.UserSchemaUpdate), user_controller_1.UserController.updateUserIntoDb);
 router.patch("/suspend-vendor/:vendorId", (0, Auth_1.default)(user_interface_1.UserRole.Admin), // Only Admins can suspend vendors
 user_controller_1.UserController.suspendVendor);
-router.delete("/:userId", (0, Auth_1.default)(user_interface_1.UserRole.Admin), user_controller_1.UserController.deleteUserfromDb);
+router.delete("delete-user/:userId", (0, Auth_1.default)(user_interface_1.UserRole.Admin), user_controller_1.UserController.deleteUserfromDb);
 exports.userRoutes = router;

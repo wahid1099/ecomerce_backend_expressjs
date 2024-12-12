@@ -45,7 +45,7 @@ router.patch(
 );
 
 router.delete(
-  "/:userId",
+  "delete-user/:userId",
   Auth(UserRole.Admin),
   UserController.deleteUserfromDb
 );

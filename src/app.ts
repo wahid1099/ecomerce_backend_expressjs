@@ -6,7 +6,14 @@ import httpStatus from "http-status";
 import notFound from "./app/middlewares/notFound";
 
 const app: Application = express();
-app.use(cors());
+// app.use(cors());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Allow this specific origin
+    credentials: true, // Allow cookies and headers like Authorization
+  })
+);
 
 //parser
 app.use(express.json());
