@@ -38,8 +38,8 @@ const updateUser = async (userId: string, payload: Partial<IUserUpdate>) => {
   return existingUser;
 };
 
-const getMyProfileService = async (userId: string) => {
-  const user = await User.findOne({ _id: userId, isDeleted: false })
+const getMyProfileService = async (email: string) => {
+  const user = await User.findOne({ email: email, isDeleted: false })
     .populate("shops")
     .populate("orders")
     .populate("reviews")

@@ -27,8 +27,8 @@ const getAllUsersfromDb = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getMyprofilefromDb = catchAsync(async (req: Request, res: Response) => {
-  const { userId } = req.params;
-  const result = await UserService.getMyProfileService(userId);
+  const email = req.user.email;
+  const result = await UserService.getMyProfileService(email);
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,

@@ -27,7 +27,6 @@ const userSchema = new mongoose_1.Schema({
         unique: true,
         validate: {
             validator: function (value) {
-                // Simple regex for email validation
                 return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
             },
             message: "Invalid email format",
@@ -41,9 +40,15 @@ const userSchema = new mongoose_1.Schema({
     country: { type: String },
     phone: { type: String },
     addressBook: { type: String },
+    shops: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" }], // Reference to Shop model
+    orders: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Order" }], // Reference to Order model
+    reviews: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Review" }], // Reference to Review model
+    followedShops: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "ShopFollower" }], // Reference to ShopFollower model
+    shopFollowers: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" }], // Reference to Shop model (for followers of user's shop)
+    payments: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Payment" }], // Reference to Payment model
     role: {
         type: String,
-        enum: Object.values(user_interface_1.UserRole),
+        enum: Object.values(user_interface_1.UserRole), // Assuming UserRole enum is defined somewhere
         required: [true, "Role is required"],
     },
     isSuspended: { type: Boolean, default: false },
@@ -52,7 +57,7 @@ const userSchema = new mongoose_1.Schema({
     lastLoginDevice: { type: String },
     lastLoginLocation: { type: String },
     passwordChangedAt: { type: Date, required: true, default: Date.now },
-}, { timestamps: true } // Automatically handle createdAt and updatedAt
+}, { timestamps: true } // Automatically add createdAt and updatedAt
 );
 // Pre-save hook to hash the password
 userSchema.pre("save", function (next) {

@@ -37,8 +37,8 @@ const getAllUsersfromDb = (0, catchAsync_1.default)((req, res) => __awaiter(void
     });
 }));
 const getMyprofilefromDb = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.params;
-    const result = yield user_service_1.UserService.getMyProfileService(userId);
+    const email = req.user.email;
+    const result = yield user_service_1.UserService.getMyProfileService(email);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,

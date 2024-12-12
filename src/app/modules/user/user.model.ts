@@ -14,7 +14,6 @@ const userSchema: Schema<IUser> = new Schema(
       unique: true,
       validate: {
         validator: function (value: string) {
-          // Simple regex for email validation
           return /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value);
         },
         message: "Invalid email format",
@@ -28,19 +27,28 @@ const userSchema: Schema<IUser> = new Schema(
     country: { type: String },
     phone: { type: String },
     addressBook: { type: String },
+
+    shops: [{ type: Schema.Types.ObjectId, ref: "Shop" }], // Reference to Shop model
+    orders: [{ type: Schema.Types.ObjectId, ref: "Order" }], // Reference to Order model
+    reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }], // Reference to Review model
+    followedShops: [{ type: Schema.Types.ObjectId, ref: "ShopFollower" }], // Reference to ShopFollower model
+    shopFollowers: [{ type: Schema.Types.ObjectId, ref: "Shop" }], // Reference to Shop model (for followers of user's shop)
+    payments: [{ type: Schema.Types.ObjectId, ref: "Payment" }], // Reference to Payment model
+
     role: {
       type: String,
-      enum: Object.values(UserRole),
+      enum: Object.values(UserRole), // Assuming UserRole enum is defined somewhere
       required: [true, "Role is required"],
     },
     isSuspended: { type: Boolean, default: false },
     isDeleted: { type: Boolean, default: false },
+
     lastLoginAt: { type: Date },
     lastLoginDevice: { type: String },
     lastLoginLocation: { type: String },
     passwordChangedAt: { type: Date, required: true, default: Date.now },
   },
-  { timestamps: true } // Automatically handle createdAt and updatedAt
+  { timestamps: true } // Automatically add createdAt and updatedAt
 );
 
 // Pre-save hook to hash the password

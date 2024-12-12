@@ -39,8 +39,8 @@ const updateUser = (userId, payload) => __awaiter(void 0, void 0, void 0, functi
     yield existingUser.save();
     return existingUser;
 });
-const getMyProfileService = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.findOne({ _id: userId, isDeleted: false })
+const getMyProfileService = (email) => __awaiter(void 0, void 0, void 0, function* () {
+    const user = yield user_model_1.User.findOne({ email: email, isDeleted: false })
         .populate("shops")
         .populate("orders")
         .populate("reviews")
