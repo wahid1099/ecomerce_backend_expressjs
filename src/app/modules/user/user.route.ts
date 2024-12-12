@@ -15,7 +15,7 @@ router.get(
 
 router.post(
   "/create-user",
-  Auth(UserRole.Admin, UserRole.Customer, UserRole.Vendor),
+
   validateRequest(UserValidationSchema.UserSchemaCreate),
   UserController.inserUserIntoDB
 );

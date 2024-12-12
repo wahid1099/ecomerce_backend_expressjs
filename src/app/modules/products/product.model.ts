@@ -1,68 +1,40 @@
 import { Schema, model } from "mongoose";
 
-import { IProduct, IProductImage } from "./product.interface";
-// Define the ProductImage schema
-const ProductImageSchema = new Schema<IProductImage>(
-  {
-    imageUrl: {
-      type: String,
-      required: true,
-    },
-    productId: {
-      type: Schema.Types.ObjectId,
-      ref: "Product",
-      required: true,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-  },
-  {
-    timestamps: false, // No automatic timestamps
-    _id: true, // Each image has its own ID
-  }
-);
+import { IProduct } from "./product.interface";
 
-export const ProductImage = model<IProductImage>(
-  "ProductImage",
-  ProductImageSchema
-);
-
-// Define the Product schema
 const ProductSchema = new Schema<IProduct>(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Product name is required"],
     },
     description: {
       type: String,
-      required: true,
+      required: [true, "Product description is required"],
     },
     price: {
       type: Number,
-      required: true,
+      required: [true, "Product price is required"],
+      min: [0, "Product price must be a positive number"],
     },
     category: {
       type: String,
-      required: true,
+      required: [true, "Product category is required"],
     },
     inventory: {
       type: Number,
-      required: true,
+      required: [true, "Inventory count is required"],
+      min: [0, "Inventory count must be a positive number"],
     },
     shopId: {
       type: Schema.Types.ObjectId,
       ref: "Shop",
-      required: true,
+      required: [true, "Shop ID is required"],
     },
-    images: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "ProductImage",
-      },
-    ],
+    images: {
+      type: [String],
+      default: [],
+    },
     reviews: [
       {
         type: Schema.Types.ObjectId,
@@ -76,9 +48,7 @@ const ProductSchema = new Schema<IProduct>(
       },
     ],
   },
-  {
-    timestamps: true, // Automatically add createdAt and updatedAt
-  }
+  { timestamps: true }
 );
 
 export const Product = model<IProduct>("Product", ProductSchema);

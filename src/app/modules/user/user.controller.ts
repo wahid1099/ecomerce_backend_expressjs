@@ -6,13 +6,13 @@ import catchAsync from "../../../shared/catchAsync";
 import ApiError from "../../errors/ApiErros";
 
 const inserUserIntoDB = catchAsync(async (req: Request, res: Response) => {
-  const result = await UserService.createUser(req.body);
+  const newUser = await UserService.createUser(req.body);
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.CREATED,
     message: "User created successfully",
-    data: result,
+    data: newUser,
   });
 });
 

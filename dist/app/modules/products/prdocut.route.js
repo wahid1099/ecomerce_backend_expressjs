@@ -12,7 +12,7 @@ const user_interface_1 = require("../user/user.interface");
 const product_validation_1 = require("./product.validation");
 const router = express_1.default.Router();
 // Create a new product
-router.post("/", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(product_validation_1.ProductValidationSchema.createProductSchema), product_controller_1.ProductController.createProduct);
+router.post("/", (0, Auth_1.default)(user_interface_1.UserRole.Vendor, user_interface_1.UserRole.Admin), (0, validaterequest_1.default)(product_validation_1.ProductValidationSchema.createProductSchema), product_controller_1.ProductController.createProductController);
 // Update a product
 router.patch("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(product_validation_1.ProductValidationSchema.updateProductSchema), product_controller_1.ProductController.updateProduct);
 // Delete a product

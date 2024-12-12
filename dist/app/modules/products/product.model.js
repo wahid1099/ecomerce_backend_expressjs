@@ -1,60 +1,39 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Product = exports.ProductImage = void 0;
+exports.Product = void 0;
 const mongoose_1 = require("mongoose");
-// Define the ProductImage schema
-const ProductImageSchema = new mongoose_1.Schema({
-    imageUrl: {
-        type: String,
-        required: true,
-    },
-    productId: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Product",
-        required: true,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-}, {
-    timestamps: false, // No automatic timestamps
-    _id: true, // Each image has its own ID
-});
-exports.ProductImage = (0, mongoose_1.model)("ProductImage", ProductImageSchema);
-// Define the Product schema
 const ProductSchema = new mongoose_1.Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, "Product name is required"],
     },
     description: {
         type: String,
-        required: true,
+        required: [true, "Product description is required"],
     },
     price: {
         type: Number,
-        required: true,
+        required: [true, "Product price is required"],
+        min: [0, "Product price must be a positive number"],
     },
     category: {
         type: String,
-        required: true,
+        required: [true, "Product category is required"],
     },
     inventory: {
         type: Number,
-        required: true,
+        required: [true, "Inventory count is required"],
+        min: [0, "Inventory count must be a positive number"],
     },
     shopId: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "Shop",
-        required: true,
+        required: [true, "Shop ID is required"],
     },
-    images: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: "ProductImage",
-        },
-    ],
+    images: {
+        type: [String],
+        default: [],
+    },
     reviews: [
         {
             type: mongoose_1.Schema.Types.ObjectId,
@@ -67,7 +46,5 @@ const ProductSchema = new mongoose_1.Schema({
             ref: "OrderItem",
         },
     ],
-}, {
-    timestamps: true, // Automatically add createdAt and updatedAt
-});
+}, { timestamps: true });
 exports.Product = (0, mongoose_1.model)("Product", ProductSchema);

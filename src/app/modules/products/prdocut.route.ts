@@ -10,9 +10,9 @@ const router = express.Router();
 // Create a new product
 router.post(
   "/",
-  Auth(UserRole.Vendor),
+  Auth(UserRole.Vendor, UserRole.Admin),
   validateRequest(ProductValidationSchema.createProductSchema),
-  ProductController.createProduct
+  ProductController.createProductController
 );
 
 // Update a product

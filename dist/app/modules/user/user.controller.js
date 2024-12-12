@@ -19,12 +19,12 @@ const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
 const inserUserIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_service_1.UserService.createUser(req.body);
+    const newUser = yield user_service_1.UserService.createUser(req.body);
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.CREATED,
         message: "User created successfully",
-        data: result,
+        data: newUser,
     });
 }));
 const getAllUsersfromDb = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

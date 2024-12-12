@@ -3,28 +3,23 @@ import catchAsync from "../../../shared/catchAsync";
 import { ProductService } from "./product.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
+import ApiError from "../../errors/ApiErros";
 
-const createProduct = catchAsync(async (req: Request, res: Response) => {
-  // Extract product and images data from the request body
-  const { images, ...productData } = req.body;
+const createProductController = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await ProductService.createProduct({
+      ...req.body,
+      vendorId: req.user?._id, // Ensure user ID is passed as vendorId
+    });
 
-  // Call the service to create the product and associated images
-  const result = await ProductService.createProductWithImages(
-    {
-      ...productData,
-      vendorId: req.user?.id, // Ensure the vendor is correctly identified
-    },
-    images // Expecting an array of image objects
-  );
-
-  // Send a structured response
-  sendResponse(res, {
-    statusCode: httpStatus.CREATED,
-    success: true,
-    message: "Product created successfully!",
-    data: result,
-  });
-});
+    sendResponse(res, {
+      statusCode: httpStatus.CREATED,
+      success: true,
+      message: "Product created successfully!",
+      data: result,
+    });
+  }
+);
 
 const updateProduct = catchAsync(async (req: Request, res: Response) => {
   const { productId } = req.params;
@@ -78,5 +73,5 @@ export const ProductController = {
   getVendorProducts,
   deleteProduct,
   updateProduct,
-  createProduct,
+  createProductController,
 };

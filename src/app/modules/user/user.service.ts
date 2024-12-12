@@ -4,10 +4,7 @@ import ApiError from "../../errors/ApiErros";
 import httpStatus from "http-status";
 
 const createUser = async (userData: IUser) => {
-  const { name, email, username, password, role } = userData;
-  if (!name || !email || !username || !password || !role) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Missing required fields");
-  }
+  const { email, username } = userData;
 
   // Check for duplicate email or username
   const existingUser = await User.findOne({
@@ -22,21 +19,10 @@ const createUser = async (userData: IUser) => {
   }
 
   // Create the user (password will be hashed by the pre-save hook)
-  const newUser = new User({
-    name,
-    email,
-    username,
-    password, // Raw password is passed here; the hook will hash it.
-    role,
-    city: userData.city || null,
-    state: userData.state || null,
-    zipCode: userData.zipCode || null,
-    country: userData.country || null,
-    phone: userData.phone || null,
-  });
+  const newUser = new User(userData);
 
-  await newUser.save(); // Pre-save hook automatically hashes the password
-  return newUser;
+  const result = await newUser.save(); // Pre-save hook automatically hashes the password
+  return result;
 };
 
 const updateUser = async (userId: string, payload: Partial<IUserUpdate>) => {

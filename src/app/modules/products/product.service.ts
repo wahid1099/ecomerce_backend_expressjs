@@ -1,44 +1,10 @@
 import { Product } from "./product.model"; // Importing the Product model
-import { ProductImage } from "./product.model"; // Importing ProductImage if needed for image management
-import mongoose from "mongoose";
 
 // Create a new product
-const createProductWithImages = async (
-  productPayload: any,
-  imagePayloads: any[]
-) => {
-  // Start a transaction to ensure atomicity
-  const session = await mongoose.startSession();
-  session.startTransaction();
-
-  try {
-    // Step 1: Create the product
-    const product = await Product.create([productPayload], { session });
-
-    // Step 2: Add product images
-    const productImages = imagePayloads.map((image) => ({
-      ...image,
-      productId: product[0]._id,
-    }));
-    const images = await ProductImage.insertMany(productImages, { session });
-
-    // Step 3: Update the product with the associated images
-    product[0].images = images.map((img) => img._id);
-    await product[0].save({ session });
-
-    // Commit the transaction
-    await session.commitTransaction();
-    session.endSession();
-
-    return { product: product[0], images };
-  } catch (error) {
-    // Rollback the transaction in case of error
-    await session.abortTransaction();
-    session.endSession();
-    throw error;
-  }
+const createProduct = async (payload: any) => {
+  const product = await Product.create(payload);
+  return product;
 };
-
 // Update product details
 const updateProduct = async (productId: string, payload: any) => {
   const updatedProduct = await Product.findByIdAndUpdate(productId, payload, {
@@ -73,7 +39,7 @@ const getProductById = async (productId: string) => {
 };
 
 export const ProductService = {
-  createProductWithImages,
+  createProduct,
   updateProduct,
   deleteProduct,
   getVendorProducts,

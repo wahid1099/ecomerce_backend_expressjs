@@ -17,10 +17,7 @@ const user_model_1 = require("./user.model");
 const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
 const http_status_1 = __importDefault(require("http-status"));
 const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () {
-    const { name, email, username, password, role } = userData;
-    if (!name || !email || !username || !password || !role) {
-        throw new ApiErros_1.default(http_status_1.default.BAD_REQUEST, "Missing required fields");
-    }
+    const { email, username } = userData;
     // Check for duplicate email or username
     const existingUser = yield user_model_1.User.findOne({
         $or: [{ email }, { username }],
@@ -29,20 +26,9 @@ const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () 
         throw new ApiErros_1.default(http_status_1.default.CONFLICT, "User with this email or username already exists");
     }
     // Create the user (password will be hashed by the pre-save hook)
-    const newUser = new user_model_1.User({
-        name,
-        email,
-        username,
-        password, // Raw password is passed here; the hook will hash it.
-        role,
-        city: userData.city || null,
-        state: userData.state || null,
-        zipCode: userData.zipCode || null,
-        country: userData.country || null,
-        phone: userData.phone || null,
-    });
-    yield newUser.save(); // Pre-save hook automatically hashes the password
-    return newUser;
+    const newUser = new user_model_1.User(userData);
+    const result = yield newUser.save(); // Pre-save hook automatically hashes the password
+    return result;
 });
 const updateUser = (userId, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const existingUser = yield user_model_1.User.findById(userId);

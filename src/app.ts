@@ -3,6 +3,7 @@ import cors from "cors";
 import globalErrorHandler from "./app/middlewares/globalErrorHandler";
 import router from "./app/routes";
 import httpStatus from "http-status";
+import notFound from "./app/middlewares/notFound";
 
 const app: Application = express();
 app.use(cors());
@@ -19,8 +20,6 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api", router);
 
-app.use(globalErrorHandler);
-
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(httpStatus.NOT_FOUND).json({
     success: false,
@@ -32,4 +31,6 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   });
 });
 
+app.use(globalErrorHandler);
+app.use(notFound);
 export default app;
