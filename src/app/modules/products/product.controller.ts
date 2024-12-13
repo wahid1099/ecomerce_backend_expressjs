@@ -23,19 +23,35 @@ const createProductController = catchAsync(
 
 const updateProduct = catchAsync(async (req: Request, res: Response) => {
   const { productId } = req.params;
-  const result = await ProductService.updateProduct(productId, req.body);
+  const { imagesToRemove, ...updateData } = req.body; // Destructure to get imagesToRemove and the rest of the data
+
+  // Remove images if specified
+  if (imagesToRemove && Array.isArray(imagesToRemove)) {
+    for (const imageUrl of imagesToRemove) {
+      await ProductService.removeImageFromProduct(productId, imageUrl); // Call your service to remove the image
+    }
+  }
+
+  // Update the product with the rest of the data
+  const updatedProduct = await ProductService.updateProduct(
+    productId,
+    updateData
+  );
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: "Product updated successfully!",
-    data: result,
+    data: updatedProduct,
   });
 });
 
 const deleteProduct = catchAsync(async (req: Request, res: Response) => {
   const { productId } = req.params;
   const result = await ProductService.deleteProduct(productId);
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found for deletion");
+  }
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -47,6 +63,12 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
 
 const getVendorProducts = catchAsync(async (req: Request, res: Response) => {
   const result = await ProductService.getVendorProducts(req.user?.id);
+  if (!result || result.length === 0) {
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "No products found for this vendor"
+    );
+  }
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
@@ -68,10 +90,24 @@ const getProductById = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllProductsForAdmin = catchAsync(
+  async (req: Request, res: Response) => {
+    const result = await ProductService.getAllProducts();
+
+    sendResponse(res, {
+      statusCode: httpStatus.OK,
+      success: true,
+      message: "All products fetched successfully for Admin!",
+      data: result,
+    });
+  }
+);
+
 export const ProductController = {
   getProductById,
   getVendorProducts,
   deleteProduct,
   updateProduct,
   createProductController,
+  getAllProductsForAdmin,
 };

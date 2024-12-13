@@ -14,11 +14,14 @@ const router = express_1.default.Router();
 // Create a new product
 router.post("/", (0, Auth_1.default)(user_interface_1.UserRole.Vendor, user_interface_1.UserRole.Admin), (0, validaterequest_1.default)(product_validation_1.ProductValidationSchema.createProductSchema), product_controller_1.ProductController.createProductController);
 // Update a product
-router.patch("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(product_validation_1.ProductValidationSchema.updateProductSchema), product_controller_1.ProductController.updateProduct);
+router.patch("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor, user_interface_1.UserRole.Admin), (0, validaterequest_1.default)(product_validation_1.ProductValidationSchema.updateProductSchema), product_controller_1.ProductController.updateProduct);
 // Delete a product
 router.delete("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), product_controller_1.ProductController.deleteProduct);
 // Get all products for the vendor
 router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), product_controller_1.ProductController.getVendorProducts);
 // Get details of a product
 router.get("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), product_controller_1.ProductController.getProductById);
+router.get("/admin", // New route for Admin
+(0, Auth_1.default)(user_interface_1.UserRole.Admin), product_controller_1.ProductController.getAllProductsForAdmin // New controller method for Admin
+);
 exports.ProductRoutes = router;

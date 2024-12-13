@@ -18,7 +18,7 @@ router.post(
 // Update a product
 router.patch(
   "/:productId",
-  Auth(UserRole.Vendor),
+  Auth(UserRole.Vendor, UserRole.Admin),
   validateRequest(ProductValidationSchema.updateProductSchema),
   ProductController.updateProduct
 );
@@ -38,6 +38,12 @@ router.get(
   "/:productId",
   Auth(UserRole.Vendor),
   ProductController.getProductById
+);
+
+router.get(
+  "/admin", // New route for Admin
+  Auth(UserRole.Admin),
+  ProductController.getAllProductsForAdmin // New controller method for Admin
 );
 
 export const ProductRoutes = router;

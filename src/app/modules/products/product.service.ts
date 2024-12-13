@@ -1,8 +1,13 @@
+import ApiError from "../../errors/ApiErros";
 import { Product } from "./product.model"; // Importing the Product model
+import httpStatus from "http-status";
 
 // Create a new product
 const createProduct = async (payload: any) => {
   const product = await Product.create(payload);
+  if (!product) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create product");
+  }
   return product;
 };
 // Update product details
@@ -11,12 +16,19 @@ const updateProduct = async (productId: string, payload: any) => {
     new: true, // Return the updated document
     runValidators: true, // Validate before updating
   });
+  if (!updatedProduct) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found to update");
+  }
   return updatedProduct;
 };
 
 // Delete a product
 const deleteProduct = async (productId: string) => {
-  await Product.findByIdAndDelete(productId);
+  const product = await Product.findById(productId);
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+  }
+  await Product.deleteOne({ _id: productId });
   return { message: "Product deleted successfully!" };
 };
 
@@ -27,6 +39,12 @@ const getVendorProducts = async (vendorId: string) => {
     "reviews",
     "orderItems",
   ]); // Populate related fields if needed
+  if (!products || products.length === 0) {
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "No products found for this vendor"
+    );
+  }
   return products;
 };
 
@@ -38,10 +56,33 @@ const getProductById = async (productId: string) => {
   return product;
 };
 
+// Remove image from the product
+const removeImageFromProduct = async (productId: string, imageUrl: string) => {
+  const product = await Product.findByIdAndUpdate(
+    productId,
+    { $pull: { images: imageUrl } }, // Remove the specific image
+    { new: true, runValidators: true } // Return the updated product
+  );
+  if (!product) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Product not found");
+  }
+  return product;
+};
+
+const getAllProducts = async () => {
+  const products = await Product.find().populate([
+    "images",
+    "reviews",
+    "orderItems",
+  ]); // You can populate other fields if necessary
+  return products;
+};
 export const ProductService = {
   createProduct,
   updateProduct,
   deleteProduct,
   getVendorProducts,
   getProductById,
+  removeImageFromProduct,
+  getAllProducts,
 };
