@@ -19,7 +19,7 @@ const shop_service_1 = require("./shop.service");
 const http_status_1 = __importDefault(require("http-status"));
 const createShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const vendorId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
+    const vendorId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
     const result = yield shop_service_1.ShopServices.createShop(vendorId, req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.CREATED,
