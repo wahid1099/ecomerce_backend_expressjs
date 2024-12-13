@@ -14,6 +14,4 @@ const ReviewSchema = new Schema<IReview>(
 );
 
 // Register the model with Mongoose
-const Review = mongoose.model<IReview>("Review", ReviewSchema);
-
-export default Review;
+export const Review = mongoose.model<IReview>("Review", ReviewSchema);

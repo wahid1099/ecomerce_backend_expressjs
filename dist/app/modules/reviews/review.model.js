@@ -23,6 +23,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Review = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 // Define the Review schema
 const ReviewSchema = new mongoose_1.Schema({
@@ -34,5 +35,4 @@ const ReviewSchema = new mongoose_1.Schema({
 }, { timestamps: true } // Automatically adds createdAt and updatedAt
 );
 // Register the model with Mongoose
-const Review = mongoose_1.default.model("Review", ReviewSchema);
-exports.default = Review;
+exports.Review = mongoose_1.default.model("Review", ReviewSchema);
