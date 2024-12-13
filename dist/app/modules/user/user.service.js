@@ -59,10 +59,10 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     const users = yield user_model_1.User.find()
         .populate({ path: "shops", options: { strictPopulate: false } }) // Handle missing shops gracefully
         .populate({ path: "orders", options: { strictPopulate: false } }) // Handle missing orders gracefully
-        .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
+        // .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
         .populate({ path: "followedShops", options: { strictPopulate: false } }) // Handle missing followedShops gracefully
-        .populate({ path: "shopFollowers", options: { strictPopulate: false } }) // Handle missing shopFollowers gracefully
-        .populate({ path: "payments", options: { strictPopulate: false } }); // Handle missing payments gracefully
+        .populate({ path: "shopFollowers", options: { strictPopulate: false } }); // Handle missing shopFollowers gracefully
+    // .populate({ path: "payments", options: { strictPopulate: false } }); // Handle missing payments gracefully
     return users;
 });
 const deleteUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {

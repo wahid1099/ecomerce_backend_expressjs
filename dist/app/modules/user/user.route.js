@@ -12,7 +12,7 @@ const user_interface_1 = require("./user.interface");
 const user_validation_1 = require("./user.validation");
 const validaterequest_1 = __importDefault(require("../../middlewares/validaterequest"));
 const router = express_1.default.Router();
-router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Customer), user_controller_1.UserController.getAllUsersfromDb);
+router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin), user_controller_1.UserController.getAllUsersfromDb);
 router.post("/create-user", (0, validaterequest_1.default)(user_validation_1.UserValidationSchema.UserSchemaCreate), user_controller_1.UserController.inserUserIntoDB);
 router.get("/me", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), user_controller_1.UserController.getMyprofilefromDb);
 router.get("/followed-shops", (0, Auth_1.default)(user_interface_1.UserRole.Customer), user_controller_1.UserController.getUserFollowedShops);

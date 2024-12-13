@@ -7,11 +7,7 @@ import { UserValidationSchema } from "./user.validation";
 import validateRequest from "../../middlewares/validaterequest";
 
 const router = express.Router();
-router.get(
-  "/",
-  Auth(UserRole.Admin, UserRole.Customer),
-  UserController.getAllUsersfromDb
-);
+router.get("/", Auth(UserRole.Admin), UserController.getAllUsersfromDb);
 
 router.post(
   "/create-user",
