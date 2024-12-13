@@ -43,10 +43,10 @@ const getMyProfileService = (email) => __awaiter(void 0, void 0, void 0, functio
     const user = yield user_model_1.User.findOne({ email, isDeleted: false })
         .populate("shops") // Populating the 'shops' field (assuming it's an array of ObjectIds referencing the Shop model)
         .populate("orders") // Populating the 'orders' field (assuming it's an array of ObjectIds referencing the Order model)
-        // .populate("reviews") // Populating the 'reviews' field (assuming it's an array of ObjectIds referencing the Review model)
+        .populate("reviews") // Populating the 'reviews' field (assuming it's an array of ObjectIds referencing the Review model)
         .populate("followedShops") // Populating the 'followedShops' field (assuming it's an array of ObjectIds referencing the Shop model)
-        .populate("shopFollowers"); // Populating the 'shopFollowers' field (assuming it's an array of ObjectIds referencing the Shop model)
-    // .populate("payments"); // Populating the 'payments' field (assuming it's an array of ObjectIds referencing the Payment model)
+        .populate("shopFollowers") // Populating the 'shopFollowers' field (assuming it's an array of ObjectIds referencing the Shop model)
+        .populate("payments"); // Populating the 'payments' field (assuming it's an array of ObjectIds referencing the Payment model)
     // Check if the user was found
     if (!user) {
         // Throw a custom error if user not found
