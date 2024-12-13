@@ -1,7 +1,17 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Shop = exports.ShopFollower = void 0;
 const mongoose_1 = require("mongoose");
+const user_model_1 = require("../user/user.model"); // Import User model
 // Define the ShopFollower schema
 const ShopFollowerSchema = new mongoose_1.Schema({
     userId: {
@@ -89,6 +99,19 @@ const ShopSchema = new mongoose_1.Schema({
 ShopSchema.pre("save", function (next) {
     this.updatedAt = new Date();
     next();
+});
+// Post-save middleware to add the shop to the user's shops array
+ShopSchema.post("save", function (doc, next) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            yield user_model_1.User.findByIdAndUpdate(doc.vendorId, { $push: { shops: doc._id } }, // Add the shop's ID to the user's shops array
+            { new: true });
+            next();
+        }
+        catch (err) {
+            next();
+        }
+    });
 });
 // Export the Shop model
 exports.Shop = (0, mongoose_1.model)("Shop", ShopSchema);

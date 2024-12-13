@@ -3,6 +3,7 @@ import { IUser } from "../user/user.interface";
 import { IProduct } from "../products/product.interface";
 import { IOrder } from "../order/order.interface";
 import { IShop, IShopFollower } from "./shop.interface"; // Assuming you have a separate interface file for ShopFollower
+import { User } from "../user/user.model"; // Import User model
 
 // Define the ShopFollower schema
 const ShopFollowerSchema = new Schema<IShopFollower>(
@@ -103,6 +104,20 @@ const ShopSchema = new Schema<IShop>(
 ShopSchema.pre("save", function (next) {
   this.updatedAt = new Date();
   next();
+});
+
+// Post-save middleware to add the shop to the user's shops array
+ShopSchema.post("save", async function (doc, next) {
+  try {
+    await User.findByIdAndUpdate(
+      doc.vendorId,
+      { $push: { shops: doc._id } }, // Add the shop's ID to the user's shops array
+      { new: true }
+    );
+    next();
+  } catch (err) {
+    next();
+  }
 });
 
 // Export the Shop model

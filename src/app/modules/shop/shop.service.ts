@@ -12,6 +12,7 @@ const createShop = async (shopData: {
   const shop = await Shop.create({
     ...shopData, // Spread the shopData object to include name, logo, description, and vendorId
   });
+
   return shop;
 };
 
