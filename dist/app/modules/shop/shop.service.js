@@ -17,8 +17,8 @@ const shop_model_1 = require("./shop.model");
 const order_model_1 = require("../order/order.model");
 const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
 const http_status_1 = __importDefault(require("http-status"));
-const createShop = (vendorId, shopData) => __awaiter(void 0, void 0, void 0, function* () {
-    const shop = yield shop_model_1.Shop.create(Object.assign(Object.assign({}, shopData), { vendorId }));
+const createShop = (shopData) => __awaiter(void 0, void 0, void 0, function* () {
+    const shop = yield shop_model_1.Shop.create(Object.assign({}, shopData));
     return shop;
 });
 const updateShop = (shopId, vendorId, shopData) => __awaiter(void 0, void 0, void 0, function* () {

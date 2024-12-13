@@ -3,13 +3,14 @@ import { Order } from "../order/order.model";
 import ApiError from "../../errors/ApiErros";
 import httpStatus from "http-status";
 
-const createShop = async (
-  vendorId: string,
-  shopData: { name: string; logo?: string; description?: string }
-) => {
+const createShop = async (shopData: {
+  name: string;
+  logo?: string;
+  description?: string;
+  vendorId: string;
+}) => {
   const shop = await Shop.create({
-    ...shopData,
-    vendorId,
+    ...shopData, // Spread the shopData object to include name, logo, description, and vendorId
   });
   return shop;
 };

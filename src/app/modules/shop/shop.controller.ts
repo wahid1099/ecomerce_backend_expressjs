@@ -5,8 +5,9 @@ import { ShopServices } from "./shop.service";
 import httpStatus from "http-status";
 
 const createShop = catchAsync(async (req: Request, res: Response) => {
-  const vendorId = req.user?._id;
-  const result = await ShopServices.createShop(vendorId, req.body);
+  // console.log("createShop",req.body);
+
+  const result = await ShopServices.createShop(req.body);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,

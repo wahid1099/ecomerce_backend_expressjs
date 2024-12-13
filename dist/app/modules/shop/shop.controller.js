@@ -18,9 +18,8 @@ const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const shop_service_1 = require("./shop.service");
 const http_status_1 = __importDefault(require("http-status"));
 const createShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
-    const vendorId = (_a = req.user) === null || _a === void 0 ? void 0 : _a._id;
-    const result = yield shop_service_1.ShopServices.createShop(vendorId, req.body);
+    // console.log("createShop",req.body);
+    const result = yield shop_service_1.ShopServices.createShop(req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,
@@ -29,8 +28,8 @@ const createShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const updateShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _b;
-    const vendorId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
+    var _a;
+    const vendorId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.id;
     const shopId = req.params.shopId;
     const result = yield shop_service_1.ShopServices.updateShop(shopId, vendorId, req.body);
     (0, sendResponse_1.default)(res, {
@@ -41,8 +40,8 @@ const updateShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const getVendorShops = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _c;
-    const vendorId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
+    var _b;
+    const vendorId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
     const result = yield shop_service_1.ShopServices.getVendorShops(vendorId);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
@@ -52,8 +51,8 @@ const getVendorShops = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     });
 }));
 const deleteShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _d;
-    const vendorId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.id;
+    var _c;
+    const vendorId = (_c = req.user) === null || _c === void 0 ? void 0 : _c.id;
     const shopId = req.params.shopId;
     const result = yield shop_service_1.ShopServices.deleteShop(shopId, vendorId);
     (0, sendResponse_1.default)(res, {
@@ -64,8 +63,8 @@ const deleteShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const getShopOrderHistory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _e;
-    const vendorId = (_e = req.user) === null || _e === void 0 ? void 0 : _e.id;
+    var _d;
+    const vendorId = (_d = req.user) === null || _d === void 0 ? void 0 : _d.id;
     const shopId = req.params.shopId;
     const result = yield shop_service_1.ShopServices.getShopOrderHistory(shopId, vendorId);
     (0, sendResponse_1.default)(res, {
@@ -76,8 +75,8 @@ const getShopOrderHistory = (0, catchAsync_1.default)((req, res) => __awaiter(vo
     });
 }));
 const followShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _f;
-    const userId = (_f = req.user) === null || _f === void 0 ? void 0 : _f.id; // Assuming user ID is in the request
+    var _e;
+    const userId = (_e = req.user) === null || _e === void 0 ? void 0 : _e.id; // Assuming user ID is in the request
     const { shopId } = req.params;
     const result = yield shop_service_1.ShopServices.followShop(userId, shopId);
     (0, sendResponse_1.default)(res, {
@@ -88,8 +87,8 @@ const followShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 const unfollowShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _g;
-    const userId = (_g = req.user) === null || _g === void 0 ? void 0 : _g.id; // Assuming user ID is in the request
+    var _f;
+    const userId = (_f = req.user) === null || _f === void 0 ? void 0 : _f.id; // Assuming user ID is in the request
     const { shopId } = req.params;
     const result = yield shop_service_1.ShopServices.unfollowShop(userId, shopId);
     (0, sendResponse_1.default)(res, {
