@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = require("mongoose");
-const paymentSchema = new mongoose_1.Schema({
+const PaymentSchema = new mongoose_1.Schema({
     orderId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Order", required: true },
     userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
     amount: { type: Number, required: true },
@@ -21,5 +21,5 @@ const paymentSchema = new mongoose_1.Schema({
 }, {
     timestamps: true, // Automatically adds `createdAt` and `updatedAt` fields
 });
-const Payment = (0, mongoose_1.model)("Payment", paymentSchema);
+const Payment = (0, mongoose_1.model)("Payment", PaymentSchema);
 exports.default = Payment;

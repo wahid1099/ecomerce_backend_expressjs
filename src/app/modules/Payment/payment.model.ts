@@ -1,7 +1,7 @@
 import mongoose, { Schema, model } from "mongoose";
 import { IPayment } from "./payment.interface";
 
-const paymentSchema = new Schema<IPayment>(
+const PaymentSchema = new Schema<IPayment>(
   {
     orderId: { type: Schema.Types.ObjectId, ref: "Order", required: true },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
@@ -25,5 +25,5 @@ const paymentSchema = new Schema<IPayment>(
   }
 );
 
-const Payment = model<IPayment>("Payment", paymentSchema);
+const Payment = model<IPayment>("Payment", PaymentSchema);
 export default Payment;

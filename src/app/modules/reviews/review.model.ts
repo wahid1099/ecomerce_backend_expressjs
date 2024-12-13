@@ -2,7 +2,7 @@ import mongoose, { Schema, Document } from "mongoose";
 import { IReview } from "./review.interface"; // Import the IReview interface
 
 // Define the Review schema
-const reviewSchema = new Schema<IReview>(
+const ReviewSchema = new Schema<IReview>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
     productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
@@ -14,6 +14,6 @@ const reviewSchema = new Schema<IReview>(
 );
 
 // Register the model with Mongoose
-const Review = mongoose.model<IReview>("Review", reviewSchema);
+const Review = mongoose.model<IReview>("Review", ReviewSchema);
 
 export default Review;
