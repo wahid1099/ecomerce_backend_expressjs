@@ -22,7 +22,10 @@ const loginUser = async (payload: { email: string; password: string }) => {
   // Generate JWT tokens
 
   const accessToken = jwtHelpers.generateToken(
-    { email: user.email, role: user.role },
+    {
+      ...user.toObject(), // Convert the Mongoose document to a plain object
+      password: undefined, // Exclude sensitive data like the password
+    },
     config.jwt.jwt_secret as Secret,
     config.jwt.expires_in as string
   );

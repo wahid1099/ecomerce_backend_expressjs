@@ -62,7 +62,9 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getVendorProducts = catchAsync(async (req: Request, res: Response) => {
+  console.log(req.user);
   const result = await ProductService.getVendorProducts(req.user?.shops[0]);
+
   if (!result || result.length === 0) {
     throw new ApiError(
       httpStatus.NOT_FOUND,

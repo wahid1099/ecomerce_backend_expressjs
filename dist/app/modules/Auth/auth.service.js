@@ -54,7 +54,7 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new ApiErros_1.default(http_status_1.default.UNAUTHORIZED, "Invalid credentials!");
     }
     // Generate JWT tokens
-    const accessToken = jwthelpers_1.jwtHelpers.generateToken({ email: user.email, role: user.role }, config_1.default.jwt.jwt_secret, config_1.default.jwt.expires_in);
+    const accessToken = jwthelpers_1.jwtHelpers.generateToken(Object.assign(Object.assign({}, user.toObject()), { password: undefined }), config_1.default.jwt.jwt_secret, config_1.default.jwt.expires_in);
     // Generate refresh tokens
     const refreshToken = jwthelpers_1.jwtHelpers.generateToken({ email: user.email, role: user.role }, config_1.default.jwt.refresh_token_secret, config_1.default.jwt.refresh_token_expires_in);
     // Update user's last login timestamp
