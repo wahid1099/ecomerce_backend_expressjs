@@ -48,7 +48,7 @@ const deleteProduct = (productId) => __awaiter(void 0, void 0, void 0, function*
 const getVendorProducts = (shopID) => __awaiter(void 0, void 0, void 0, function* () {
     const products = yield product_model_1.Product.find({ shopId: shopID }).populate([
         "images",
-        "reviews",
+        // "reviews",
         "orderItems",
     ]); // Populate related fields if needed
     if (!products || products.length === 0) {

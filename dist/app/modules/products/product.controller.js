@@ -72,7 +72,7 @@ const deleteProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
 }));
 const getVendorProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _c;
-    console.log(req.user);
+    // console.log(req.user);
     const result = yield product_service_1.ProductService.getVendorProducts((_c = req.user) === null || _c === void 0 ? void 0 : _c.shops[0]);
     if (!result || result.length === 0) {
         throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "No products found for this vendor");

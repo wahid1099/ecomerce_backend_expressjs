@@ -31,7 +31,11 @@ router.delete(
 );
 
 // Get all products for the vendor
-router.get("/", Auth(UserRole.Vendor), ProductController.getVendorProducts);
+router.get(
+  "/vendor-products",
+  Auth(UserRole.Vendor),
+  ProductController.getVendorProducts
+);
 
 // Get details of a product
 router.get(
@@ -41,9 +45,9 @@ router.get(
 );
 
 router.get(
-  "/admin", // New route for Admin
+  "/all-prodcuts-admin",
   Auth(UserRole.Admin),
-  ProductController.getAllProductsForAdmin // New controller method for Admin
+  ProductController.getAllProductsForAdmin
 );
 
 export const ProductRoutes = router;

@@ -36,7 +36,7 @@ const deleteProduct = async (productId: string) => {
 const getVendorProducts = async (shopID: string) => {
   const products = await Product.find({ shopId: shopID }).populate([
     "images",
-    "reviews",
+    // "reviews",
     "orderItems",
   ]); // Populate related fields if needed
   if (!products || products.length === 0) {
