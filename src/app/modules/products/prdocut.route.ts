@@ -47,7 +47,7 @@ router.patch(
 // Delete a product (generic route)
 router.delete(
   "/:productId",
-  Auth(UserRole.Vendor),
+  Auth(UserRole.Vendor, UserRole.Admin),
   ProductController.deleteProduct
 );
 

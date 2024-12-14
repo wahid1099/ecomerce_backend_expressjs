@@ -22,5 +22,5 @@ router.get("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor),
 // Update a product (generic route)
 router.patch("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor, user_interface_1.UserRole.Admin), (0, validaterequest_1.default)(product_validation_1.ProductValidationSchema.updateProductSchema), product_controller_1.ProductController.updateProduct);
 // Delete a product (generic route)
-router.delete("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), product_controller_1.ProductController.deleteProduct);
+router.delete("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor, user_interface_1.UserRole.Admin), product_controller_1.ProductController.deleteProduct);
 exports.ProductRoutes = router;
