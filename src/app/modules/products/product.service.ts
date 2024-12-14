@@ -70,11 +70,7 @@ const removeImageFromProduct = async (productId: string, imageUrl: string) => {
 };
 
 const getAllProducts = async () => {
-  const products = await Product.find().populate([
-    "images",
-    "reviews",
-    "orderItems",
-  ]); // You can populate other fields if necessary
+  const products = await Product.find().populate(["images", "orderItems"]); // You can populate other fields if necessary
   return products;
 };
 export const ProductService = {

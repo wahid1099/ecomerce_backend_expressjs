@@ -15,7 +15,28 @@ router.post(
   ProductController.createProductController
 );
 
-// Update a product
+// Get all products for the vendor (specific route)
+router.get(
+  "/vendor-products",
+  Auth(UserRole.Vendor),
+  ProductController.getVendorProducts
+);
+
+// Get all products for the admin (specific route)
+router.get(
+  "/all-products-admin",
+  Auth(UserRole.Admin),
+  ProductController.getAllProductsForAdmin
+);
+
+// Get details of a product (specific route)
+router.get(
+  "/:productId",
+  Auth(UserRole.Vendor),
+  ProductController.getProductById
+);
+
+// Update a product (generic route)
 router.patch(
   "/:productId",
   Auth(UserRole.Vendor, UserRole.Admin),
@@ -23,31 +44,11 @@ router.patch(
   ProductController.updateProduct
 );
 
-// Delete a product
+// Delete a product (generic route)
 router.delete(
   "/:productId",
   Auth(UserRole.Vendor),
   ProductController.deleteProduct
-);
-
-// Get all products for the vendor
-router.get(
-  "/vendor-products",
-  Auth(UserRole.Vendor),
-  ProductController.getVendorProducts
-);
-
-// Get details of a product
-router.get(
-  "/:productId",
-  Auth(UserRole.Vendor),
-  ProductController.getProductById
-);
-
-router.get(
-  "/all-prodcuts-admin",
-  Auth(UserRole.Admin),
-  ProductController.getAllProductsForAdmin
 );
 
 export const ProductRoutes = router;

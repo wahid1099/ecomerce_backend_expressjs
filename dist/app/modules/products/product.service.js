@@ -74,11 +74,7 @@ const removeImageFromProduct = (productId, imageUrl) => __awaiter(void 0, void 0
     return product;
 });
 const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield product_model_1.Product.find().populate([
-        "images",
-        "reviews",
-        "orderItems",
-    ]); // You can populate other fields if necessary
+    const products = yield product_model_1.Product.find().populate(["images", "orderItems"]); // You can populate other fields if necessary
     return products;
 });
 exports.ProductService = {
