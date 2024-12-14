@@ -45,8 +45,8 @@ const deleteProduct = (productId) => __awaiter(void 0, void 0, void 0, function*
     return { message: "Product deleted successfully!" };
 });
 // Get all products for a vendor (assumed `vendorId` corresponds to `shopId`)
-const getVendorProducts = (vendorId) => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield product_model_1.Product.find({ shopId: vendorId }).populate([
+const getVendorProducts = (shopID) => __awaiter(void 0, void 0, void 0, function* () {
+    const products = yield product_model_1.Product.find({ shopId: shopID }).populate([
         "images",
         "reviews",
         "orderItems",
