@@ -7,10 +7,16 @@ const globalErrorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+  // Default status code to 500 if not provided
+  const statusCode = err.statusCode || httpStatus.INTERNAL_SERVER_ERROR;
+
+  res.status(statusCode).json({
     success: false,
     message: err.message || "Something went wrong!",
-    error: err,
+    error: {
+      statusCode,
+      stack: process.env.NODE_ENV === "development" ? err.stack : undefined, // Include stack trace in development mode
+    },
   });
 };
 

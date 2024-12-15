@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 
 const notFound = (req: Request, res: Response, next: NextFunction) => {
@@ -6,6 +6,9 @@ const notFound = (req: Request, res: Response, next: NextFunction) => {
     success: false,
     statusCode: 404,
     message: "Not Found!!",
+    error: {
+      path: req.originalUrl,
+    },
   });
 };
 

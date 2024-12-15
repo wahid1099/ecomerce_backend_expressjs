@@ -15,28 +15,24 @@ router.post(
   ProductController.createProductController
 );
 
-// Get all products for the vendor (specific route)
+// Get all products for the vendor
 router.get(
   "/vendor-products",
   Auth(UserRole.Vendor),
   ProductController.getVendorProducts
 );
 
-// Get all products for the admin (specific route)
+// Browse products (public route)
+router.get("/browseproducts", ProductController.browseProducts);
+
+// Get all products for the admin
 router.get(
   "/all-products-admin",
   Auth(UserRole.Admin),
   ProductController.getAllProductsForAdmin
 );
 
-// Get details of a product (specific route)
-router.get(
-  "/:productId",
-  Auth(UserRole.Vendor),
-  ProductController.getProductById
-);
-
-// Update a product (generic route)
+// Update a product
 router.patch(
   "/:productId",
   Auth(UserRole.Vendor, UserRole.Admin),
@@ -44,11 +40,18 @@ router.patch(
   ProductController.updateProduct
 );
 
-// Delete a product (generic route)
+// Delete a product
 router.delete(
   "/:productId",
   Auth(UserRole.Vendor, UserRole.Admin),
   ProductController.deleteProduct
+);
+
+// Get details of a single product (dynamic route moved to the bottom)
+router.get(
+  "/:productId",
+  Auth(UserRole.Vendor),
+  ProductController.getProductById
 );
 
 export const ProductRoutes = router;

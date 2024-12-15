@@ -29,6 +29,7 @@ const product_service_1 = require("./product.service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
 const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
+const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const createProductController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const result = yield product_service_1.ProductService.createProduct(Object.assign(Object.assign({}, req.body), { vendorId: (_a = req.user) === null || _a === void 0 ? void 0 : _a._id }));
@@ -103,6 +104,23 @@ const getAllProductsForAdmin = (0, catchAsync_1.default)((req, res) => __awaiter
         data: result,
     });
 }));
+const browseProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const filters = req.query; // Extract query params for filtering
+    const paginationOptions = paginationHelper_1.paginationHelper.calculatePagination(req.query);
+    const { data, totalItems, totalPages } = yield product_service_1.ProductService.getPaginatedProducts(filters, paginationOptions);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "All products fetched successfully for Admin!",
+        data: data,
+        pagination: {
+            totalItems,
+            totalPages,
+            currentPage: paginationOptions.page,
+            pageSize: paginationOptions.limit,
+        },
+    });
+}));
 exports.ProductController = {
     getProductById,
     getVendorProducts,
@@ -110,4 +128,5 @@ exports.ProductController = {
     updateProduct,
     createProductController,
     getAllProductsForAdmin,
+    browseProducts,
 };

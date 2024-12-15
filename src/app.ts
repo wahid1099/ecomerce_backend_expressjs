@@ -15,10 +15,11 @@ app.use(
   })
 );
 
-//parser
+// Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Home route
 app.get("/", (req: Request, res: Response) => {
   res.send({
     Message: "Multi Vendor Ecomerce  System..",
@@ -27,17 +28,9 @@ app.get("/", (req: Request, res: Response) => {
 
 app.use("/api", router);
 
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.status(httpStatus.NOT_FOUND).json({
-    success: false,
-    message: "API NOT FOUND!",
-    error: {
-      path: req.originalUrl,
-      message: "Your requested path is not found!",
-    },
-  });
-});
-
-app.use(globalErrorHandler);
+// Not found handler
 app.use(notFound);
+
+// Global error handler
+app.use(globalErrorHandler);
 export default app;

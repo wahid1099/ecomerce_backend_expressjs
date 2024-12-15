@@ -4,6 +4,7 @@ import { ProductService } from "./product.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import ApiError from "../../errors/ApiErros";
+import { paginationHelper } from "../../../helpers/paginationHelper";
 
 const createProductController = catchAsync(
   async (req: Request, res: Response) => {
@@ -105,6 +106,26 @@ const getAllProductsForAdmin = catchAsync(
   }
 );
 
+const browseProducts = catchAsync(async (req: Request, res: Response) => {
+  const filters = req.query; // Extract query params for filtering
+  const paginationOptions = paginationHelper.calculatePagination(req.query);
+  const { data, totalItems, totalPages } =
+    await ProductService.getPaginatedProducts(filters, paginationOptions);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All products fetched successfully for Admin!",
+    data: data,
+    pagination: {
+      totalItems,
+      totalPages,
+      currentPage: paginationOptions.page,
+      pageSize: paginationOptions.limit,
+    },
+  });
+});
+
 export const ProductController = {
   getProductById,
   getVendorProducts,
@@ -112,4 +133,5 @@ export const ProductController = {
   updateProduct,
   createProductController,
   getAllProductsForAdmin,
+  browseProducts,
 };
