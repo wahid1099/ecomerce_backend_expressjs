@@ -10,8 +10,8 @@ const app: Application = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://wahidsbdshop.netlify.app/"],
-    //  // Allow this specific origin
+    origin: ["http://localhost:5173", "https://wahidsbdshop.netlify.app"],
+
     credentials: true, // Allow cookies and headers like Authorization
   })
 );

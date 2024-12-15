@@ -11,8 +11,7 @@ const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
 const app = (0, express_1.default)();
 // app.use(cors());
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:5173", "https://wahidsbdshop.netlify.app/"],
-    //  // Allow this specific origin
+    origin: ["http://localhost:5173", "https://wahidsbdshop.netlify.app"],
     credentials: true, // Allow cookies and headers like Authorization
 }));
 // Body parser
