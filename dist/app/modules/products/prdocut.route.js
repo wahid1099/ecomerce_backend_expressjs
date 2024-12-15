@@ -24,5 +24,5 @@ router.patch("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor
 // Delete a product
 router.delete("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor, user_interface_1.UserRole.Admin), product_controller_1.ProductController.deleteProduct);
 // Get details of a single product (dynamic route moved to the bottom)
-router.get("/:productId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), product_controller_1.ProductController.getProductById);
+router.get("/:productId", product_controller_1.ProductController.getProductById);
 exports.ProductRoutes = router;
