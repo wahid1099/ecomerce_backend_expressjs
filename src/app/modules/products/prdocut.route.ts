@@ -50,7 +50,7 @@ router.delete(
 // Get details of a single product (dynamic route moved to the bottom)
 router.get(
   "/:productId",
-  Auth(UserRole.Vendor),
+
   ProductController.getProductById
 );
 
