@@ -58,9 +58,7 @@ const getVendorProducts = (shopID) => __awaiter(void 0, void 0, void 0, function
 });
 // Get product details by ID
 const getProductById = (productId) => __awaiter(void 0, void 0, void 0, function* () {
-    const product = yield product_model_1.Product.findById(productId)
-        .populate("images reviews orderItems") // Populate related fields
-        .orFail(); // Throws an error if not found
+    const product = yield product_model_1.Product.findById(productId);
     return product;
 });
 // Remove image from the product

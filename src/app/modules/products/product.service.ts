@@ -57,9 +57,7 @@ const getVendorProducts = async (shopID: string) => {
 
 // Get product details by ID
 const getProductById = async (productId: string) => {
-  const product = await Product.findById(productId)
-    .populate("images reviews orderItems") // Populate related fields
-    .orFail(); // Throws an error if not found
+  const product = await Product.findById(productId);
   return product;
 };
 
@@ -98,14 +96,13 @@ const getPaginatedProducts = async (
     query.name = { $regex: filters.name, $options: "i" }; // Case-insensitive search
   }
 
-   // **3. Filter by price range**
-   if (filters.minPrice || filters.maxPrice) {
+  // **3. Filter by price range**
+  if (filters.minPrice || filters.maxPrice) {
     query.price = {
       ...(filters.minPrice ? { $gte: Number(filters.minPrice) } : {}),
       ...(filters.maxPrice ? { $lte: Number(filters.maxPrice) } : {}),
     };
   }
-
 
   const data = await Product.find(query)
     .sort({ [sortBy]: sortOrder === "asc" ? 1 : -1 })
