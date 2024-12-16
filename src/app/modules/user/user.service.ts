@@ -102,9 +102,10 @@ const suspendVendor = async (vendorId: string, isSuspended: boolean) => {
 
 const getUserFollowedShops = async (userId: string) => {
   const user = await User.findById(userId).populate({
-    path: "followedShops",
+    path: "followedShops", // Populate the array of ShopFollower references
     populate: {
-      path: "shop",
+      path: "shop", // Populate the shop field inside each ShopFollower
+      select: "name description", // Optional: you can specify which fields to select from the Shop model
     },
   });
 

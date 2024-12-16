@@ -89,9 +89,10 @@ const suspendVendor = (vendorId, isSuspended) => __awaiter(void 0, void 0, void 
 });
 const getUserFollowedShops = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.findById(userId).populate({
-        path: "followedShops",
+        path: "followedShops", // Populate the array of ShopFollower references
         populate: {
-            path: "shop",
+            path: "shop", // Populate the shop field inside each ShopFollower
+            select: "name description", // Optional: you can specify which fields to select from the Shop model
         },
     });
     if (!user || !user.followedShops) {

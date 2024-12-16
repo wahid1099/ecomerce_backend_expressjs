@@ -1,8 +1,11 @@
+import { Shop } from "./../shop/shop.model";
 import { IPayment } from "../payment/payment.interface";
 import { IShop, IShopFollower } from "../shop/shop.interface";
 import { IOrder } from "../order/order.interface";
 import { IReview } from "../reviews/review.interface";
 import { Model } from "mongoose";
+
+import { Types } from "mongoose";
 
 export enum UserRole {
   Admin = "Admin",
@@ -42,12 +45,12 @@ export type IUser = {
   updatedAt: Date; // Timestamp when the user was last updated
 
   // Relations
-  shops?: IShop[]; // Shops owned by the user (if vendor)
-  orders?: IOrder[]; // Orders placed by the user
-  reviews?: IReview[]; // Reviews written by the user
-  followedShops?: IShopFollower[]; // Shops the user follows
-  shopFollowers?: IShop[]; // Followers of the user's shop (if vendor)
-  payments?: IPayment[]; // Payments made by the user
+  shop?: Types.ObjectId[]; // Shops owned by the user (if vendor)
+  orders?: Types.ObjectId[]; // Orders placed by the user
+  reviews?: Types.ObjectId[]; // Reviews written by the user
+  followedShops?: Types.ObjectId[]; // Shops the user follows
+  shopFollowers?: Types.ObjectId[]; // Followers of the user's shop (if vendor)
+  payments?: Types.ObjectId[]; // Payments made by the user
 };
 
 export type IUserUpdate = {

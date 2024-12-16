@@ -40,11 +40,11 @@ const userSchema = new mongoose_1.Schema({
     country: { type: String },
     phone: { type: String },
     addressBook: { type: String },
-    shops: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" }], // Reference to Shop model
-    orders: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Order" }], // Reference to Order model
-    reviews: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Review" }], // Reference to Review model
-    followedShops: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "ShopFollower" }], // Reference to ShopFollower model
-    shopFollowers: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" }], // Reference to Shop model (for followers of user's shop)
+    shop: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" }],
+    orders: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Order" }],
+    reviews: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Review" }],
+    followedShops: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "ShopFollower" }],
+    shopFollowers: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "ShopFollower" }],
     payments: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Payment" }], // Reference to Payment model
     role: {
         type: String,
