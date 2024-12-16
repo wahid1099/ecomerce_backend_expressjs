@@ -14,12 +14,12 @@ const mongoose_1 = require("mongoose");
 const user_model_1 = require("../user/user.model"); // Import User model
 // Define the ShopFollower schema
 const ShopFollowerSchema = new mongoose_1.Schema({
-    userId: {
+    user: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
-    shopId: {
+    shop: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "Shop",
         required: true,

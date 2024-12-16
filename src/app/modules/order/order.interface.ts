@@ -8,8 +8,8 @@ export type IOrder = {
   id: string; // UUID for the order
   userId: Types.ObjectId; // Reference to the user who placed the order
   user?: IUser; // Populated user reference, optional
-  shopId: Types.ObjectId; // Reference to the shop where the order was placed
-  shop?: IShop; // Populated shop reference, optional
+  shop: Types.ObjectId; // Reference to the shop where the order was placed
+
   totalAmount: number; // Total cost of the order
   status: "pending" | "completed" | "canceled"; // Order status options
   createdAt: Date; // Order creation timestamp

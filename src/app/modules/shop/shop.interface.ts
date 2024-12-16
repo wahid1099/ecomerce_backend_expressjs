@@ -4,7 +4,6 @@ import { IUser } from "../user/user.interface";
 import { Types } from "mongoose";
 
 export type IShop = {
-  id: string; // UUID
   name: string;
   description?: string;
   logo?: string;
@@ -20,11 +19,8 @@ export type IShop = {
 };
 
 export type IShopFollower = {
-  id: string; // UUID
-  userId: Types.ObjectId;
-  shopId: Types.ObjectId;
-  user?: IUser; // Populated if needed
-  shop?: IShop; // Populated if needed
+  user?: Types.ObjectId; // Populated if needed
+  shop?: Types.ObjectId; // Populated if needed
   isBlacklisted?: boolean;
   createdAt: Date;
 };

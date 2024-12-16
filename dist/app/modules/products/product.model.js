@@ -59,12 +59,16 @@ const ProductSchema = new mongoose_1.Schema({
         max: [100, "Discount cannot be more than 100"],
         default: 0, // Optional field
     },
-    shopId: {
+    // shopId: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Shop",
+    //   required: [true, "Shop ID is required"],
+    // },
+    shop: {
         type: mongoose_1.Schema.Types.ObjectId,
         ref: "Shop",
         required: [true, "Shop ID is required"],
     },
-    shop: { type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" },
     images: {
         type: [String],
         default: [],

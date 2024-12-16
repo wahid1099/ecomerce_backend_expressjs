@@ -2,6 +2,7 @@ import { Shop, ShopFollower } from "./shop.model";
 import { Order } from "../order/order.model";
 import ApiError from "../../errors/ApiErros";
 import httpStatus from "http-status";
+import { IUser } from "../user/user.interface"; // Assuming you have IUser interface
 
 const createShop = async (shopData: {
   name: string;
@@ -93,7 +94,9 @@ const unfollowShop = async (userId: string, shopId: string) => {
 };
 
 const getShopFollowers = async (shopId: string) => {
-  const followers = await ShopFollower.find({ shopId }).populate("user");
+  const followers = await ShopFollower.find({ shop: shopId })
+    .populate<{ user: IUser }>("user") // Explicitly set the type of 'user' to IUser
+    .exec(); // Adding exec() ensures it's properly executed
 
   return followers.map((follower) => ({
     id: follower.user?._id,

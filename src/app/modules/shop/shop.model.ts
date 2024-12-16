@@ -8,12 +8,12 @@ import { User } from "../user/user.model"; // Import User model
 // Define the ShopFollower schema
 const ShopFollowerSchema = new Schema<IShopFollower>(
   {
-    userId: {
+    user: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    shopId: {
+    shop: {
       type: Schema.Types.ObjectId,
       ref: "Shop",
       required: true,

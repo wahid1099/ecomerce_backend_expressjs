@@ -18,7 +18,7 @@ const OrderItemSchema = new Schema<IOrderItem>(
 const OrderSchema = new Schema<IOrder>(
   {
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    shopId: { type: Schema.Types.ObjectId, ref: "Shop", required: true },
+    shop: { type: Schema.Types.ObjectId, ref: "Shop", required: true },
     totalAmount: { type: Number, required: true },
     status: {
       type: String,

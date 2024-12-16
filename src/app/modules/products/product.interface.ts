@@ -12,8 +12,8 @@ export type IProduct = {
   category: string;
   inventory: number;
   discount: number;
-  shopId: Types.ObjectId;
-  shop?: IShop;
+  // shopId: Types.ObjectId;
+  shop: Types.ObjectId;
   createdAt: Date;
   updatedAt: Date;
   images?: string[];

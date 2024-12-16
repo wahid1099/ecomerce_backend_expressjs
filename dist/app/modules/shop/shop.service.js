@@ -73,7 +73,9 @@ const unfollowShop = (userId, shopId) => __awaiter(void 0, void 0, void 0, funct
     };
 });
 const getShopFollowers = (shopId) => __awaiter(void 0, void 0, void 0, function* () {
-    const followers = yield shop_model_1.ShopFollower.find({ shopId }).populate("user");
+    const followers = yield shop_model_1.ShopFollower.find({ shop: shopId })
+        .populate("user") // Explicitly set the type of 'user' to IUser
+        .exec(); // Adding exec() ensures it's properly executed
     return followers.map((follower) => {
         var _a, _b, _c, _d;
         return ({
