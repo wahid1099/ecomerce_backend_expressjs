@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Payment Confirmation</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background-color: #f0f2f5; /* Light background color for contrast */
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: #333; /* Dark text color for better readability */
+      }
+      .container {
+        background-color: #ffffff; /* White background for the container */
+        padding: 40px;
+        border-radius: 20px; /* Slightly increased border radius */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Softer shadow */
+        text-align: center;
+        max-width: 500px;
+        border: 1px solid #e0e0e0; /* Light border for better definition */
+      }
+      h1 {
+        color: #007bff; /* Bootstrap primary color */
+        font-size: 30px; /* Larger font size */
+        margin-bottom: 15px;
+      }
+      p {
+        font-size: 16px; /* Slightly smaller font size */
+        margin: 15px 0 20px;
+        color: #555; /* Darker gray for text */
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 30px;
+        background-color: #28a745; /* Bootstrap success color */
+        color: white;
+        text-decoration: none;
+        border-radius: 30px; /* More rounded corners */
+        font-size: 18px;
+        transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform for hover effect */
+        border: none; /* Remove default border */
+        cursor: pointer; /* Pointer cursor for button */
+      }
+      .btn:hover {
+        background-color: #218838; /* Darker green on hover */
+        transform: scale(1.05); /* Slightly enlarge button on hover */
+      }
+      .footer {
+        margin-top: 20px;
+        font-size: 14px;
+        color: #888; /* Lighter text color for footer */
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{message}}</h1>
+      <p>
+        Thank you for your payment! You will receive a confirmation email
+        shortly.
+      </p>
+      <a class="btn" href="#">Continue</a>
+      <div class="footer">
+        <p>
+          If you are not redirected,
+          <a href="https://wahidsbdshop.netlify.app/">click here</a>.
+        </p>
+      </div>
+      <script>
+        setTimeout(() => {
+          window.location.href = "https://wahidsbdshop.netlify.app/";
+        }, 3000);
+      </script>
+    </div>
+  </body>
+</html>

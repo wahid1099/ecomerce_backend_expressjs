@@ -11,6 +11,12 @@ exports.default = {
     port: process.env.PORT,
     database_url: process.env.DATABASE_URL,
     bcrypt_salt_rounds: process.env.BCRYPT_SALT_ROUNDS,
+    backend_url: process.env.BACKEND_URL,
+    payment_verify_url: process.env.PAYMENT_VERIFY_URL,
+    payment_url: process.env.PAYMENT_URL,
+    store_id: process.env.Store_ID,
+    signature_key: process.env.SIGNATURE_KEY,
+    client_url: process.env.CLIENT_URL,
     jwt: {
         jwt_secret: process.env.JWT_SECRET,
         expires_in: process.env.EXPIRES_IN,

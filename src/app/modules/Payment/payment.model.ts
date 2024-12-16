@@ -25,5 +25,4 @@ const PaymentSchema = new Schema<IPayment>(
   }
 );
 
-const Payment = model<IPayment>("Payment", PaymentSchema);
-export default Payment;
+export const Payment = model<IPayment>("Payment", PaymentSchema);
