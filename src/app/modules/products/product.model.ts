@@ -69,6 +69,8 @@ const ProductSchema = new Schema<IProduct>(
       ref: "Shop",
       required: [true, "Shop ID is required"],
     },
+    shop: { type: Schema.Types.ObjectId, ref: "Shop" },
+
     images: {
       type: [String],
       default: [],

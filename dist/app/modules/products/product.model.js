@@ -64,6 +64,7 @@ const ProductSchema = new mongoose_1.Schema({
         ref: "Shop",
         required: [true, "Shop ID is required"],
     },
+    shop: { type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" },
     images: {
         type: [String],
         default: [],
