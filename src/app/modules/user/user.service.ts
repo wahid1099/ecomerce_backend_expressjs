@@ -40,7 +40,7 @@ const updateUser = async (userId: string, payload: Partial<IUserUpdate>) => {
 
 const getMyProfileService = async (email: string) => {
   const user = await User.findOne({ email, isDeleted: false })
-    .populate({ path: "shops", options: { strictPopulate: false } }) // Handle missing shops gracefully
+    .populate({ path: "shop", options: { strictPopulate: false } }) // Handle missing shops gracefully
     .populate({ path: "orders", options: { strictPopulate: false } }) // Handle missing orders gracefully
     // .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
     .populate({ path: "followedShops", options: { strictPopulate: false } }) // Handle missing followedShops gracefully
@@ -59,7 +59,7 @@ const getMyProfileService = async (email: string) => {
 
 const getAllUsers = async () => {
   const users = await User.find()
-    .populate({ path: "shops", options: { strictPopulate: false } }) // Handle missing shops gracefully
+    .populate({ path: "shop", options: { strictPopulate: false } }) // Handle missing shops gracefully
     .populate({ path: "orders", options: { strictPopulate: false } }) // Handle missing orders gracefully
     // .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
     .populate({ path: "followedShops", options: { strictPopulate: false } }) // Handle missing followedShops gracefully

@@ -111,7 +111,7 @@ ShopSchema.post("save", async function (doc, next) {
   try {
     await User.findByIdAndUpdate(
       doc.vendorId,
-      { $push: { shops: doc._id } }, // Add the shop's ID to the user's shops array
+      { $push: { shop: doc._id } }, // Add the shop's ID to the user's shops array
       { new: true }
     );
     next();

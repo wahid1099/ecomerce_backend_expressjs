@@ -104,7 +104,7 @@ ShopSchema.pre("save", function (next) {
 ShopSchema.post("save", function (doc, next) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield user_model_1.User.findByIdAndUpdate(doc.vendorId, { $push: { shops: doc._id } }, // Add the shop's ID to the user's shops array
+            yield user_model_1.User.findByIdAndUpdate(doc.vendorId, { $push: { shop: doc._id } }, // Add the shop's ID to the user's shops array
             { new: true });
             next();
         }
