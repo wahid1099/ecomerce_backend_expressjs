@@ -16,7 +16,7 @@ router.post(
 );
 
 // Get all shops for the vendor
-router.get("/", Auth(UserRole.Vendor), ShopController.getVendorShops);
+router.get("/", Auth(UserRole.Admin), ShopController.getVendorShops);
 
 // Get shop followers
 router.get(

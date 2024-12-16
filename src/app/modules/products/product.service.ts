@@ -41,7 +41,7 @@ const deleteProduct = async (productId: string) => {
 
 // Get all products for a vendor (assumed `vendorId` corresponds to `shopId`)
 const getVendorProducts = async (shopID: string) => {
-  const products = await Product.find({ shopId: shopID }).populate([
+  const products = await Product.find({ shop: shopID }).populate([
     "images",
     // "reviews",
     "orderItems",
