@@ -16,7 +16,7 @@ const PaymentSchema = new Schema<IPayment>(
       enum: ["success", "failed", "pending"],
       required: true,
     },
-    transactionId: { type: Schema.Types.ObjectId, ref: "Transaction" },
+    transactionId: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   },

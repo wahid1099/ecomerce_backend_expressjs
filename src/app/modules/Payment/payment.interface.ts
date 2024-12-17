@@ -9,7 +9,7 @@ export type IPayment = {
   amount: number;
   method: "card" | "bank_transfer" | "cash_on_delivery";
   status: "success" | "failed" | "pending";
-  transactionId: { type: String; required: true };
+  transactionId: string;
   createdAt: Date;
   updatedAt: Date;
 };
