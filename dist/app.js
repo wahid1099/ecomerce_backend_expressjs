@@ -10,6 +10,7 @@ const routes_1 = __importDefault(require("./app/routes"));
 const notFound_1 = __importDefault(require("./app/middlewares/notFound"));
 const app = (0, express_1.default)();
 // app.use(cors());
+//using cors to prevent
 app.use((0, cors_1.default)({
     origin: ["http://localhost:5173", "https://wahidsbdshop.netlify.app"],
     credentials: true, // Allow cookies and headers like Authorization
