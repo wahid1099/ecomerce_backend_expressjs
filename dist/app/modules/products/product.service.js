@@ -51,9 +51,6 @@ const getVendorProducts = (shopID) => __awaiter(void 0, void 0, void 0, function
         // "reviews",
         "orderItems",
     ]); // Populate related fields if needed
-    if (!products || products.length === 0) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "No products found for this vendor");
-    }
     return products;
 });
 // Get product details by ID

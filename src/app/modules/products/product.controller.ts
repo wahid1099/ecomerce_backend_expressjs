@@ -63,7 +63,6 @@ const deleteProduct = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getVendorProducts = catchAsync(async (req: Request, res: Response) => {
-  // console.log(req.user);
   const result = await ProductService.getVendorProducts(req.user?.shop);
 
   const message =

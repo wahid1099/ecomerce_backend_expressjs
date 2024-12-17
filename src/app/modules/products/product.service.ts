@@ -46,12 +46,7 @@ const getVendorProducts = async (shopID: string) => {
     // "reviews",
     "orderItems",
   ]); // Populate related fields if needed
-  if (!products || products.length === 0) {
-    throw new ApiError(
-      httpStatus.NOT_FOUND,
-      "No products found for this vendor"
-    );
-  }
+
   return products;
 };
 
