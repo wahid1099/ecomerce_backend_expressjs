@@ -66,18 +66,16 @@ const getVendorProducts = catchAsync(async (req: Request, res: Response) => {
   // console.log(req.user);
   const result = await ProductService.getVendorProducts(req.user?.shop);
 
-  if (!result || result.length === 0) {
-    throw new ApiError(
-      httpStatus.NOT_FOUND,
-      "No products found for this vendor"
-    );
-  }
+  const message =
+    result && result.length > 0
+      ? "Products fetched successfully!"
+      : "No products found for this vendor";
 
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "Products fetched successfully!",
-    data: result,
+    message: message,
+    data: result || [],
   });
 });
 

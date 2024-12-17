@@ -75,14 +75,14 @@ const getVendorProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void
     var _c;
     // console.log(req.user);
     const result = yield product_service_1.ProductService.getVendorProducts((_c = req.user) === null || _c === void 0 ? void 0 : _c.shop);
-    if (!result || result.length === 0) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "No products found for this vendor");
-    }
+    const message = result && result.length > 0
+        ? "Products fetched successfully!"
+        : "No products found for this vendor";
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "Products fetched successfully!",
-        data: result,
+        message: message,
+        data: result || [],
     });
 }));
 const getProductById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
