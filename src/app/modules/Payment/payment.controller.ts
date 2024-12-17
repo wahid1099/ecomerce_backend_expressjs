@@ -8,7 +8,7 @@ const createPayment = catchAsync(async (req, res) => {
 
   sendResponse(res, {
     success: true,
-    statusCode: httpStatus.OK,
+    statusCode: httpStatus.CREATED,
     message: "Payment Created Successfully",
     data: result,
   });

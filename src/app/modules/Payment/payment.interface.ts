@@ -1,5 +1,3 @@
-import { IOrder } from "../order/order.interface";
-import { IUser } from "../user/user.interface";
 import { Types } from "mongoose";
 
 export type IPayment = {

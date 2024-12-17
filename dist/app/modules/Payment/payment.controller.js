@@ -21,7 +21,7 @@ const createPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     const result = yield payment_service_1.PaymentService.createPaymentIntoDB(req.body);
     (0, sendResponse_1.default)(res, {
         success: true,
-        statusCode: http_status_1.default.OK,
+        statusCode: http_status_1.default.CREATED,
         message: "Payment Created Successfully",
         data: result,
     });

@@ -1,4 +1,4 @@
-import mongoose, { Schema, model } from "mongoose";
+import { Schema, model } from "mongoose";
 import { IPayment } from "./payment.interface";
 
 const PaymentSchema = new Schema<IPayment>(
