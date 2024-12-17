@@ -3,8 +3,8 @@ import { IPayment } from "./payment.interface";
 
 const PaymentSchema = new Schema<IPayment>(
   {
-    orderId: { type: Schema.Types.ObjectId, ref: "Order", required: true },
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    order: { type: Schema.Types.ObjectId, ref: "Order", required: true },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     amount: { type: Number, required: true },
     method: {
       type: String,

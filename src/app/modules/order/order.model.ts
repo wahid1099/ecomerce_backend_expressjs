@@ -4,8 +4,8 @@ import { Schema, model } from "mongoose";
 
 const OrderItemSchema = new Schema<IOrderItem>(
   {
-    productId: { type: Schema.Types.ObjectId, ref: "Product", required: true },
-    orderId: { type: Schema.Types.ObjectId, ref: "Order", required: true },
+    product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
+    order: { type: Schema.Types.ObjectId, ref: "Order", required: true },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
   },
@@ -17,7 +17,7 @@ const OrderItemSchema = new Schema<IOrderItem>(
 
 const OrderSchema = new Schema<IOrder>(
   {
-    userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: Schema.Types.ObjectId, ref: "User", required: true },
     shop: { type: Schema.Types.ObjectId, ref: "Shop", required: true },
     totalAmount: { type: Number, required: true },
     status: {

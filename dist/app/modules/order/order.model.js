@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderItem = exports.Order = void 0;
 const mongoose_1 = require("mongoose");
 const OrderItemSchema = new mongoose_1.Schema({
-    productId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Product", required: true },
-    orderId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Order", required: true },
+    product: { type: mongoose_1.Schema.Types.ObjectId, ref: "Product", required: true },
+    order: { type: mongoose_1.Schema.Types.ObjectId, ref: "Order", required: true },
     quantity: { type: Number, required: true },
     price: { type: Number, required: true },
 }, {
@@ -12,7 +12,7 @@ const OrderItemSchema = new mongoose_1.Schema({
     _id: true, // Each order item has its own ID
 });
 const OrderSchema = new mongoose_1.Schema({
-    userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
+    user: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
     shop: { type: mongoose_1.Schema.Types.ObjectId, ref: "Shop", required: true },
     totalAmount: { type: Number, required: true },
     status: {
