@@ -22,12 +22,34 @@ const path_1 = require("path");
 const fs_1 = require("fs");
 const uuid_1 = require("uuid");
 const createPaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!payload.user || !payload.amount || !payload.method) {
+        throw new ApiErros_1.default(http_status_1.default.BAD_REQUEST, "Missing required payment fields!");
+    }
+    // Check if the user exists
     const isUserExist = yield user_model_1.User.findById(payload.user);
+    if (!isUserExist) {
+        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found!");
+    }
+    // Generate a unique transaction ID
     const newTransactionId = (0, uuid_1.v4)();
-    if (isUserExist && newTransactionId) {
-        const paymentData = Object.assign(Object.assign({}, payload), { transactionId: newTransactionId, userName: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.name, email: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.email, phoneNumber: isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.phone, address: (isUserExist === null || isUserExist === void 0 ? void 0 : isUserExist.addressBook) || "Dhaka" });
+    const paymentData = Object.assign(Object.assign({}, payload), { transactionId: newTransactionId, userName: isUserExist.name, email: isUserExist.email, phoneNumber: isUserExist.phone || "N/A", address: isUserExist.addressBook || "Dhaka" });
+    try {
+        // Initiate the payment session
         const paymentSession = yield (0, PaymentGetway_1.initiatePayment)(paymentData);
-        return paymentSession;
+        // Create a payment record in the database
+        const newPayment = yield payment_model_1.Payment.create({
+            order: payload.order,
+            user: payload.user,
+            amount: payload.amount,
+            method: payload.method,
+            status: "pending", // Default status until confirmed
+            transactionId: newTransactionId,
+        });
+        return { paymentSession, newPayment };
+    }
+    catch (error) {
+        console.error("Payment creation failed:", error);
+        throw new ApiErros_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Failed to create payment!");
     }
 });
 const getAllPaymentIntoDB = () => __awaiter(void 0, void 0, void 0, function* () {

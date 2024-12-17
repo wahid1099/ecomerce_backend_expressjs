@@ -14,22 +14,52 @@ import { readFileSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
 
 const createPaymentIntoDB = async (payload: IPayment) => {
-  const isUserExist = await User.findById(payload.user);
+  if (!payload.user || !payload.amount || !payload.method) {
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "Missing required payment fields!"
+    );
+  }
 
+  // Check if the user exists
+  const isUserExist = await User.findById(payload.user);
+  if (!isUserExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found!");
+  }
+
+  // Generate a unique transaction ID
   const newTransactionId = uuidv4();
 
-  if (isUserExist && newTransactionId) {
-    const paymentData = {
-      ...payload,
-      transactionId: newTransactionId,
-      userName: isUserExist?.name,
-      email: isUserExist?.email,
-      phoneNumber: isUserExist?.phone,
-      address: isUserExist?.addressBook || "Dhaka",
-    };
+  const paymentData = {
+    ...payload,
+    transactionId: newTransactionId,
+    userName: isUserExist.name,
+    email: isUserExist.email,
+    phoneNumber: isUserExist.phone || "N/A",
+    address: isUserExist.addressBook || "Dhaka",
+  };
+
+  try {
+    // Initiate the payment session
     const paymentSession = await initiatePayment(paymentData);
 
-    return paymentSession;
+    // Create a payment record in the database
+    const newPayment = await Payment.create({
+      order: payload.order,
+      user: payload.user,
+      amount: payload.amount,
+      method: payload.method,
+      status: "pending", // Default status until confirmed
+      transactionId: newTransactionId,
+    });
+
+    return { paymentSession, newPayment };
+  } catch (error) {
+    console.error("Payment creation failed:", error);
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Failed to create payment!"
+    );
   }
 };
 
