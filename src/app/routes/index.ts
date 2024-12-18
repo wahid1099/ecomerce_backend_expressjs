@@ -4,7 +4,7 @@ import { Router } from "express";
 import { AuthRoutes } from "../modules/Auth/auth.route";
 import { ProductRoutes } from "../modules/products/prdocut.route";
 import { OrderRoutes } from "../modules/order/order.route";
-import { PaymentRoute } from "../modules/payment/payment.route";
+import { PaymentRoute } from "../modules/Payments/payment.route";
 const router = Router();
 
 const moduleRoutes = [

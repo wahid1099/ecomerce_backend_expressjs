@@ -6,7 +6,7 @@ const express_1 = require("express");
 const auth_route_1 = require("../modules/Auth/auth.route");
 const prdocut_route_1 = require("../modules/products/prdocut.route");
 const order_route_1 = require("../modules/order/order.route");
-const payment_route_1 = require("../modules/payment/payment.route");
+const payment_route_1 = require("../modules/Payments/payment.route");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
