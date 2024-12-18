@@ -1,6 +1,6 @@
 import { IOrder, IOrderItem } from "./order.interface";
 import { Order } from "./order.model";
-import ApiError from "../../errors/ApiErros";
+import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
 
 /**

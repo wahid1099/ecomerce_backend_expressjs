@@ -1,4 +1,4 @@
-import ApiError from "../../errors/ApiErros";
+import ApiError from "../../errors/ApiError";
 import { Product } from "./product.model"; // Importing the Product model
 import httpStatus from "http-status";
 

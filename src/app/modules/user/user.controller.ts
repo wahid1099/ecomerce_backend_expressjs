@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
 import catchAsync from "../../../shared/catchAsync";
-import ApiError from "../../errors/ApiErros";
+import ApiError from "../../errors/ApiError";
 
 const inserUserIntoDB = catchAsync(async (req: Request, res: Response) => {
   const newUser = await UserService.createUser(req.body);

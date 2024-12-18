@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentService = void 0;
 const http_status_1 = __importDefault(require("http-status"));
-const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const user_model_1 = require("../user/user.model");
 const payment_model_1 = require("./payment.model");
 const PaymentGetway_1 = require("../../../helpers/PaymentGetway");
@@ -23,12 +23,12 @@ const fs_1 = require("fs");
 const uuid_1 = require("uuid");
 const createPaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     if (!payload.user || !payload.amount || !payload.method) {
-        throw new ApiErros_1.default(http_status_1.default.BAD_REQUEST, "Missing required payment fields!");
+        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Missing required payment fields!");
     }
     // Check if the user exists
     const isUserExist = yield user_model_1.User.findById(payload.user);
     if (!isUserExist) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found!");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "User not found!");
     }
     // Generate a unique transaction ID
     const newTransactionId = (0, uuid_1.v4)();
@@ -49,7 +49,7 @@ const createPaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, funct
     }
     catch (error) {
         console.error("Payment creation failed:", error);
-        throw new ApiErros_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Failed to create payment!");
+        throw new ApiError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Failed to create payment!");
     }
 });
 const getAllPaymentIntoDB = () => __awaiter(void 0, void 0, void 0, function* () {
@@ -59,7 +59,7 @@ const getAllPaymentIntoDB = () => __awaiter(void 0, void 0, void 0, function* ()
 const getSinglePaymentIntoDB = (paymentId) => __awaiter(void 0, void 0, void 0, function* () {
     const payment = yield payment_model_1.Payment.findById(paymentId);
     if (!payment) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "Payment Not Found!");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Payment Not Found!");
     }
     return payment;
 });
@@ -125,7 +125,7 @@ const confirmationServiceIntoDB = (transactionId, status, payloadData) => __awai
             template = (0, fs_1.readFileSync)(filePath, "utf-8");
         }
         catch (error) {
-            throw new ApiErros_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Internal server error!");
+            throw new ApiError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Internal server error!");
         }
         template = template.replace("{{message}}", message);
         return template;

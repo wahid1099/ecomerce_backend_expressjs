@@ -1,6 +1,6 @@
 import { IUser, IUserUpdate } from "./user.interface";
 import { User } from "./user.model";
-import ApiError from "../../errors/ApiErros";
+import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
 
 const createUser = async (userData: IUser) => {

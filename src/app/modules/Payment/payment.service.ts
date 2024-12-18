@@ -1,5 +1,5 @@
 import httpStatus from "http-status";
-import ApiError from "../../errors/ApiErros";
+import ApiError from "../../errors/ApiError";
 import { User } from "../user/user.model";
 import { IPayment } from "./payment.interface";
 import { Payment } from "./payment.model";

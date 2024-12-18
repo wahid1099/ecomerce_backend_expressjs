@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.orderService = void 0;
 const order_model_1 = require("./order.model");
-const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const http_status_1 = __importDefault(require("http-status"));
 /**
  * Create a new order for a shop
@@ -23,7 +23,7 @@ const http_status_1 = __importDefault(require("http-status"));
 const createOrder = (params) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId, shopId, items, totalAmount } = params;
     if (!userId || !shopId || !items.length || !totalAmount) {
-        throw new ApiErros_1.default(http_status_1.default.BAD_REQUEST, "Invalid data provided");
+        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Invalid data provided");
     }
     const order = yield order_model_1.Order.create({
         user: userId,
@@ -44,7 +44,7 @@ const getOrdersForUser = (userId) => __awaiter(void 0, void 0, void 0, function*
         .populate("shop")
         .populate("payment");
     if (!orders) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "No orders found for this user");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "No orders found for this user");
     }
     return orders;
 });
@@ -58,7 +58,7 @@ const getOrdersForVendor = (shopId) => __awaiter(void 0, void 0, void 0, functio
         .populate("shop")
         .populate("payment");
     if (!orders) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "No orders found for this shop");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "No orders found for this shop");
     }
     return orders;
 });
@@ -70,7 +70,7 @@ const getOrdersForVendor = (shopId) => __awaiter(void 0, void 0, void 0, functio
 const updateOrderStatus = (orderId, status) => __awaiter(void 0, void 0, void 0, function* () {
     const order = yield order_model_1.Order.findById(orderId);
     if (!order) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "Order not found");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Order not found");
     }
     order.status = status;
     yield order.save();

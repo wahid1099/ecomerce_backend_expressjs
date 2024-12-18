@@ -28,7 +28,7 @@ const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const product_service_1 = require("./product.service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
-const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const paginationHelper_1 = require("../../../helpers/paginationHelper");
 const createProductController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -62,7 +62,7 @@ const deleteProduct = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     const { productId } = req.params;
     const result = yield product_service_1.ProductService.deleteProduct(productId);
     if (!result) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "Product not found for deletion");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Product not found for deletion");
     }
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,

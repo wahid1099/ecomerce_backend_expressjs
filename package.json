@@ -13,6 +13,7 @@
   "description": "",
   "dependencies": {
     "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.17",
     "@types/http-status": "^0.2.30",
     "@types/jsonwebtoken": "^9.0.7",

@@ -3,7 +3,7 @@ import catchAsync from "../../../shared/catchAsync";
 import { ProductService } from "./product.service";
 import sendResponse from "../../../shared/sendResponse";
 import httpStatus from "http-status";
-import ApiError from "../../errors/ApiErros";
+import ApiError from "../../errors/ApiError";
 import { paginationHelper } from "../../../helpers/paginationHelper";
 
 const createProductController = catchAsync(

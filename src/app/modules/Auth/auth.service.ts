@@ -4,7 +4,7 @@ import * as bcrypt from "bcrypt";
 import config from "../../../config";
 import { Secret } from "jsonwebtoken";
 import emailSender from "./emailSender";
-import ApiError from "../../errors/ApiErros";
+import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
 
 const loginUser = async (payload: { email: string; password: string }) => {

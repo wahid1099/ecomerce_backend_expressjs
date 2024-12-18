@@ -41,17 +41,17 @@ const user_model_1 = require("../user/user.model");
 const bcrypt = __importStar(require("bcrypt"));
 const config_1 = __importDefault(require("../../../config"));
 const emailSender_1 = __importDefault(require("./emailSender"));
-const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const http_status_1 = __importDefault(require("http-status"));
 const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.findOne({ email: payload.email, isDeleted: false });
     if (!user) {
-        throw new ApiErros_1.default(http_status_1.default.UNAUTHORIZED, "Invalid credentials!");
+        throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, "Invalid credentials!");
     }
     // Check if the provided password matches the hashed password in the database
     const isPasswordValid = yield bcrypt.compare(payload.password, user.password);
     if (!isPasswordValid) {
-        throw new ApiErros_1.default(http_status_1.default.UNAUTHORIZED, "Invalid credentials!");
+        throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, "Invalid credentials!");
     }
     // Generate JWT tokens
     const accessToken = jwthelpers_1.jwtHelpers.generateToken(Object.assign(Object.assign({}, user.toObject()), { password: undefined }), config_1.default.jwt.jwt_secret, config_1.default.jwt.expires_in);
@@ -68,14 +68,14 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
 const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedData = jwthelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.refresh_token_secret);
     if (!decodedData) {
-        throw new ApiErros_1.default(http_status_1.default.FORBIDDEN, "Invalid refresh token!");
+        throw new ApiError_1.default(http_status_1.default.FORBIDDEN, "Invalid refresh token!");
     }
     const user = yield user_model_1.User.findOne({
         email: decodedData.email,
         isDeleted: false,
     });
     if (!user) {
-        throw new ApiErros_1.default(http_status_1.default.FORBIDDEN, "User not found!");
+        throw new ApiError_1.default(http_status_1.default.FORBIDDEN, "User not found!");
     }
     const accessToken = jwthelpers_1.jwtHelpers.generateToken({ email: user.email, role: user.role }, config_1.default.jwt.jwt_secret, config_1.default.jwt.expires_in);
     return { accessToken };
@@ -86,11 +86,11 @@ const changePassword = (user, payload) => __awaiter(void 0, void 0, void 0, func
         isDeleted: false,
     });
     if (!existingUser) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found!");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "User not found!");
     }
     const isPasswordValid = yield bcrypt.compare(payload.oldPassword, existingUser.password);
     if (!isPasswordValid) {
-        throw new ApiErros_1.default(http_status_1.default.UNAUTHORIZED, "Old password is incorrect!");
+        throw new ApiError_1.default(http_status_1.default.UNAUTHORIZED, "Old password is incorrect!");
     }
     existingUser.password = payload.newPassword; // Will be hashed automatically by pre-save hook
     yield existingUser.save();
@@ -99,7 +99,7 @@ const changePassword = (user, payload) => __awaiter(void 0, void 0, void 0, func
 const forgotPassword = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.findOne({ email: payload.email, isDeleted: false });
     if (!user) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found!");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "User not found!");
     }
     const resetPassToken = jwthelpers_1.jwtHelpers.generateToken({ email: user.email, role: user.role }, config_1.default.jwt.reset_pass_secret, config_1.default.jwt.reset_pass_token_expires_in);
     const resetPassLink = `${config_1.default.reset_pass_link}?userId=${user.id}&token=${resetPassToken}`;
@@ -115,11 +115,11 @@ const forgotPassword = (payload) => __awaiter(void 0, void 0, void 0, function* 
 const resetPassword = (token, payload) => __awaiter(void 0, void 0, void 0, function* () {
     const decodedData = jwthelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.reset_pass_secret);
     if (!decodedData) {
-        throw new ApiErros_1.default(http_status_1.default.FORBIDDEN, "Invalid reset password token!");
+        throw new ApiError_1.default(http_status_1.default.FORBIDDEN, "Invalid reset password token!");
     }
     const user = yield user_model_1.User.findOne({ _id: payload.id, isDeleted: false });
     if (!user) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "User not found!");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "User not found!");
     }
     user.password = payload.password; // Will be hashed automatically by pre-save hook
     yield user.save();

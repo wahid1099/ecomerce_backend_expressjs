@@ -13,14 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductService = void 0;
-const ApiErros_1 = __importDefault(require("../../errors/ApiErros"));
+const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const product_model_1 = require("./product.model"); // Importing the Product model
 const http_status_1 = __importDefault(require("http-status"));
 // Create a new product
 const createProduct = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const product = yield product_model_1.Product.create(payload);
     if (!product) {
-        throw new ApiErros_1.default(http_status_1.default.BAD_REQUEST, "Failed to create product");
+        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Failed to create product");
     }
     return product;
 });
@@ -31,7 +31,7 @@ const updateProduct = (productId, payload) => __awaiter(void 0, void 0, void 0, 
         runValidators: true, // Validate before updating
     });
     if (!updatedProduct) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "Product not found to update");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Product not found to update");
     }
     return updatedProduct;
 });
@@ -39,7 +39,7 @@ const updateProduct = (productId, payload) => __awaiter(void 0, void 0, void 0, 
 const deleteProduct = (productId) => __awaiter(void 0, void 0, void 0, function* () {
     const product = yield product_model_1.Product.findById(productId);
     if (!product) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "Product not found");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Product not found");
     }
     yield product_model_1.Product.deleteOne({ _id: productId });
     return { message: "Product deleted successfully!" };
@@ -64,7 +64,7 @@ const removeImageFromProduct = (productId, imageUrl) => __awaiter(void 0, void 0
     { new: true, runValidators: true } // Return the updated product
     );
     if (!product) {
-        throw new ApiErros_1.default(http_status_1.default.NOT_FOUND, "Product not found");
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Product not found");
     }
     return product;
 });

@@ -1,6 +1,6 @@
 import { Shop, ShopFollower } from "./shop.model";
 import { Order } from "../order/order.model";
-import ApiError from "../../errors/ApiErros";
+import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
 import { IUser } from "../user/user.interface"; // Assuming you have IUser interface
 
