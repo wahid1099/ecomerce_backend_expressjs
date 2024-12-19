@@ -19,7 +19,6 @@ const OrderSchema = new Schema<IOrder>(
       required: true,
     },
     items: { type: [OrderItemSchema], required: true }, // Embedded array of order items
-    payment: { type: Schema.Types.ObjectId, ref: "Payment" },
   },
   {
     timestamps: true, // Automatically add createdAt and updatedAt fields

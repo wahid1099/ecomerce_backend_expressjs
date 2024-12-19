@@ -18,7 +18,6 @@ const OrderSchema = new mongoose_1.Schema({
         required: true,
     },
     items: { type: [OrderItemSchema], required: true }, // Embedded array of order items
-    payment: { type: mongoose_1.Schema.Types.ObjectId, ref: "Payment" },
 }, {
     timestamps: true, // Automatically add createdAt and updatedAt fields
 });

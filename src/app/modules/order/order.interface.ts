@@ -15,5 +15,4 @@ export type IOrder = {
   createdAt: Date; // Order creation timestamp
   updatedAt: Date; // Order last update timestamp
   items: IOrderItem[]; // Array of items in the order
-  payment?: Types.ObjectId; // Reference to the payment details, optional
 };
