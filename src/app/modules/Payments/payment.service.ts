@@ -34,9 +34,10 @@ const createPaymentIntoDB = async (payload: IPayment) => {
     ...payload,
     transactionId: newTransactionId,
     userName: isUserExist.name,
-    // email: isUserExist.email,
+    email: isUserExist.email,
     phoneNumber: isUserExist.phone || "N/A",
     address: isUserExist.addressBook || "Dhaka",
+    ammount: payload.amount,
   };
 
   try {
