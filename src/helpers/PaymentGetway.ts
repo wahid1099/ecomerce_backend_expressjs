@@ -13,7 +13,7 @@ export const initiatePayment = async (payload: any) => {
       success_url: `${config.backend_url}/api/v1/payment/confirmation?transactionId=${payload.transactionId}&status=success&payloadData=${payloadData}`,
       fail_url: `${config.backend_url}/api/v1/payment/confirmation?transactionId=${payload.transactionId}&status=failed`,
       cancel_url: `${config.client_url}`,
-      amount: payload.ammount,
+      amount: payload.amount,
       currency: "BDT",
       desc: "Merchant Registration Payment",
       cus_name: payload?.userName,

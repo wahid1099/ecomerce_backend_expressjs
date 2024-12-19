@@ -25,7 +25,7 @@ const initiatePayment = (payload) => __awaiter(void 0, void 0, void 0, function*
             success_url: `${index_1.default.backend_url}/api/v1/payment/confirmation?transactionId=${payload.transactionId}&status=success&payloadData=${payloadData}`,
             fail_url: `${index_1.default.backend_url}/api/v1/payment/confirmation?transactionId=${payload.transactionId}&status=failed`,
             cancel_url: `${index_1.default.client_url}`,
-            amount: payload.price,
+            amount: payload.amount,
             currency: "BDT",
             desc: "Merchant Registration Payment",
             cus_name: payload === null || payload === void 0 ? void 0 : payload.userName,
