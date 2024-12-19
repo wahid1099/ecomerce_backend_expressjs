@@ -32,7 +32,9 @@ const createPaymentIntoDB = (payload) => __awaiter(void 0, void 0, void 0, funct
     }
     // Generate a unique transaction ID
     const newTransactionId = (0, uuid_1.v4)();
-    const paymentData = Object.assign(Object.assign({}, payload), { transactionId: newTransactionId, userName: isUserExist.name, email: isUserExist.email, phoneNumber: isUserExist.phone || "N/A", address: isUserExist.addressBook || "Dhaka" });
+    const paymentData = Object.assign(Object.assign({}, payload), { transactionId: newTransactionId, userName: isUserExist.name, 
+        // email: isUserExist.email,
+        phoneNumber: isUserExist.phone || "N/A", address: isUserExist.addressBook || "Dhaka" });
     try {
         // Initiate the payment session
         const paymentSession = yield (0, PaymentGetway_1.initiatePayment)(paymentData);
