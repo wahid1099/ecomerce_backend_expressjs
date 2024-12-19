@@ -16,7 +16,7 @@ const PaymentSchema = new mongoose_1.Schema({
         enum: ["success", "failed", "pending"],
         required: true,
     },
-    transactionId: { type: String, required: true },
+    transactionId: { type: String, required: false },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
 }, {
