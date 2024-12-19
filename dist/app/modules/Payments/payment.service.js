@@ -63,55 +63,49 @@ const getSinglePaymentIntoDB = (paymentId) => __awaiter(void 0, void 0, void 0, 
     }
     return payment;
 });
+const readTemplate = (filePath, message) => {
+    try {
+        let template = (0, fs_1.readFileSync)(filePath, "utf-8");
+        return template.replace("{{message}}", message);
+    }
+    catch (error) {
+        throw new ApiError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Template reading failed.");
+    }
+};
 const confirmationServiceIntoDB = (transactionId, status, payloadData) => __awaiter(void 0, void 0, void 0, function* () {
     let message = "";
     let parsedPaymentData;
     try {
+        // Verify payment
         const res = yield (0, PaymentGetway_1.verifyPayment)(transactionId);
         console.log(res);
         if (!res || res.pay_status !== "Successful") {
             throw new Error("Payment verification failed or was not successful.");
         }
-        if (res) {
-            try {
-                parsedPaymentData =
-                    typeof payloadData === "string"
-                        ? JSON.parse(payloadData)
-                        : payloadData;
-            }
-            catch (error) {
-                throw new Error("Invalid JSON format in payment data");
-            }
-            if (!parsedPaymentData.user ||
-                !parsedPaymentData.title ||
-                !parsedPaymentData.price ||
-                !parsedPaymentData.transactionId ||
-                !parsedPaymentData.expiry) {
-                throw new Error("Missing required payment data fields.");
-            }
+        // Parse payment data
+        try {
+            parsedPaymentData =
+                typeof payloadData === "string" ? JSON.parse(payloadData) : payloadData;
         }
-        const paymentInfo = {
-            user: parsedPaymentData === null || parsedPaymentData === void 0 ? void 0 : parsedPaymentData.user,
-            transactionId: transactionId,
-            packageName: parsedPaymentData === null || parsedPaymentData === void 0 ? void 0 : parsedPaymentData.title,
-            packagePrice: parsedPaymentData === null || parsedPaymentData === void 0 ? void 0 : parsedPaymentData.price,
-            status: res.pay_status === "Successful" ? "completed" : "failed",
-            expiryDate: (0, PaymentGetway_1.calculateExpiryDate)(parsedPaymentData === null || parsedPaymentData === void 0 ? void 0 : parsedPaymentData.expiry),
-        };
-        const payment = yield payment_model_1.Payment.create(paymentInfo);
+        catch (error) {
+            throw new Error("Invalid JSON format in payment data.");
+        }
+        // Validate parsed payment data
+        const { user, amount, transactionId: parsedTransactionId, method, } = parsedPaymentData || {};
+        if (!user || !amount || !parsedTransactionId || !method) {
+            throw new Error("Missing required payment data fields.");
+        }
+        // Check if payment record exists
+        const payment = yield payment_model_1.Payment.findOne({ transactionId });
+        if (!payment) {
+            throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Payment record not found!");
+        }
+        // Update user and return successful template
         if ((res === null || res === void 0 ? void 0 : res.pay_status) === "Successful") {
-            yield user_model_1.User.findByIdAndUpdate({
-                _id: parsedPaymentData === null || parsedPaymentData === void 0 ? void 0 : parsedPaymentData.user,
-            }, {
-                isVerified: true,
-                subscriptions: paymentInfo === null || paymentInfo === void 0 ? void 0 : paymentInfo.packageName,
-                $push: { payments: payment._id }, // Push the created payment _id to the user's payments array
-            }, { new: true });
+            yield user_model_1.User.findByIdAndUpdate(user, { $push: { payments: payment._id } }, { new: true });
             message = "Payment successful";
             const filePath = (0, path_1.join)(__dirname, "../../../../public/confirmation.html");
-            let template = (0, fs_1.readFileSync)(filePath, "utf-8");
-            template = template.replace("{{message}}", message);
-            return template;
+            return readTemplate(filePath, message);
         }
         else {
             throw new Error("Payment validation failed.");
@@ -120,15 +114,7 @@ const confirmationServiceIntoDB = (transactionId, status, payloadData) => __awai
     catch (error) {
         message = "Payment failed";
         const filePath = (0, path_1.join)(__dirname, "../../../../public/faildpayment.html");
-        let template;
-        try {
-            template = (0, fs_1.readFileSync)(filePath, "utf-8");
-        }
-        catch (error) {
-            throw new ApiError_1.default(http_status_1.default.INTERNAL_SERVER_ERROR, "Internal server error!");
-        }
-        template = template.replace("{{message}}", message);
-        return template;
+        return readTemplate(filePath, message);
     }
 });
 exports.PaymentService = {

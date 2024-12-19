@@ -12,6 +12,7 @@ import {
 import { join } from "path";
 import { readFileSync } from "fs";
 import { v4 as uuidv4 } from "uuid";
+import { Order } from "../order/order.model";
 
 const createPaymentIntoDB = async (payload: IPayment) => {
   if (!payload.user || !payload.amount || !payload.method) {
@@ -77,8 +78,20 @@ const getSinglePaymentIntoDB = async (paymentId: string) => {
   return payment;
 };
 
+const readTemplate = (filePath: string, message: string): string => {
+  try {
+    let template = readFileSync(filePath, "utf-8");
+    return template.replace("{{message}}", message);
+  } catch (error) {
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "Template reading failed."
+    );
+  }
+};
+
 const confirmationServiceIntoDB = async (
-  transactionId?: string | undefined,
+  transactionId?: string,
   status?: string,
   payloadData?: string
 ) => {
@@ -86,82 +99,59 @@ const confirmationServiceIntoDB = async (
   let parsedPaymentData;
 
   try {
+    // Verify payment
     const res = await verifyPayment(transactionId);
     console.log(res);
+
     if (!res || res.pay_status !== "Successful") {
       throw new Error("Payment verification failed or was not successful.");
     }
 
-    if (res) {
-      try {
-        parsedPaymentData =
-          typeof payloadData === "string"
-            ? JSON.parse(payloadData)
-            : payloadData;
-      } catch (error) {
-        throw new Error("Invalid JSON format in payment data");
-      }
-
-      if (
-        !parsedPaymentData.user ||
-        !parsedPaymentData.title ||
-        !parsedPaymentData.price ||
-        !parsedPaymentData.transactionId ||
-        !parsedPaymentData.expiry
-      ) {
-        throw new Error("Missing required payment data fields.");
-      }
+    // Parse payment data
+    try {
+      parsedPaymentData =
+        typeof payloadData === "string" ? JSON.parse(payloadData) : payloadData;
+    } catch (error) {
+      throw new Error("Invalid JSON format in payment data.");
     }
 
-    const paymentInfo = {
-      user: parsedPaymentData?.user,
-      transactionId: transactionId,
-      packageName: parsedPaymentData?.title,
-      packagePrice: parsedPaymentData?.price,
-      status: res.pay_status === "Successful" ? "completed" : "failed",
-      expiryDate: calculateExpiryDate(parsedPaymentData?.expiry),
-    };
-    const payment = await Payment.create(paymentInfo);
+    // Validate parsed payment data
+    const {
+      user,
+      amount,
+      transactionId: parsedTransactionId,
+      method,
+    } = parsedPaymentData || {};
+    if (!user || !amount || !parsedTransactionId || !method) {
+      throw new Error("Missing required payment data fields.");
+    }
 
+    // Check if payment record exists
+    const payment = await Payment.findOne({ transactionId });
+    if (!payment) {
+      throw new ApiError(httpStatus.NOT_FOUND, "Payment record not found!");
+    }
+
+    // Update user and return successful template
     if (res?.pay_status === "Successful") {
       await User.findByIdAndUpdate(
-        {
-          _id: parsedPaymentData?.user,
-        },
-        {
-          isVerified: true,
-
-          subscriptions: paymentInfo?.packageName,
-          $push: { payments: payment._id }, // Push the created payment _id to the user's payments array
-        },
+        user,
+        { $push: { payments: payment._id } },
         { new: true }
       );
-
       message = "Payment successful";
-
       const filePath = join(__dirname, "../../../../public/confirmation.html");
-      let template = readFileSync(filePath, "utf-8");
-      template = template.replace("{{message}}", message);
-      return template;
+      return readTemplate(filePath, message);
     } else {
       throw new Error("Payment validation failed.");
     }
   } catch (error) {
     message = "Payment failed";
     const filePath = join(__dirname, "../../../../public/faildpayment.html");
-    let template;
-    try {
-      template = readFileSync(filePath, "utf-8");
-    } catch (error) {
-      throw new ApiError(
-        httpStatus.INTERNAL_SERVER_ERROR,
-        "Internal server error!"
-      );
-    }
-    template = template.replace("{{message}}", message);
-    return template;
+    return readTemplate(filePath, message);
   }
 };
+
 export const PaymentService = {
   createPaymentIntoDB,
   getAllPaymentIntoDB,
