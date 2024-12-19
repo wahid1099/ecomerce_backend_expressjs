@@ -18,14 +18,8 @@ const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const order_service_1 = require("./order.service");
 const http_status_1 = __importDefault(require("http-status"));
 const createOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId, shopId, items, totalAmount } = req.body;
     // Call the correct order creation service
-    const result = yield order_service_1.orderService.createOrder({
-        userId,
-        shopId,
-        items,
-        totalAmount,
-    });
+    const result = yield order_service_1.orderService.createOrder(req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,

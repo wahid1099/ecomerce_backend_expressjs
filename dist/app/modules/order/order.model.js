@@ -11,6 +11,7 @@ const OrderItemSchema = new mongoose_1.Schema({
 const OrderSchema = new mongoose_1.Schema({
     user: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
     shop: { type: mongoose_1.Schema.Types.ObjectId, ref: "Shop", required: true },
+    paymentType: { type: String, enum: ["COD", "ONLINE"], equired: true },
     totalAmount: { type: Number, required: true },
     status: {
         type: String,

@@ -20,18 +20,8 @@ const http_status_1 = __importDefault(require("http-status"));
  * Create a new order for a shop
  * @param params - userId, shopId, items, and totalAmount
  */
-const createOrder = (params) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId, shopId, items, totalAmount } = params;
-    if (!userId || !shopId || !items.length || !totalAmount) {
-        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Invalid data provided");
-    }
-    const order = yield order_model_1.Order.create({
-        user: userId,
-        shop: shopId,
-        totalAmount,
-        status: "pending",
-        items,
-    });
+const createOrder = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const order = yield order_model_1.Order.create(payload);
     return order;
 });
 /**

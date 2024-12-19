@@ -7,25 +7,8 @@ import httpStatus from "http-status";
  * Create a new order for a shop
  * @param params - userId, shopId, items, and totalAmount
  */
-const createOrder = async (params: {
-  userId: string;
-  shopId: string;
-  items: IOrderItem[];
-  totalAmount: number;
-}) => {
-  const { userId, shopId, items, totalAmount } = params;
-
-  if (!userId || !shopId || !items.length || !totalAmount) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Invalid data provided");
-  }
-
-  const order = await Order.create({
-    user: userId,
-    shop: shopId,
-    totalAmount,
-    status: "pending",
-    items,
-  });
+const createOrder = async (payload: IOrder) => {
+  const order = await Order.create(payload);
 
   return order;
 };
