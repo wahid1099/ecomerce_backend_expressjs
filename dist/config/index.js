@@ -14,7 +14,7 @@ exports.default = {
     backend_url: process.env.BACKEND_URL,
     payment_verify_url: process.env.PAYMENT_VERIFY_URL,
     payment_url: process.env.PAYMENT_URL,
-    store_id: process.env.Store_ID,
+    store_id: process.env.STORE_ID,
     signature_key: process.env.SIGNATURE_KEY,
     client_url: process.env.CLIENT_URL,
     jwt: {
@@ -30,13 +30,13 @@ exports.default = {
         email: process.env.EMAIL,
         app_pass: process.env.APP_PASS,
     },
-    ssl: {
-        storeId: process.env.STORE_ID,
-        storePass: process.env.STORE_PASS,
-        successUrl: process.env.SUCCESS_URL,
-        cancelUrl: process.env.CANCEL_URL,
-        failUrl: process.env.FAIL_URL,
-        sslPaymentApi: process.env.SSL_PAYMENT_API,
-        sslValidationApi: process.env.SSL_VALIDATIOIN_API,
-    },
+    // ssl: {
+    //   storeId: process.env.STORE_ID,
+    //   storePass: process.env.STORE_PASS,
+    //   successUrl: process.env.SUCCESS_URL,
+    //   cancelUrl: process.env.CANCEL_URL,
+    //   failUrl: process.env.FAIL_URL,
+    //   sslPaymentApi: process.env.SSL_PAYMENT_API,
+    //   sslValidationApi: process.env.SSL_VALIDATIOIN_API,
+    // },
 };
