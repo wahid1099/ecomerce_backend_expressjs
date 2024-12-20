@@ -28,8 +28,8 @@ const getOrdersForUser = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getOrdersForVendor = catchAsync(async (req: Request, res: Response) => {
-  const { shopId } = req.params;
-  const result = await orderService.getOrdersForUser(shopId);
+  // const { shopId } = req.params;
+  const result = await orderService.getOrdersForUser(req.user.shop[0]);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
