@@ -4,6 +4,7 @@ import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
 import { User } from "../user/user.model";
 import { Shop } from "../shop/shop.model";
+import { Payment } from "../Payments/payment.model";
 
 /**
  * Create a new order for a shop
@@ -38,16 +39,28 @@ const createOrder = async (payload: IOrder) => {
  * @param userId - The user's ID
  */
 const getOrdersForUser = async (userId: string) => {
+  // Fetch orders for the user
   const orders = await Order.find({ user: userId })
-    .populate("items.product")
-    .populate("shop")
-    .populate("payment");
+    .populate("items.product") // Populate product details in order items
+    .populate("shop"); // Populate shop details
 
-  if (!orders) {
+  if (!orders || orders.length === 0) {
     throw new ApiError(httpStatus.NOT_FOUND, "No orders found for this user");
   }
 
-  return orders;
+  // Fetch payments for each order
+  const orderIds = orders.map((order) => order._id);
+  const payments = await Payment.find({ order: { $in: orderIds } });
+
+  // Combine orders with their respective payments
+  const ordersWithPayments = orders.map((order) => {
+    const payment = payments.find(
+      (pay) => pay.order && pay.order.toString() === order._id.toString()
+    );
+    return { ...order.toObject(), payment: payment || null };
+  });
+
+  return ordersWithPayments;
 };
 
 /**
@@ -55,16 +68,28 @@ const getOrdersForUser = async (userId: string) => {
  * @param shopId - The shop's ID
  */
 const getOrdersForVendor = async (shopId: string) => {
+  // Fetch orders for the shop
   const orders = await Order.find({ shop: shopId })
-    .populate("items.product")
-    .populate("shop")
-    .populate("payment");
+    .populate("items.product") // Populate product details in order items
+    .populate("shop"); // Populate shop details
 
-  if (!orders) {
+  if (!orders || orders.length === 0) {
     throw new ApiError(httpStatus.NOT_FOUND, "No orders found for this shop");
   }
 
-  return orders;
+  // Fetch payments for each order
+  const orderIds = orders.map((order) => order._id);
+  const payments = await Payment.find({ order: { $in: orderIds } });
+
+  // Combine orders with their respective payments
+  const ordersWithPayments = orders.map((order) => {
+    const payment = payments.find(
+      (pay) => pay.order && pay.order.toString() === order._id.toString()
+    );
+    return { ...order.toObject(), payment: payment || null };
+  });
+
+  return ordersWithPayments;
 };
 
 /**

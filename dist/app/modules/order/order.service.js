@@ -18,6 +18,7 @@ const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const http_status_1 = __importDefault(require("http-status"));
 const user_model_1 = require("../user/user.model");
 const shop_model_1 = require("../shop/shop.model");
+const payment_model_1 = require("../Payments/payment.model");
 /**
  * Create a new order for a shop
  * @param params - userId, shopId, items, and totalAmount
@@ -42,28 +43,44 @@ const createOrder = (payload) => __awaiter(void 0, void 0, void 0, function* () 
  * @param userId - The user's ID
  */
 const getOrdersForUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    // Fetch orders for the user
     const orders = yield order_model_1.Order.find({ user: userId })
-        .populate("items.product")
-        .populate("shop")
-        .populate("payment");
-    if (!orders) {
+        .populate("items.product") // Populate product details in order items
+        .populate("shop"); // Populate shop details
+    if (!orders || orders.length === 0) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "No orders found for this user");
     }
-    return orders;
+    // Fetch payments for each order
+    const orderIds = orders.map((order) => order._id);
+    const payments = yield payment_model_1.Payment.find({ order: { $in: orderIds } });
+    // Combine orders with their respective payments
+    const ordersWithPayments = orders.map((order) => {
+        const payment = payments.find((pay) => pay.order && pay.order.toString() === order._id.toString());
+        return Object.assign(Object.assign({}, order.toObject()), { payment: payment || null });
+    });
+    return ordersWithPayments;
 });
 /**
  * Get all orders for a specific vendor/shop
  * @param shopId - The shop's ID
  */
 const getOrdersForVendor = (shopId) => __awaiter(void 0, void 0, void 0, function* () {
+    // Fetch orders for the shop
     const orders = yield order_model_1.Order.find({ shop: shopId })
-        .populate("items.product")
-        .populate("shop")
-        .populate("payment");
-    if (!orders) {
+        .populate("items.product") // Populate product details in order items
+        .populate("shop"); // Populate shop details
+    if (!orders || orders.length === 0) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "No orders found for this shop");
     }
-    return orders;
+    // Fetch payments for each order
+    const orderIds = orders.map((order) => order._id);
+    const payments = yield payment_model_1.Payment.find({ order: { $in: orderIds } });
+    // Combine orders with their respective payments
+    const ordersWithPayments = orders.map((order) => {
+        const payment = payments.find((pay) => pay.order && pay.order.toString() === order._id.toString());
+        return Object.assign(Object.assign({}, order.toObject()), { payment: payment || null });
+    });
+    return ordersWithPayments;
 });
 /**
  * Update the status of an order
