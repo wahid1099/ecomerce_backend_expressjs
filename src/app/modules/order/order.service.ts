@@ -39,13 +39,12 @@ const createOrder = async (payload: IOrder) => {
  * @param userId - The user's ID
  */
 const getOrdersForUser = async (userId: string) => {
-  // Fetch orders for the user
   const orders = await Order.find({ user: userId })
     .populate("items.product") // Populate product details in order items
     .populate("shop"); // Populate shop details
 
   if (!orders || orders.length === 0) {
-    throw new ApiError(httpStatus.NOT_FOUND, "No orders found for this user");
+    throw new ApiError(httpStatus.OK, "No orders found for this user");
   }
 
   // Fetch payments for each order
@@ -74,7 +73,7 @@ const getOrdersForVendor = async (shopId: string) => {
     .populate("shop"); // Populate shop details
 
   if (!orders || orders.length === 0) {
-    throw new ApiError(httpStatus.NOT_FOUND, "No orders found for this shop");
+    throw new ApiError(httpStatus.OK, "No orders found for this shop");
   }
 
   // Fetch payments for each order

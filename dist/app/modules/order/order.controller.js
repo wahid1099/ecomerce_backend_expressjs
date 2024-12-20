@@ -28,8 +28,7 @@ const createOrder = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
     });
 }));
 const getOrdersForUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.user._id;
-    const result = yield order_service_1.orderService.getOrdersForUser(userId);
+    const result = yield order_service_1.orderService.getOrdersForUser(req.user._id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.CREATED,
         success: true,

@@ -43,12 +43,11 @@ const createOrder = (payload) => __awaiter(void 0, void 0, void 0, function* () 
  * @param userId - The user's ID
  */
 const getOrdersForUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
-    // Fetch orders for the user
     const orders = yield order_model_1.Order.find({ user: userId })
         .populate("items.product") // Populate product details in order items
         .populate("shop"); // Populate shop details
     if (!orders || orders.length === 0) {
-        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "No orders found for this user");
+        throw new ApiError_1.default(http_status_1.default.OK, "No orders found for this user");
     }
     // Fetch payments for each order
     const orderIds = orders.map((order) => order._id);
@@ -70,7 +69,7 @@ const getOrdersForVendor = (shopId) => __awaiter(void 0, void 0, void 0, functio
         .populate("items.product") // Populate product details in order items
         .populate("shop"); // Populate shop details
     if (!orders || orders.length === 0) {
-        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "No orders found for this shop");
+        throw new ApiError_1.default(http_status_1.default.OK, "No orders found for this shop");
     }
     // Fetch payments for each order
     const orderIds = orders.map((order) => order._id);

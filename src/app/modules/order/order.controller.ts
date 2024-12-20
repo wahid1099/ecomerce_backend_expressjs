@@ -17,8 +17,7 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getOrdersForUser = catchAsync(async (req: Request, res: Response) => {
-  const { userId } = req.user._id;
-  const result = await orderService.getOrdersForUser(userId);
+  const result = await orderService.getOrdersForUser(req.user._id);
 
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
