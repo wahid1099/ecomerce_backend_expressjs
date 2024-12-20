@@ -54,7 +54,6 @@ const getVendorProducts = (shopID) => __awaiter(void 0, void 0, void 0, function
     const products = yield product_model_1.Product.find({ shop: shopID }).populate([
         "images",
         // "reviews",
-        "orderItems",
     ]); // Populate related fields if needed
     return products;
 });
@@ -74,7 +73,7 @@ const removeImageFromProduct = (productId, imageUrl) => __awaiter(void 0, void 0
     return product;
 });
 const getAllProducts = () => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield product_model_1.Product.find().populate(["images", "orderItems"]); // You can populate other fields if necessary
+    const products = yield product_model_1.Product.find().populate(["images"]); // You can populate other fields if necessary
     return products;
 });
 const getPaginatedProducts = (filters, paginationOptions) => __awaiter(void 0, void 0, void 0, function* () {

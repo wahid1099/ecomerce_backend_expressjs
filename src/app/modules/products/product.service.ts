@@ -54,7 +54,6 @@ const getVendorProducts = async (shopID: string) => {
   const products = await Product.find({ shop: shopID }).populate([
     "images",
     // "reviews",
-    "orderItems",
   ]); // Populate related fields if needed
 
   return products;
@@ -80,7 +79,7 @@ const removeImageFromProduct = async (productId: string, imageUrl: string) => {
 };
 
 const getAllProducts = async () => {
-  const products = await Product.find().populate(["images", "orderItems"]); // You can populate other fields if necessary
+  const products = await Product.find().populate(["images"]); // You can populate other fields if necessary
   return products;
 };
 
