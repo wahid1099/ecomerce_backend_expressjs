@@ -25,7 +25,7 @@ const createProduct = (payload) => __awaiter(void 0, void 0, void 0, function* (
     }
     const { shop } = payload;
     if (shop) {
-        yield shop_model_1.Shop.findByIdAndUpdate(shop, { $push: { orders: product._id } }, { new: true });
+        yield shop_model_1.Shop.findByIdAndUpdate(shop, { $push: { products: product._id } }, { new: true });
     }
     return product;
 });

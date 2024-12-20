@@ -21,7 +21,7 @@ const createProduct = async (payload: any) => {
   if (shop) {
     await Shop.findByIdAndUpdate(
       shop,
-      { $push: { orders: product._id } },
+      { $push: { products: product._id } },
       { new: true }
     );
   }
