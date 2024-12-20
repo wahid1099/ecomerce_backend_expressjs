@@ -91,7 +91,7 @@ const confirmationServiceIntoDB = (transactionId, status, payloadData) => __awai
             throw new Error("Invalid JSON format in payment data.");
         }
         // Validate parsed payment data
-        const { user, amount, transactionId: parsedTransactionId, method, } = parsedPaymentData || {};
+        const { user, amount, transactionId: parsedTransactionId, method, order, } = parsedPaymentData || {};
         if (!user || !amount || !parsedTransactionId || !method) {
             throw new Error("Missing required payment data fields.");
         }
@@ -103,6 +103,7 @@ const confirmationServiceIntoDB = (transactionId, status, payloadData) => __awai
         // Update user and return successful template
         if ((res === null || res === void 0 ? void 0 : res.pay_status) === "Successful") {
             yield user_model_1.User.findByIdAndUpdate(user, { $push: { payments: payment._id } }, { new: true });
+            yield payment_model_1.Payment.findByIdAndUpdate(payment._id, { status: "success" });
             message = "Payment successful";
             const filePath = (0, path_1.join)(__dirname, "../../../../public/confirmation.html");
             return readTemplate(filePath, message);

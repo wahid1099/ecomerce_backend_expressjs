@@ -1,5 +1,3 @@
-import { IProduct } from "./../products/product.interface";
-import { IOrder } from "../order/order.interface";
 import { IUser } from "../user/user.interface";
 import { Types } from "mongoose";
 
@@ -12,9 +10,9 @@ export type IShop = {
   isBlacklisted: boolean;
   createdAt: Date;
   updatedAt: Date;
-  products?: IProduct[]; // Optional
-  orders?: IOrder[]; // Optional
-  followers?: IUser[]; // Optional
+  products?: Types.ObjectId[]; // Optional
+  orders?: Types.ObjectId[]; // shop orders
+  followers?: Types.ObjectId[]; // Optional
   shopFollowers?: IShopFollower[]; // Optional
 };
 

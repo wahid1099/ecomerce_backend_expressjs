@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductService = void 0;
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
+const shop_model_1 = require("../shop/shop.model");
 const product_model_1 = require("./product.model"); // Importing the Product model
 const http_status_1 = __importDefault(require("http-status"));
 // Create a new product
@@ -21,6 +22,10 @@ const createProduct = (payload) => __awaiter(void 0, void 0, void 0, function* (
     const product = yield product_model_1.Product.create(payload);
     if (!product) {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Failed to create product");
+    }
+    const { shop } = payload;
+    if (shop) {
+        yield shop_model_1.Shop.findByIdAndUpdate(shop, { $push: { orders: product._id } }, { new: true });
     }
     return product;
 });

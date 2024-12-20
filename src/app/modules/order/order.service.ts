@@ -2,6 +2,8 @@ import { IOrder, IOrderItem } from "./order.interface";
 import { Order } from "./order.model";
 import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
+import { User } from "../user/user.model";
+import { Shop } from "../shop/shop.model";
 
 /**
  * Create a new order for a shop
@@ -9,6 +11,24 @@ import httpStatus from "http-status";
  */
 const createOrder = async (payload: IOrder) => {
   const order = await Order.create(payload);
+  const { user, shop } = payload;
+  // Update the user's orders array
+  if (user) {
+    await User.findByIdAndUpdate(
+      user,
+      { $push: { orders: order._id } }, // Add order ID to user's orders array
+      { new: true }
+    );
+  }
+
+  // Update the shop's orders array
+  if (shop) {
+    await Shop.findByIdAndUpdate(
+      shop,
+      { $push: { orders: order._id } }, // Add order ID to shop's orders array
+      { new: true }
+    );
+  }
 
   return order;
 };

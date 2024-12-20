@@ -16,12 +16,25 @@ exports.orderService = void 0;
 const order_model_1 = require("./order.model");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const http_status_1 = __importDefault(require("http-status"));
+const user_model_1 = require("../user/user.model");
+const shop_model_1 = require("../shop/shop.model");
 /**
  * Create a new order for a shop
  * @param params - userId, shopId, items, and totalAmount
  */
 const createOrder = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const order = yield order_model_1.Order.create(payload);
+    const { user, shop } = payload;
+    // Update the user's orders array
+    if (user) {
+        yield user_model_1.User.findByIdAndUpdate(user, { $push: { orders: order._id } }, // Add order ID to user's orders array
+        { new: true });
+    }
+    // Update the shop's orders array
+    if (shop) {
+        yield shop_model_1.Shop.findByIdAndUpdate(shop, { $push: { orders: order._id } }, // Add order ID to shop's orders array
+        { new: true });
+    }
     return order;
 });
 /**

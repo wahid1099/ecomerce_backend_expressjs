@@ -121,6 +121,7 @@ const confirmationServiceIntoDB = async (
       amount,
       transactionId: parsedTransactionId,
       method,
+      order,
     } = parsedPaymentData || {};
     if (!user || !amount || !parsedTransactionId || !method) {
       throw new Error("Missing required payment data fields.");
@@ -139,6 +140,8 @@ const confirmationServiceIntoDB = async (
         { $push: { payments: payment._id } },
         { new: true }
       );
+      await Payment.findByIdAndUpdate(payment._id, { status: "success" });
+
       message = "Payment successful";
       const filePath = join(__dirname, "../../../../public/confirmation.html");
       return readTemplate(filePath, message);

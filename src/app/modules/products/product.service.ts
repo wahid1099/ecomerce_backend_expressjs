@@ -1,4 +1,5 @@
 import ApiError from "../../errors/ApiError";
+import { Shop } from "../shop/shop.model";
 import { Product } from "./product.model"; // Importing the Product model
 import httpStatus from "http-status";
 
@@ -14,6 +15,15 @@ const createProduct = async (payload: any) => {
   const product = await Product.create(payload);
   if (!product) {
     throw new ApiError(httpStatus.BAD_REQUEST, "Failed to create product");
+  }
+
+  const { shop } = payload;
+  if (shop) {
+    await Shop.findByIdAndUpdate(
+      shop,
+      { $push: { orders: product._id } },
+      { new: true }
+    );
   }
   return product;
 };
