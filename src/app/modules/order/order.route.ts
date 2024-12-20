@@ -21,7 +21,7 @@ router.get(
 
 // Route to get orders for a specific vendor (shop)
 router.get(
-  "/orders/vendor",
+  "/vendor-orders",
   Auth(UserRole.Admin, UserRole.Vendor),
   orderController.getOrdersForVendor
 );
