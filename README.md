@@ -1,3 +1,5 @@
+It looks like the formatting got mixed up in the backend `README.md` file. Here's the corrected version:
+
 ---
 
 ### Backend `README.md`
@@ -24,58 +26,77 @@ This is the **Node.js/Express** backend for the E-Commerce application. It handl
    ```
 ````
 
-Navigate to the backend directory:
+2. **Navigate to the backend directory**:
 
-cd assignment9-backend
-Install dependencies:
-npm install
-Create a .env file in the root directory and add the following environment variables:
-PORT=5000
-MONGO_URI=your-mongo-uri
-JWT_SECRET=your-jwt-secret
-AMARPAY_KEY=your-amarpay-api-key
+   ```bash
+   cd assignment9-backend
+   ```
 
-npm start
+3. **Install dependencies**:
 
-The backend will be available at http://localhost:5000.
+   ```bash
+   npm install
+   ```
 
-:gear: Tech Stack
-Node.js
-Express.js
-MongoDB (with Mongoose)
-JWT (for authentication)
-AmarPay (payment gateway)
+4. **Create a `.env` file** in the root directory and add the following environment variables:
 
-:book: Contributing
-Fork the repository.
-Clone your fork:
-bash
-Copy code
-git clone https://github.com/your-username/assignment9-backend.git
-Create a new branch:
-bash
-Copy code
-git checkout -b feature-name
-Make your changes.
-Commit and push:
-bash
-Copy code
-git commit -m "Add feature"
-git push origin feature-name
-Create a pull request.
+   ```
+   PORT=5000
+   MONGO_URI=your-mongo-uri
+   JWT_SECRET=your-jwt-secret
+   AMARPAY_KEY=your-amarpay-api-key
+   ```
 
+5. **Start the server**:
+
+   ```bash
+   npm start
+   ```
+
+6. The backend will be available at `http://localhost:5000`.
+
+## :gear: Tech Stack
+
+- **Node.js**
+- **Express.js**
+- **MongoDB** (with Mongoose)
+- **JWT** (for authentication)
+- **AmarPay** (payment gateway)
+
+## :book: Contributing
+
+1. Fork the repository.
+2. Clone your fork:
+   ```bash
+   git clone https://github.com/your-username/assignment9-backend.git
+   ```
+3. Create a new branch:
+   ```bash
+   git checkout -b feature-name
+   ```
+4. Make your changes.
+5. Commit and push:
+   ```bash
+   git commit -m "Add feature"
+   git push origin feature-name
+   ```
+6. Create a pull request.
 
 ---
 
-:memo: License
+## :memo: License
+
 This project is licensed under the MIT License.
+
+```
 
 ### Key Features of the README:
 
 - **Icons**: Added relevant icons for better readability and visual appeal.
-- **Installation**: Clear instructions for setting up both frontend and backend.
-- **Tech Stack**: Lists the technologies used for both parts.
+- **Installation**: Clear instructions for setting up the backend.
+- **Tech Stack**: Lists the technologies used in the backend.
 - **Contributing**: Standard contributing guidelines for GitHub.
 - **License**: MIT License mentioned for open-source use.
 
-You can now create separate `README.md` files for both the **frontend** and **backend** parts of your project on GitHub. Let me know if you need any further changes!
+This should now be properly formatted! Let me know if you need any further adjustments.
+```
