@@ -113,8 +113,26 @@ const updateOrderStatus = async (
 };
 
 const getAllordersFromDB = async () => {
-  const result = await Order.find().populate("user").populate("shop");
-  return result;
+  const orders = await Order.find().populate(["user", "shop"]);
+
+  // Extract order IDs
+  const orderIds = orders.map((order) => order._id);
+
+  // Fetch payments associated with the orders
+  const payments = await Payment.find({ order: { $in: orderIds } });
+
+  // Combine orders with their respective payments
+  const ordersWithPayments = orders.map((order) => {
+    const payment = payments.find(
+      (pay) => pay.order && pay.order.toString() === order._id.toString()
+    );
+    return {
+      ...order.toObject(),
+      payment: payment ? payment.toObject() : null,
+    };
+  });
+
+  return ordersWithPayments;
 };
 
 export const orderService = {

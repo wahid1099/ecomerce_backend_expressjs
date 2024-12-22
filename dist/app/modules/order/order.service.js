@@ -67,6 +67,7 @@ const getOrdersForVendor = (shopId) => __awaiter(void 0, void 0, void 0, functio
     // Fetch orders for the shop
     const orders = yield order_model_1.Order.find({ shop: shopId })
         .populate("items.product") // Populate product details in order items
+        .populate("user") // Populate product details in order items
         .populate("shop"); // Populate shop details
     if (!orders || orders.length === 0) {
         throw new ApiError_1.default(http_status_1.default.OK, "No orders found for this shop");
@@ -96,8 +97,17 @@ const updateOrderStatus = (orderId, status) => __awaiter(void 0, void 0, void 0,
     return order;
 });
 const getAllordersFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield order_model_1.Order.find().populate("user", "shop");
-    return result;
+    const orders = yield order_model_1.Order.find().populate(["user", "shop"]);
+    // Extract order IDs
+    const orderIds = orders.map((order) => order._id);
+    // Fetch payments associated with the orders
+    const payments = yield payment_model_1.Payment.find({ order: { $in: orderIds } });
+    // Combine orders with their respective payments
+    const ordersWithPayments = orders.map((order) => {
+        const payment = payments.find((pay) => pay.order && pay.order.toString() === order._id.toString());
+        return Object.assign(Object.assign({}, order.toObject()), { payment: payment ? payment.toObject() : null });
+    });
+    return ordersWithPayments;
 });
 exports.orderService = {
     createOrder,
