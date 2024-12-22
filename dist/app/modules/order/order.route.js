@@ -15,6 +15,7 @@ router.post("/createorder", (0, Auth_1.default)(user_interface_1.UserRole.Admin,
 router.get("/user-order", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), order_controller_1.orderController.getOrdersForUser);
 // Route to get orders for a specific vendor (shop)
 router.get("/vendor-orders", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), order_controller_1.orderController.getOrdersForVendor);
+router.get("/All-orders-admin", (0, Auth_1.default)(user_interface_1.UserRole.Admin), order_controller_1.orderController.getAllOrdersForAdmin);
 // Route to update order status
 router.put("/orders/status", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), order_controller_1.orderController.updateOrderStatus);
 exports.OrderRoutes = router;

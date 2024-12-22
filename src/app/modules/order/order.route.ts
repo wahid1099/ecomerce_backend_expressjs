@@ -26,11 +26,19 @@ router.get(
   orderController.getOrdersForVendor
 );
 
+router.get(
+  "/All-orders-admin",
+  Auth(UserRole.Admin),
+  orderController.getAllOrdersForAdmin
+);
 // Route to update order status
 router.put(
   "/orders/status",
   Auth(UserRole.Admin, UserRole.Vendor),
   orderController.updateOrderStatus
 );
+
+
+
 
 export const OrderRoutes = router;

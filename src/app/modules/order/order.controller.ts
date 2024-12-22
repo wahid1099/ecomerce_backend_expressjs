@@ -39,6 +39,20 @@ const getOrdersForVendor = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+const getAllOrdersForAdmin = catchAsync(async (req: Request, res: Response) => {
+
+  const result = await orderService.getAllordersFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: "All Order fethced successfully!",
+    data: result,
+  });
+});
+
+
 const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   const { orderId, status } = req.body;
   const result = await orderService.updateOrderStatus(orderId, status);
@@ -51,9 +65,11 @@ const updateOrderStatus = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+
+
 export const orderController = {
   updateOrderStatus,
   getOrdersForVendor,
   getOrdersForUser,
-  createOrder,
+  createOrder,getAllOrdersForAdmin
 };

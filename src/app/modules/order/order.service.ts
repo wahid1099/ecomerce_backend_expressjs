@@ -111,9 +111,15 @@ const updateOrderStatus = async (
   return order;
 };
 
+const getAllordersFromDB = async () => {
+  const result = await Order.find().populate("user", "shop");
+  return result;
+};
+
 export const orderService = {
   createOrder,
   getOrdersForUser,
   getOrdersForVendor,
   updateOrderStatus,
+  getAllordersFromDB,
 };

@@ -46,6 +46,15 @@ const getOrdersForVendor = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         data: result,
     });
 }));
+const getAllOrdersForAdmin = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_service_1.orderService.getAllordersFromDB();
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.CREATED,
+        success: true,
+        message: "All Order fethced successfully!",
+        data: result,
+    });
+}));
 const updateOrderStatus = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { orderId, status } = req.body;
     const result = yield order_service_1.orderService.updateOrderStatus(orderId, status);
@@ -60,5 +69,5 @@ exports.orderController = {
     updateOrderStatus,
     getOrdersForVendor,
     getOrdersForUser,
-    createOrder,
+    createOrder, getAllOrdersForAdmin
 };

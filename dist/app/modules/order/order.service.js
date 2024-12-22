@@ -95,9 +95,14 @@ const updateOrderStatus = (orderId, status) => __awaiter(void 0, void 0, void 0,
     yield order.save();
     return order;
 });
+const getAllordersFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield order_model_1.Order.find().populate("user", "shop");
+    return result;
+});
 exports.orderService = {
     createOrder,
     getOrdersForUser,
     getOrdersForVendor,
     updateOrderStatus,
+    getAllordersFromDB,
 };
