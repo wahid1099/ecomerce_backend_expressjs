@@ -70,6 +70,7 @@ const getOrdersForVendor = async (shopId: string) => {
   // Fetch orders for the shop
   const orders = await Order.find({ shop: shopId })
     .populate("items.product") // Populate product details in order items
+    .populate("user") // Populate product details in order items
     .populate("shop"); // Populate shop details
 
   if (!orders || orders.length === 0) {
@@ -112,7 +113,7 @@ const updateOrderStatus = async (
 };
 
 const getAllordersFromDB = async () => {
-  const result = await Order.find().populate("user", "shop");
+  const result = await Order.find().populate("user").populate("shop");
   return result;
 };
 
