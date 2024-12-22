@@ -31,7 +31,7 @@ const getAllPayment = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
-        message: "Payment fetched successfully",
+        message: "All Payment fetched successfully",
         data: result,
     });
 }));

@@ -1,13 +1,23 @@
 import express from "express";
 import { PaymentControllers } from "./payment.controller";
+import { UserRole } from "../user/user.interface";
+import Auth from "../../middlewares/Auth";
 
 const router = express.Router();
 
-router.post("/create-payment", PaymentControllers.createPayment);
+router.post(
+  "/create-payment",
+  Auth(UserRole.Admin, UserRole.Customer, UserRole.Vendor),
+  PaymentControllers.createPayment
+);
 
-router.post("/confirmation", PaymentControllers.confirmationController);
+router.post(
+  "/confirmation",
+  Auth(UserRole.Admin, UserRole.Customer, UserRole.Vendor),
+  PaymentControllers.confirmationController
+);
 
-router.get("/get-all", PaymentControllers.getAllPayment);
+router.get("/get-all", Auth(UserRole.Admin), PaymentControllers.getAllPayment);
 
 router.get("/get-single/:id", PaymentControllers.getSinglePayment);
 

@@ -18,7 +18,7 @@ const getAllPayment = catchAsync(async (req, res) => {
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "Payment fetched successfully",
+    message: "All Payment fetched successfully",
     data: result,
   });
 });
