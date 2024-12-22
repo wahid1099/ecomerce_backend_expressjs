@@ -17,7 +17,11 @@ router.post(
   PaymentControllers.confirmationController
 );
 
-router.get("/get-all", Auth(UserRole.Admin), PaymentControllers.getAllPayment);
+router.get(
+  "/get-all-payments",
+  Auth(UserRole.Admin),
+  PaymentControllers.getAllPayment
+);
 
 router.get("/get-single/:id", PaymentControllers.getSinglePayment);
 
