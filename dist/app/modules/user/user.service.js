@@ -42,14 +42,17 @@ const updateUser = (userId, payload) => __awaiter(void 0, void 0, void 0, functi
 const getMyProfileService = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.findOne({ email, isDeleted: false })
         .populate({ path: "shop", options: { strictPopulate: false } }) // Handle missing shops gracefully
-        .populate({ path: "orders", options: { strictPopulate: false } }) // Handle missing orders gracefully
+        .populate({
+        path: "orders",
+        options: { strictPopulate: false }, // Handle missing orders gracefully
+        populate: {
+            path: "items.product", // Path to the product field in the items array
+            model: "Product", // Name of the model to populate
+            options: { strictPopulate: false }, // Handle missing products gracefully
+        },
+    })
         .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
         .populate({ path: "followedShops", options: { strictPopulate: false } }) // Handle missing followedShops gracefully
-        .populate({
-        path: "items.product", // Path to the product field in the items array
-        model: "Product", // Name of the model to populate
-        options: { strictPopulate: false }, // Handle missing products gracefully
-    })
         .populate({ path: "shopFollowers", options: { strictPopulate: false } }); // Handle missing shopFollowers gracefully
     // .populate({ path: "payments", options: { strictPopulate: false } }); // Handle missing payments gracefully
     // Check if the user was found
