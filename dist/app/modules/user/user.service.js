@@ -44,7 +44,11 @@ const getMyProfileService = (email) => __awaiter(void 0, void 0, void 0, functio
         .populate({ path: "shop", options: { strictPopulate: false } }) // Handle missing shops gracefully
         .populate({ path: "orders", options: { strictPopulate: false } }) // Handle missing orders gracefully
         .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
-        .populate({ path: "followedShops", options: { strictPopulate: false } }) // Handle missing followedShops gracefully
+        .populate({ path: "followedShops", options: { strictPopulate: false } })
+        .populate({
+        path: "items.product", // Path to the product field in the items array
+        model: "Product", // Name of the model to populate
+    }) // Handle missing followedShops gracefully
         .populate({ path: "shopFollowers", options: { strictPopulate: false } }); // Handle missing shopFollowers gracefully
     // .populate({ path: "payments", options: { strictPopulate: false } }); // Handle missing payments gracefully
     // Check if the user was found

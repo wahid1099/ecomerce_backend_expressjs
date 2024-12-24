@@ -97,7 +97,10 @@ const updateOrderStatus = (orderId, status) => __awaiter(void 0, void 0, void 0,
     return order;
 });
 const getAllordersFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const orders = yield order_model_1.Order.find().populate(["user", "shop"]);
+    const orders = yield order_model_1.Order.find().populate(["user", "shop"]).populate({
+        path: "items.product", // Path to the product field in the items array
+        model: "Product", // Name of the model to populate
+    });
     // Extract order IDs
     const orderIds = orders.map((order) => order._id);
     // Fetch payments associated with the orders

@@ -113,7 +113,10 @@ const updateOrderStatus = async (
 };
 
 const getAllordersFromDB = async () => {
-  const orders = await Order.find().populate(["user", "shop"]);
+  const orders = await Order.find().populate(["user", "shop"]).populate({
+    path: "items.product", // Path to the product field in the items array
+    model: "Product", // Name of the model to populate
+  });
 
   // Extract order IDs
   const orderIds = orders.map((order) => order._id);
