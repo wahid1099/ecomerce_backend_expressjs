@@ -122,6 +122,7 @@ const getPaginatedProducts = async (
     totalPages,
   };
 };
+
 export const ProductService = {
   createProduct,
   updateProduct,

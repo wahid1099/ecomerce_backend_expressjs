@@ -27,10 +27,13 @@ exports.Review = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 // Define the Review schema
 const ReviewSchema = new mongoose_1.Schema({
-    userId: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
-    productId: { type: mongoose_1.Schema.Types.ObjectId, ref: "Product", required: true },
+    user: { type: mongoose_1.Schema.Types.ObjectId, ref: "User", required: true },
+    product: { type: mongoose_1.Schema.Types.ObjectId, ref: "Product", required: true },
+    order: { type: mongoose_1.Schema.Types.ObjectId, ref: "Order", required: true },
+    shop: { type: mongoose_1.Schema.Types.ObjectId, ref: "Shop", required: true },
     rating: { type: Number, required: true, min: 1, max: 5 },
     comment: { type: String },
+    image: { type: String }, // Optional image
     createdAt: { type: Date, default: Date.now },
 }, { timestamps: true } // Automatically adds createdAt and updatedAt
 );
