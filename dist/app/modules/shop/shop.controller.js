@@ -39,6 +39,16 @@ const updateShop = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         data: result,
     });
 }));
+const getSingleShopData = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const shopId = req.params.shopId;
+    const result = yield shop_service_1.ShopServices.getSingleShopFromDb(shopId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_1.default.OK,
+        success: true,
+        message: "Shop Fetched successfully!",
+        data: result,
+    });
+}));
 const getVendorShops = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _b;
     const vendorId = (_b = req.user) === null || _b === void 0 ? void 0 : _b.id;
@@ -117,4 +127,5 @@ exports.ShopController = {
     followShop,
     unfollowShop,
     getShopFollowers,
+    getSingleShopData,
 };

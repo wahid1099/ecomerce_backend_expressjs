@@ -15,16 +15,15 @@ const router = express_1.default.Router();
 router.post("/", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(shop_validation_1.ShopValidationSchema.createShopSchema), shop_controller_1.ShopController.createShop);
 // Get all shops for the vendor
 router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin), shop_controller_1.ShopController.getVendorShops);
-// Get shop followers
+// Shop-specific actions
 router.get("/:shopId/followers", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.getShopFollowers);
-// Get order history for a shop
 router.get("/:shopId/orders", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.getShopOrderHistory);
+router.post("/:shopId/follow", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.followShop);
+router.post("/:shopId/unfollow", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.unfollowShop);
+// Get a single shop
+router.get("/:shopId", shop_controller_1.ShopController.getSingleShopData);
 // Update shop details
 router.patch("/:shopId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(shop_validation_1.ShopValidationSchema.updateShopSchema), shop_controller_1.ShopController.updateShop);
-// Follow a shop
-router.post("/:shopId/follow", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.followShop);
-// Unfollow a shop
-router.post("/:shopId/unfollow", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.unfollowShop);
 // Delete a shop
 router.delete("/:shopId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.deleteShop);
 exports.ShopRoutes = router;

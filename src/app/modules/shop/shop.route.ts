@@ -18,19 +18,33 @@ router.post(
 // Get all shops for the vendor
 router.get("/", Auth(UserRole.Admin), ShopController.getVendorShops);
 
-// Get shop followers
+// Shop-specific actions
 router.get(
   "/:shopId/followers",
   Auth(UserRole.Admin, UserRole.Vendor),
   ShopController.getShopFollowers
 );
 
-// Get order history for a shop
 router.get(
   "/:shopId/orders",
   Auth(UserRole.Vendor),
   ShopController.getShopOrderHistory
 );
+
+router.post(
+  "/:shopId/follow",
+  Auth(UserRole.Customer, UserRole.Vendor),
+  ShopController.followShop
+);
+
+router.post(
+  "/:shopId/unfollow",
+  Auth(UserRole.Customer, UserRole.Vendor),
+  ShopController.unfollowShop
+);
+
+// Get a single shop
+router.get("/:shopId", ShopController.getSingleShopData);
 
 // Update shop details
 router.patch(
@@ -38,20 +52,6 @@ router.patch(
   Auth(UserRole.Vendor),
   validateRequest(ShopValidationSchema.updateShopSchema),
   ShopController.updateShop
-);
-
-// Follow a shop
-router.post(
-  "/:shopId/follow",
-  Auth(UserRole.Customer, UserRole.Vendor),
-  ShopController.followShop
-);
-
-// Unfollow a shop
-router.post(
-  "/:shopId/unfollow",
-  Auth(UserRole.Customer, UserRole.Vendor),
-  ShopController.unfollowShop
 );
 
 // Delete a shop

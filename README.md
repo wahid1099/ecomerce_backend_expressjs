@@ -1,7 +1,3 @@
-It looks like the formatting got mixed up in the backend `README.md` file. Here's the corrected version:
-
----
-
 ### Backend `README.md`
 
 ````markdown
@@ -29,7 +25,7 @@ This is the **Node.js/Express** backend for the E-Commerce application. It handl
 2. **Navigate to the backend directory**:
 
    ```bash
-   cd assignment9-backend
+   cd ecomerce_backend_expressjs
    ```
 
 3. **Install dependencies**:
@@ -68,7 +64,7 @@ This is the **Node.js/Express** backend for the E-Commerce application. It handl
 1. Fork the repository.
 2. Clone your fork:
    ```bash
-   git clone https://github.com/your-username/assignment9-backend.git
+   git clone https://github.com/wahid1099/ecomerce_backend_expressjs
    ```
 3. Create a new branch:
    ```bash

@@ -30,6 +30,18 @@ const updateShop = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getSingleShopData = catchAsync(async (req: Request, res: Response) => {
+  const shopId = req.params.shopId;
+  const result = await ShopServices.getSingleShopFromDb(shopId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Shop Fetched successfully!",
+    data: result,
+  });
+});
+
 const getVendorShops = catchAsync(async (req: Request, res: Response) => {
   const vendorId = req.user?.id;
   const result = await ShopServices.getVendorShops(vendorId);
@@ -116,4 +128,5 @@ export const ShopController = {
   followShop,
   unfollowShop,
   getShopFollowers,
+  getSingleShopData,
 };

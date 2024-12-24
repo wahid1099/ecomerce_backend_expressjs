@@ -86,6 +86,13 @@ const getShopFollowers = (shopId) => __awaiter(void 0, void 0, void 0, function*
         });
     });
 });
+const getSingleShopFromDb = (shopId) => __awaiter(void 0, void 0, void 0, function* () {
+    const shopData = yield shop_model_1.Shop.findOne({ _id: shopId }).populate("products");
+    if (!shopData) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Shop not found");
+    }
+    return shopData;
+});
 exports.ShopServices = {
     createShop,
     updateShop,
@@ -95,4 +102,5 @@ exports.ShopServices = {
     followShop,
     unfollowShop,
     getShopFollowers,
+    getSingleShopFromDb,
 };

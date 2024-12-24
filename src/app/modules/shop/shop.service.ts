@@ -106,6 +106,16 @@ const getShopFollowers = async (shopId: string) => {
   }));
 };
 
+const getSingleShopFromDb = async (shopId: string) => {
+  const shopData = await Shop.findOne({ _id: shopId }).populate("products");
+
+  if (!shopData) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found");
+  }
+
+  return shopData;
+};
+
 export const ShopServices = {
   createShop,
   updateShop,
@@ -115,4 +125,5 @@ export const ShopServices = {
   followShop,
   unfollowShop,
   getShopFollowers,
+  getSingleShopFromDb,
 };
