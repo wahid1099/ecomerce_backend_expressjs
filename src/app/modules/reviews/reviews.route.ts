@@ -13,4 +13,4 @@ router.post(
 
 router.get("/", Auth(UserRole.Admin), ReivewController.getAllReviews);
 
-export const PaymentRoute = router;
+export const ReviewRoute = router;

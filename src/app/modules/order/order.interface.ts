@@ -13,6 +13,8 @@ export type IOrder = {
   totalAmount: number; // Total cost of the order
   paymentType: "COD" | "ONLINE";
   status: "pending" | "completed" | "canceled"; // Order status options
+  isReviewed: boolean; // New field
+
   createdAt: Date; // Order creation timestamp
   updatedAt: Date; // Order last update timestamp
   items: IOrderItem[]; // Array of items in the order

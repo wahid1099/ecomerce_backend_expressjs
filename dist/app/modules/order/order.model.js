@@ -13,6 +13,7 @@ const OrderSchema = new mongoose_1.Schema({
     shop: { type: mongoose_1.Schema.Types.ObjectId, ref: "Shop", required: true },
     paymentType: { type: String, enum: ["COD", "ONLINE"], equired: true },
     totalAmount: { type: Number, required: true },
+    isReviewed: { type: Boolean, default: false }, // Initialize as false
     status: {
         type: String,
         enum: ["pending", "completed", "canceled"],

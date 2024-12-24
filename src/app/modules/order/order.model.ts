@@ -14,6 +14,8 @@ const OrderSchema = new Schema<IOrder>(
     shop: { type: Schema.Types.ObjectId, ref: "Shop", required: true },
     paymentType: { type: String, enum: ["COD", "ONLINE"], equired: true },
     totalAmount: { type: Number, required: true },
+    isReviewed: { type: Boolean, default: false }, // Initialize as false
+
     status: {
       type: String,
       enum: ["pending", "completed", "canceled"],
