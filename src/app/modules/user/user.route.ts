@@ -18,7 +18,7 @@ router.post(
 );
 
 router.post(
-  "/toggle-fllowshop",
+  "/toggle-fllowshop/:shopId",
   Auth(UserRole.Customer, UserRole.Vendor),
   UserController.toggleShopFollow
 );
