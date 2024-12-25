@@ -11,9 +11,7 @@ const coupon_controller_1 = require("./coupon.controller");
 const router = express_1.default.Router();
 router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin), coupon_controller_1.couponController.getCoupons);
 router.get("/:couponId", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), coupon_controller_1.couponController.getCouponById);
-router.get("/validate-coupon/:code", 
-//   Auth(UserRole.Customer, UserRole.Admin, UserRole.Vendor),
-coupon_controller_1.couponController.validateCoupon);
+router.get("/validate-coupon/:code", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), coupon_controller_1.couponController.validateCoupon);
 router.post("/create-coupon", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), coupon_controller_1.couponController.createCoupon);
 router.patch("/update-coupon/:couponId", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), coupon_controller_1.couponController.updateCoupon);
 router.delete("/delete-coupon/:couponId", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), coupon_controller_1.couponController.deleteCoupon);
