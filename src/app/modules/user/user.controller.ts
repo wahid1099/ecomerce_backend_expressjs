@@ -50,29 +50,28 @@ const updateUserIntoDb = catchAsync(async (req: Request, res: Response) => {
 
 const deleteUserfromDb = async (req: Request, res: Response) => {
   const { userId } = req.params;
-  const result = await UserService.deleteUser(userId);
+  const result = await UserService.toggleUserDeletion(userId);
+  const statusMessage = result.isDeleted ? "Deleted" : "Restored";
+
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: "User successfully deleted",
+    message: `User ${statusMessage} successfully`,
+    data: result,
   });
 };
 
 const suspendVendor = catchAsync(async (req: Request, res: Response) => {
   const { vendorId } = req.params;
-  const { isSuspended } = req.body;
 
-  // Validate that `isSuspended` is provided and is a boolean
-  if (typeof isSuspended !== "boolean") {
-    throw new ApiError(httpStatus.BAD_REQUEST, "isSuspended must be a boolean");
-  }
+  const result = await UserService.suspendVendor(vendorId);
 
-  const result = await UserService.suspendVendor(vendorId, isSuspended);
+  const statusMessage = result.isSuspended ? "suspended" : "unsuspended";
 
   sendResponse(res, {
     success: true,
     statusCode: httpStatus.OK,
-    message: `Vendor ${isSuspended ? "suspended" : "unsuspended"} successfully`,
+    message: `Vendor ${statusMessage} successfully`,
     data: result,
   });
 });

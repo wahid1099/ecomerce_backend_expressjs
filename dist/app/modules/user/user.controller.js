@@ -17,7 +17,6 @@ const user_service_1 = require("./user.service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_1 = __importDefault(require("http-status"));
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
-const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const inserUserIntoDB = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const newUser = yield user_service_1.UserService.createUser(req.body);
     (0, sendResponse_1.default)(res, {
@@ -58,25 +57,23 @@ const updateUserIntoDb = (0, catchAsync_1.default)((req, res) => __awaiter(void 
 }));
 const deleteUserfromDb = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { userId } = req.params;
-    const result = yield user_service_1.UserService.deleteUser(userId);
+    const result = yield user_service_1.UserService.toggleUserDeletion(userId);
+    const statusMessage = result.isDeleted ? "Deleted" : "Restored";
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
-        message: "User successfully deleted",
+        message: `User ${statusMessage} successfully`,
+        data: result,
     });
 });
 const suspendVendor = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { vendorId } = req.params;
-    const { isSuspended } = req.body;
-    // Validate that `isSuspended` is provided and is a boolean
-    if (typeof isSuspended !== "boolean") {
-        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "isSuspended must be a boolean");
-    }
-    const result = yield user_service_1.UserService.suspendVendor(vendorId, isSuspended);
+    const result = yield user_service_1.UserService.suspendVendor(vendorId);
+    const statusMessage = result.isSuspended ? "suspended" : "unsuspended";
     (0, sendResponse_1.default)(res, {
         success: true,
         statusCode: http_status_1.default.OK,
-        message: `Vendor ${isSuspended ? "suspended" : "unsuspended"} successfully`,
+        message: `Vendor ${statusMessage} successfully`,
         data: result,
     });
 }));

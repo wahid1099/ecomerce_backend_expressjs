@@ -76,20 +76,28 @@ const getAllUsers = async () => {
   return users;
 };
 
-const deleteUser = async (userId: string) => {
+const toggleUserDeletion = async (userId: string) => {
   const user = await User.findById(userId);
 
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }
 
+  // If the user is already deleted, restore them by setting isDeleted to false.
+  if (user.isDeleted) {
+    user.isDeleted = false;
+    await user.save();
+    return user;
+  }
+
+  // If the user is not deleted, mark them as deleted.
   user.isDeleted = true;
   await user.save();
 
   return user;
 };
 
-const suspendVendor = async (vendorId: string, isSuspended: boolean) => {
+const suspendVendor = async (vendorId: string) => {
   // Check if the user exists and is a vendor
   const user = await User.findById(vendorId);
 
@@ -101,7 +109,13 @@ const suspendVendor = async (vendorId: string, isSuspended: boolean) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "User is not a vendor");
   }
 
-  user.isSuspended = isSuspended;
+  // Toggle the `isSuspended` status
+  if (user.isSuspended) {
+    user.isSuspended = false; // Unsuspend the vendor
+  } else {
+    user.isSuspended = true; // Suspend the vendor
+  }
+
   await user.save();
 
   return user;
@@ -132,7 +146,7 @@ export const UserService = {
   getAllUsers,
   getMyProfileService,
   updateUser,
-  deleteUser,
+  toggleUserDeletion,
   suspendVendor,
   getUserFollowedShops,
 };

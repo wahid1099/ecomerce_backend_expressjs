@@ -19,7 +19,6 @@ const createReviewController = catchAsync(
 
 const getAllReviews = catchAsync(async (req: Request, res: Response) => {
   const result = await ReviewService.getAllReviewsFromDb();
-  console.log(result);
 
   sendResponse(res, {
     statusCode: httpStatus.OK,

@@ -73,16 +73,23 @@ const getAllUsers = () => __awaiter(void 0, void 0, void 0, function* () {
     // .populate({ path: "payments", options: { strictPopulate: false } }); // Handle missing payments gracefully
     return users;
 });
-const deleteUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+const toggleUserDeletion = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.findById(userId);
     if (!user) {
         throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "User not found");
     }
+    // If the user is already deleted, restore them by setting isDeleted to false.
+    if (user.isDeleted) {
+        user.isDeleted = false;
+        yield user.save();
+        return user;
+    }
+    // If the user is not deleted, mark them as deleted.
     user.isDeleted = true;
     yield user.save();
     return user;
 });
-const suspendVendor = (vendorId, isSuspended) => __awaiter(void 0, void 0, void 0, function* () {
+const suspendVendor = (vendorId) => __awaiter(void 0, void 0, void 0, function* () {
     // Check if the user exists and is a vendor
     const user = yield user_model_1.User.findById(vendorId);
     if (!user) {
@@ -91,7 +98,13 @@ const suspendVendor = (vendorId, isSuspended) => __awaiter(void 0, void 0, void 
     if (user.role !== "Vendor") {
         throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "User is not a vendor");
     }
-    user.isSuspended = isSuspended;
+    // Toggle the `isSuspended` status
+    if (user.isSuspended) {
+        user.isSuspended = false; // Unsuspend the vendor
+    }
+    else {
+        user.isSuspended = true; // Suspend the vendor
+    }
     yield user.save();
     return user;
 });
@@ -117,7 +130,7 @@ exports.UserService = {
     getAllUsers,
     getMyProfileService,
     updateUser,
-    deleteUser,
+    toggleUserDeletion,
     suspendVendor,
     getUserFollowedShops,
 };
