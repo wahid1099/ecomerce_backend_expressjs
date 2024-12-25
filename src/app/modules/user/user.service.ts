@@ -42,7 +42,16 @@ const updateUser = async (userId: string, payload: Partial<IUserUpdate>) => {
 
 const getMyProfileService = async (email: string) => {
   const user = await User.findOne({ email, isDeleted: false })
-    .populate({ path: "shop", options: { strictPopulate: false } }) // Handle missing shops gracefully
+    .populate({
+      path: "shop",
+      options: { strictPopulate: false }, // Handle missing shops gracefully
+      populate: {
+        path: "shopFollowers", // Populate followers of the shop
+        model: "User", // Reference to the User model
+        select: "name email", // Fetch only specific fields if needed
+        options: { strictPopulate: false }, // Handle missing followers gracefully
+      },
+    })
     .populate({
       path: "orders",
       options: { strictPopulate: false }, // Handle missing orders gracefully
@@ -53,11 +62,8 @@ const getMyProfileService = async (email: string) => {
       },
     })
     .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
-    .populate({ path: "followedShops", options: { strictPopulate: false } }) // Handle missing followedShops gracefully
-    .populate({ path: "shopFollowers", options: { strictPopulate: false } }); // Handle missing shopFollowers gracefully
-  // .populate({ path: "payments", options: { strictPopulate: false } }); // Handle missing payments gracefully
+    .populate({ path: "payments", options: { strictPopulate: false } }); // Handle missing reviews gracefully
 
-  // Check if the user was found
   if (!user) {
     // Throw a custom error if user not found
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
@@ -66,13 +72,13 @@ const getMyProfileService = async (email: string) => {
   // Return the user with populated data
   return user;
 };
+
 const getAllUsers = async () => {
   const users = await User.find()
     .populate({ path: "shop", options: { strictPopulate: false } }) // Handle missing shops gracefully
-    .populate({ path: "orders", options: { strictPopulate: false } }) // Handle missing orders gracefully
-    // .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
-    .populate({ path: "followedShops", options: { strictPopulate: false } }) // Handle missing followedShops gracefully
-    .populate({ path: "shopFollowers", options: { strictPopulate: false } }); // Handle missing shopFollowers gracefully
+    .populate({ path: "orders", options: { strictPopulate: false } }); // Handle missing orders gracefully
+  // .populate({ path: "reviews", options: { strictPopulate: false } }) // Handle missing reviews gracefully
+
   // .populate({ path: "payments", options: { strictPopulate: false } }); // Handle missing payments gracefully
 
   return users;

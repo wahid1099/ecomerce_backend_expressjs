@@ -43,8 +43,7 @@ const userSchema = new mongoose_1.Schema({
     shop: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" }],
     orders: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Order" }],
     reviews: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Review" }],
-    followedShops: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "ShopFollower" }],
-    shopFollowers: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "ShopFollower" }],
+    followedShops: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Shop" }],
     payments: [{ type: mongoose_1.Schema.Types.ObjectId, ref: "Payment" }], // Reference to Payment model
     role: {
         type: String,

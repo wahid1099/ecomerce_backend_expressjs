@@ -30,8 +30,7 @@ const userSchema: Schema<IUser> = new Schema(
     shop: [{ type: Schema.Types.ObjectId, ref: "Shop" }],
     orders: [{ type: Schema.Types.ObjectId, ref: "Order" }],
     reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
-    followedShops: [{ type: Schema.Types.ObjectId, ref: "ShopFollower" }],
-    shopFollowers: [{ type: Schema.Types.ObjectId, ref: "ShopFollower" }],
+    followedShops: [{ type: Schema.Types.ObjectId, ref: "Shop" }],
     payments: [{ type: Schema.Types.ObjectId, ref: "Payment" }], // Reference to Payment model
 
     role: {
