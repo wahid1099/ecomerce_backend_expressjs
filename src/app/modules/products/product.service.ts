@@ -61,7 +61,10 @@ const getVendorProducts = async (shopID: string) => {
 
 // Get product details by ID
 const getProductById = async (productId: string) => {
-  const product = await Product.findById(productId).populate("shop");
+  const product = await Product.findById(productId).populate([
+    "shop",
+    "reviews",
+  ]);
   return product;
 };
 

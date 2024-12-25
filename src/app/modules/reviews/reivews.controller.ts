@@ -3,7 +3,7 @@ import sendResponse from "../../../shared/sendResponse";
 import { Request, Response } from "express";
 import { ReviewService } from "./reviews.service";
 
-const createProductController = catchAsync(
+const createReviewController = catchAsync(
   async (req: Request, res: Response) => {
     const result = await ReviewService.createReviewIntoDb(req.body);
 
@@ -27,6 +27,6 @@ const getAllReviews = catchAsync(async (req: Request, res: Response) => {
   });
 });
 export const ReivewController = {
-  createProductController,
+  createReviewController,
   getAllReviews,
 };

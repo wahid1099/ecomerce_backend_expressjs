@@ -6,7 +6,6 @@ import { Product } from "../products/product.model";
 import { User } from "../user/user.model";
 
 const createReviewIntoDb = async (payload: any) => {
-  // Create the review document
   const review = await Review.create(payload);
 
   const { product, user, order } = payload;
@@ -45,7 +44,7 @@ const getAllReviewsFromDb = async () => {
   const reviews = await Review.find().populate([
     "user",
     "shop",
-    "oder",
+    "order",
     "product",
   ]);
   if (!reviews.length) {

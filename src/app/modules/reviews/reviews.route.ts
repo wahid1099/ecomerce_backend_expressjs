@@ -8,7 +8,7 @@ const router = express.Router();
 router.post(
   "/create-review",
   Auth(UserRole.Admin, UserRole.Customer, UserRole.Vendor),
-  ReivewController.createProductController
+  ReivewController.createReviewController
 );
 
 router.get("/", Auth(UserRole.Admin), ReivewController.getAllReviews);

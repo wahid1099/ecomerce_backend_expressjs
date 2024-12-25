@@ -20,7 +20,6 @@ const order_model_1 = require("../order/order.model");
 const product_model_1 = require("../products/product.model");
 const user_model_1 = require("../user/user.model");
 const createReviewIntoDb = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    // Create the review document
     const review = yield review_model_1.Review.create(payload);
     const { product, user, order } = payload;
     // Update the product to include the review
@@ -45,7 +44,7 @@ const getAllReviewsFromDb = () => __awaiter(void 0, void 0, void 0, function* ()
     const reviews = yield review_model_1.Review.find().populate([
         "user",
         "shop",
-        "oder",
+        "order",
         "product",
     ]);
     if (!reviews.length) {

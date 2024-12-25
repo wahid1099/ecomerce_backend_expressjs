@@ -13,7 +13,7 @@ export type IShop = {
   products?: Types.ObjectId[]; // Optional
   orders?: Types.ObjectId[]; // shop orders
   followers?: Types.ObjectId[]; // Optional
-  shopFollowers?: IShopFollower[]; // Optional
+  shopFollowers?: Types.ObjectId[]; // Optional
 };
 
 export type IShopFollower = {
