@@ -21,7 +21,7 @@ const UserSchemaCreate = zod_1.z.object({
         .optional(),
     phone: zod_1.z
         .string()
-        .regex(/^\+?[1-9]\d{1,14}$/, { message: "Invalid phone number" })
+        .regex(/^\+?[0-9]\d{1,14}$/, { message: "Invalid phone number" })
         .optional(),
     addressBook: zod_1.z.string().optional(),
     zipCode: zod_1.z.string().optional(),
