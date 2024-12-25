@@ -43,49 +43,46 @@ const getShopOrderHistory = (shopId, vendorId) => __awaiter(void 0, void 0, void
     const orders = yield order_model_1.Order.find({ shopId, vendorId });
     return orders;
 });
-const followShop = (userId, shopId) => __awaiter(void 0, void 0, void 0, function* () {
-    // Check if shop exists
-    const shop = yield shop_model_1.Shop.findById(shopId);
-    if (!shop) {
-        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Shop not found.");
-    }
-    // Check if already following
-    const isAlreadyFollowing = yield shop_model_1.ShopFollower.findOne({ userId, shopId });
-    if (isAlreadyFollowing) {
-        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Already following this shop.");
-    }
-    // Add the shop to the user's followedShops
-    yield shop_model_1.ShopFollower.create({ userId, shopId });
-    return {
-        message: `You are now following the shop ${shop.name}.`,
-    };
-});
-const unfollowShop = (userId, shopId) => __awaiter(void 0, void 0, void 0, function* () {
-    // Check if the user is following the shop
-    const followRecord = yield shop_model_1.ShopFollower.findOne({ userId, shopId });
-    if (!followRecord) {
-        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Shop not found.");
-    }
-    // Remove the follow relationship
-    yield shop_model_1.ShopFollower.findByIdAndDelete(followRecord._id);
-    return {
-        message: `You have unfollowed the shop.`,
-    };
-});
-const getShopFollowers = (shopId) => __awaiter(void 0, void 0, void 0, function* () {
-    const followers = yield shop_model_1.ShopFollower.find({ shop: shopId })
-        .populate("user") // Explicitly set the type of 'user' to IUser
-        .exec(); // Adding exec() ensures it's properly executed
-    return followers.map((follower) => {
-        var _a, _b, _c, _d;
-        return ({
-            id: (_a = follower.user) === null || _a === void 0 ? void 0 : _a._id,
-            name: (_b = follower.user) === null || _b === void 0 ? void 0 : _b.name,
-            email: (_c = follower.user) === null || _c === void 0 ? void 0 : _c.email,
-            profileImage: (_d = follower.user) === null || _d === void 0 ? void 0 : _d.profileImage,
-        });
-    });
-});
+// const followShop = async (userId: string, shopId: string) => {
+//   // Check if shop exists
+//   const shop = await Shop.findById(shopId);
+//   if (!shop) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "Shop not found.");
+//   }
+//   // Check if already following
+//   const isAlreadyFollowing = await ShopFollower.findOne({ userId, shopId });
+//   if (isAlreadyFollowing) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, "Already following this shop.");
+//   }
+//   // Add the shop to the user's followedShops
+//   await ShopFollower.create({ userId, shopId });
+//   return {
+//     message: `You are now following the shop ${shop.name}.`,
+//   };
+// };
+// const unfollowShop = async (userId: string, shopId: string) => {
+//   // Check if the user is following the shop
+//   const followRecord = await ShopFollower.findOne({ userId, shopId });
+//   if (!followRecord) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "Shop not found.");
+//   }
+//   // Remove the follow relationship
+//   await ShopFollower.findByIdAndDelete(followRecord._id);
+//   return {
+//     message: `You have unfollowed the shop.`,
+//   };
+// };
+// const getShopFollowers = async (shopId: string) => {
+//   const followers = await ShopFollower.find({ shop: shopId })
+//     .populate<{ user: IUser }>("user") // Explicitly set the type of 'user' to IUser
+//     .exec(); // Adding exec() ensures it's properly executed
+//   return followers.map((follower) => ({
+//     id: follower.user?._id,
+//     name: follower.user?.name,
+//     email: follower.user?.email,
+//     profileImage: follower.user?.profileImage,
+//   }));
+// };
 const getSingleShopFromDb = (shopId) => __awaiter(void 0, void 0, void 0, function* () {
     const shopData = yield shop_model_1.Shop.findOne({ _id: shopId }).populate("products");
     if (!shopData) {
@@ -99,8 +96,8 @@ exports.ShopServices = {
     getVendorShops,
     deleteShop,
     getShopOrderHistory,
-    followShop,
-    unfollowShop,
-    getShopFollowers,
+    // followShop,
+    // unfollowShop,
+    // getShopFollowers,
     getSingleShopFromDb,
 };

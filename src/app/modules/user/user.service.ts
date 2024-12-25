@@ -2,6 +2,8 @@ import { IUser, IUserUpdate } from "./user.interface";
 import { User } from "./user.model";
 import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
+import { Shop } from "../shop/shop.model";
+import mongoose from "mongoose";
 
 const createUser = async (userData: IUser) => {
   const { email, username } = userData;
@@ -141,6 +143,65 @@ const getUserFollowedShops = async (userId: string) => {
   }));
 };
 
+const followShopToggle = async (userId: string, shopId: string) => {
+  // Convert string IDs to ObjectId
+  const userObjectId = new mongoose.Types.ObjectId(userId);
+  const shopObjectId = new mongoose.Types.ObjectId(shopId);
+
+  // Fetch user and shop documents
+  const user = await User.findById(userObjectId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User not found");
+  }
+
+  const shop = await Shop.findById(shopObjectId);
+  if (!shop) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found");
+  }
+
+  // Check if the user already follows the shop
+  const isUserFollowingShop = user.followedShops?.some(
+    (id) => id.toString() === shopObjectId.toString()
+  );
+  const isShopFollowedByUser = shop.followers?.some(
+    (id) => id.toString() === userObjectId.toString()
+  );
+
+  // Data consistency validation
+  if (isUserFollowingShop !== isShopFollowedByUser) {
+    throw new ApiError(
+      httpStatus.CONFLICT,
+      "Data inconsistency detected between user and shop"
+    );
+  }
+
+  if (isUserFollowingShop) {
+    // Unfollow the shop
+    user.followedShops = user.followedShops?.filter(
+      (id) => id.toString() !== shopObjectId.toString()
+    );
+    shop.followers = shop.followers?.filter(
+      (id) => id.toString() !== userObjectId.toString()
+    );
+  } else {
+    // Follow the shop
+    user.followedShops = user.followedShops || [];
+    shop.followers = shop.followers || [];
+    user.followedShops.push(shopObjectId);
+    shop.followers.push(userObjectId);
+  }
+
+  // Save changes
+  await user.save();
+  await shop.save();
+
+  return {
+    isFollowed: !isUserFollowingShop,
+    user,
+    shop,
+  };
+};
+
 export const UserService = {
   createUser,
   getAllUsers,
@@ -149,4 +210,5 @@ export const UserService = {
   toggleUserDeletion,
   suspendVendor,
   getUserFollowedShops,
+  followShopToggle,
 };

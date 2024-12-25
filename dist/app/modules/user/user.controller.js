@@ -86,6 +86,18 @@ const getUserFollowedShops = (0, catchAsync_1.default)((req, res) => __awaiter(v
         data: result,
     });
 }));
+const toggleShopFollow = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { shopId } = req.params;
+    const { userId } = req.user;
+    const result = yield user_service_1.UserService.followShopToggle(shopId, userId);
+    const statusMessage = result.isFollowed ? "followed" : "unfollowed";
+    (0, sendResponse_1.default)(res, {
+        success: true,
+        statusCode: http_status_1.default.OK,
+        message: `Shop ${statusMessage} successfully`,
+        data: result,
+    });
+}));
 exports.UserController = {
     inserUserIntoDB,
     getAllUsersfromDb,
@@ -94,4 +106,5 @@ exports.UserController = {
     deleteUserfromDb,
     suspendVendor,
     getUserFollowedShops,
+    toggleShopFollow,
 };

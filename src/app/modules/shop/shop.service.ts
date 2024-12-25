@@ -1,4 +1,4 @@
-import { Shop, ShopFollower } from "./shop.model";
+import { Shop } from "./shop.model";
 import { Order } from "../order/order.model";
 import ApiError from "../../errors/ApiError";
 import httpStatus from "http-status";
@@ -57,54 +57,54 @@ const getShopOrderHistory = async (shopId: string, vendorId: string) => {
   return orders;
 };
 
-const followShop = async (userId: string, shopId: string) => {
-  // Check if shop exists
-  const shop = await Shop.findById(shopId);
-  if (!shop) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found.");
-  }
+// const followShop = async (userId: string, shopId: string) => {
+//   // Check if shop exists
+//   const shop = await Shop.findById(shopId);
+//   if (!shop) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "Shop not found.");
+//   }
 
-  // Check if already following
-  const isAlreadyFollowing = await ShopFollower.findOne({ userId, shopId });
-  if (isAlreadyFollowing) {
-    throw new ApiError(httpStatus.BAD_REQUEST, "Already following this shop.");
-  }
+//   // Check if already following
+//   const isAlreadyFollowing = await ShopFollower.findOne({ userId, shopId });
+//   if (isAlreadyFollowing) {
+//     throw new ApiError(httpStatus.BAD_REQUEST, "Already following this shop.");
+//   }
 
-  // Add the shop to the user's followedShops
-  await ShopFollower.create({ userId, shopId });
+//   // Add the shop to the user's followedShops
+//   await ShopFollower.create({ userId, shopId });
 
-  return {
-    message: `You are now following the shop ${shop.name}.`,
-  };
-};
+//   return {
+//     message: `You are now following the shop ${shop.name}.`,
+//   };
+// };
 
-const unfollowShop = async (userId: string, shopId: string) => {
-  // Check if the user is following the shop
-  const followRecord = await ShopFollower.findOne({ userId, shopId });
-  if (!followRecord) {
-    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found.");
-  }
+// const unfollowShop = async (userId: string, shopId: string) => {
+//   // Check if the user is following the shop
+//   const followRecord = await ShopFollower.findOne({ userId, shopId });
+//   if (!followRecord) {
+//     throw new ApiError(httpStatus.NOT_FOUND, "Shop not found.");
+//   }
 
-  // Remove the follow relationship
-  await ShopFollower.findByIdAndDelete(followRecord._id);
+//   // Remove the follow relationship
+//   await ShopFollower.findByIdAndDelete(followRecord._id);
 
-  return {
-    message: `You have unfollowed the shop.`,
-  };
-};
+//   return {
+//     message: `You have unfollowed the shop.`,
+//   };
+// };
 
-const getShopFollowers = async (shopId: string) => {
-  const followers = await ShopFollower.find({ shop: shopId })
-    .populate<{ user: IUser }>("user") // Explicitly set the type of 'user' to IUser
-    .exec(); // Adding exec() ensures it's properly executed
+// const getShopFollowers = async (shopId: string) => {
+//   const followers = await ShopFollower.find({ shop: shopId })
+//     .populate<{ user: IUser }>("user") // Explicitly set the type of 'user' to IUser
+//     .exec(); // Adding exec() ensures it's properly executed
 
-  return followers.map((follower) => ({
-    id: follower.user?._id,
-    name: follower.user?.name,
-    email: follower.user?.email,
-    profileImage: follower.user?.profileImage,
-  }));
-};
+//   return followers.map((follower) => ({
+//     id: follower.user?._id,
+//     name: follower.user?.name,
+//     email: follower.user?.email,
+//     profileImage: follower.user?.profileImage,
+//   }));
+// };
 
 const getSingleShopFromDb = async (shopId: string) => {
   const shopData = await Shop.findOne({ _id: shopId }).populate("products");
@@ -122,8 +122,8 @@ export const ShopServices = {
   getVendorShops,
   deleteShop,
   getShopOrderHistory,
-  followShop,
-  unfollowShop,
-  getShopFollowers,
+  // followShop,
+  // unfollowShop,
+  // getShopFollowers,
   getSingleShopFromDb,
 };

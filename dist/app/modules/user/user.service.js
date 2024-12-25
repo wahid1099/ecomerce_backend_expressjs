@@ -16,6 +16,8 @@ exports.UserService = void 0;
 const user_model_1 = require("./user.model");
 const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const http_status_1 = __importDefault(require("http-status"));
+const shop_model_1 = require("../shop/shop.model");
+const mongoose_1 = __importDefault(require("mongoose"));
 const createUser = (userData) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, username } = userData;
     // Check for duplicate email or username
@@ -125,6 +127,48 @@ const getUserFollowedShops = (userId) => __awaiter(void 0, void 0, void 0, funct
         description: record.shop.description,
     }));
 });
+const followShopToggle = (userId, shopId) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
+    // Convert string IDs to ObjectId
+    const userObjectId = new mongoose_1.default.Types.ObjectId(userId);
+    const shopObjectId = new mongoose_1.default.Types.ObjectId(shopId);
+    // Fetch user and shop documents
+    const user = yield user_model_1.User.findById(userObjectId);
+    if (!user) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "User not found");
+    }
+    const shop = yield shop_model_1.Shop.findById(shopObjectId);
+    if (!shop) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Shop not found");
+    }
+    // Check if the user already follows the shop
+    const isUserFollowingShop = (_a = user.followedShops) === null || _a === void 0 ? void 0 : _a.some((id) => id.toString() === shopObjectId.toString());
+    const isShopFollowedByUser = (_b = shop.followers) === null || _b === void 0 ? void 0 : _b.some((id) => id.toString() === userObjectId.toString());
+    // Data consistency validation
+    if (isUserFollowingShop !== isShopFollowedByUser) {
+        throw new ApiError_1.default(http_status_1.default.CONFLICT, "Data inconsistency detected between user and shop");
+    }
+    if (isUserFollowingShop) {
+        // Unfollow the shop
+        user.followedShops = (_c = user.followedShops) === null || _c === void 0 ? void 0 : _c.filter((id) => id.toString() !== shopObjectId.toString());
+        shop.followers = (_d = shop.followers) === null || _d === void 0 ? void 0 : _d.filter((id) => id.toString() !== userObjectId.toString());
+    }
+    else {
+        // Follow the shop
+        user.followedShops = user.followedShops || [];
+        shop.followers = shop.followers || [];
+        user.followedShops.push(shopObjectId);
+        shop.followers.push(userObjectId);
+    }
+    // Save changes
+    yield user.save();
+    yield shop.save();
+    return {
+        isFollowed: !isUserFollowingShop,
+        user,
+        shop,
+    };
+});
 exports.UserService = {
     createUser,
     getAllUsers,
@@ -133,4 +177,5 @@ exports.UserService = {
     toggleUserDeletion,
     suspendVendor,
     getUserFollowedShops,
+    followShopToggle,
 };

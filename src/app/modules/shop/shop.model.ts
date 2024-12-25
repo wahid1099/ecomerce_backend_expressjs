@@ -2,41 +2,10 @@ import mongoose, { Schema, model } from "mongoose";
 import { IUser } from "../user/user.interface";
 import { IProduct } from "../products/product.interface";
 import { IOrder } from "../order/order.interface";
-import { IShop, IShopFollower } from "./shop.interface"; // Assuming you have a separate interface file for ShopFollower
+import { IShop } from "./shop.interface"; // Assuming you have a separate interface file for ShopFollower
 import { User } from "../user/user.model"; // Import User model
 
 // Define the ShopFollower schema
-const ShopFollowerSchema = new Schema<IShopFollower>(
-  {
-    user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    shop: {
-      type: Schema.Types.ObjectId,
-      ref: "Shop",
-      required: true,
-    },
-    isBlacklisted: {
-      type: Boolean,
-      default: false,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-  },
-  {
-    timestamps: false, // Explicitly handle createdAt, no updatedAt needed
-    _id: true,
-  }
-);
-
-export const ShopFollower = model<IShopFollower>(
-  "ShopFollower",
-  ShopFollowerSchema
-);
 
 // Define the Shop schema
 const ShopSchema = new Schema<IShop>(
@@ -86,12 +55,6 @@ const ShopSchema = new Schema<IShop>(
       {
         type: Schema.Types.ObjectId,
         ref: "User",
-      },
-    ],
-    shopFollowers: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "ShopFollower",
       },
     ],
   },

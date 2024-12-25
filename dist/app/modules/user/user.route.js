@@ -15,6 +15,7 @@ const router = express_1.default.Router();
 router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin), user_controller_1.UserController.getAllUsersfromDb);
 // Create a new user (Admin only)
 router.post("/create-user", (0, validaterequest_1.default)(user_validation_1.UserValidationSchema.UserSchemaCreate), user_controller_1.UserController.inserUserIntoDB);
+router.post("/toggle-fllowshop", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), user_controller_1.UserController.toggleShopFollow);
 // Get user profile (Admin, Customer, or Vendor)
 router.get("/me", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), user_controller_1.UserController.getMyprofilefromDb);
 // Get followed shops (only for Customers)

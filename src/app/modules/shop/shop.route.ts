@@ -19,11 +19,11 @@ router.post(
 router.get("/", Auth(UserRole.Admin), ShopController.getVendorShops);
 
 // Shop-specific actions
-router.get(
-  "/:shopId/followers",
-  Auth(UserRole.Admin, UserRole.Vendor),
-  ShopController.getShopFollowers
-);
+// router.get(
+//   "/:shopId/followers",
+//   Auth(UserRole.Admin, UserRole.Vendor),
+//   ShopController.getShopFollowers
+// );
 
 router.get(
   "/:shopId/orders",
@@ -31,17 +31,17 @@ router.get(
   ShopController.getShopOrderHistory
 );
 
-router.post(
-  "/:shopId/follow",
-  Auth(UserRole.Customer, UserRole.Vendor),
-  ShopController.followShop
-);
+// router.post(
+//   "/:shopId/follow",
+//   Auth(UserRole.Customer, UserRole.Vendor),
+//   ShopController.followShop
+// );
 
-router.post(
-  "/:shopId/unfollow",
-  Auth(UserRole.Customer, UserRole.Vendor),
-  ShopController.unfollowShop
-);
+// router.post(
+//   "/:shopId/unfollow",
+//   Auth(UserRole.Customer, UserRole.Vendor),
+//   ShopController.unfollowShop
+// );
 
 // Get a single shop
 router.get("/:shopId", ShopController.getSingleShopData);

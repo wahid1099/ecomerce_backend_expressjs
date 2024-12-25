@@ -1,8 +1,4 @@
-import { Shop } from "./../shop/shop.model";
-import { IPayment } from "../Payments/payment.interface";
-import { IShop, IShopFollower } from "../shop/shop.interface";
-import { IOrder } from "../order/order.interface";
-import { IReview } from "../reviews/review.interface";
+
 import { Model } from "mongoose";
 
 import { Types } from "mongoose";

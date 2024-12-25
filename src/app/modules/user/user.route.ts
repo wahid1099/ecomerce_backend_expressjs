@@ -17,6 +17,11 @@ router.post(
   UserController.inserUserIntoDB
 );
 
+router.post(
+  "/toggle-fllowshop",
+  Auth(UserRole.Customer, UserRole.Vendor),
+  UserController.toggleShopFollow
+);
 // Get user profile (Admin, Customer, or Vendor)
 router.get(
   "/me",

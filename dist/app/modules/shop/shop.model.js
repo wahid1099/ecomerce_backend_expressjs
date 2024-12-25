@@ -9,34 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Shop = exports.ShopFollower = void 0;
+exports.Shop = void 0;
 const mongoose_1 = require("mongoose");
 const user_model_1 = require("../user/user.model"); // Import User model
 // Define the ShopFollower schema
-const ShopFollowerSchema = new mongoose_1.Schema({
-    user: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-    },
-    shop: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Shop",
-        required: true,
-    },
-    isBlacklisted: {
-        type: Boolean,
-        default: false,
-    },
-    createdAt: {
-        type: Date,
-        default: Date.now,
-    },
-}, {
-    timestamps: false, // Explicitly handle createdAt, no updatedAt needed
-    _id: true,
-});
-exports.ShopFollower = (0, mongoose_1.model)("ShopFollower", ShopFollowerSchema);
 // Define the Shop schema
 const ShopSchema = new mongoose_1.Schema({
     name: {
@@ -84,12 +60,6 @@ const ShopSchema = new mongoose_1.Schema({
         {
             type: mongoose_1.Schema.Types.ObjectId,
             ref: "User",
-        },
-    ],
-    shopFollowers: [
-        {
-            type: mongoose_1.Schema.Types.ObjectId,
-            ref: "ShopFollower",
         },
     ],
 }, {

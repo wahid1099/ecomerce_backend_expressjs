@@ -13,12 +13,4 @@ export type IShop = {
   products?: Types.ObjectId[]; // Optional
   orders?: Types.ObjectId[]; // shop orders
   followers?: Types.ObjectId[]; // Optional
-  shopFollowers?: Types.ObjectId[]; // Optional
-};
-
-export type IShopFollower = {
-  user?: Types.ObjectId; // Populated if needed
-  shop?: Types.ObjectId; // Populated if needed
-  isBlacklisted?: boolean;
-  createdAt: Date;
 };

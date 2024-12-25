@@ -80,44 +80,44 @@ const getShopOrderHistory = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-const followShop = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user?.id; // Assuming user ID is in the request
-  const { shopId } = req.params;
+// const followShop = catchAsync(async (req: Request, res: Response) => {
+//   const userId = req.user?.id; // Assuming user ID is in the request
+//   const { shopId } = req.params;
 
-  const result = await ShopServices.followShop(userId, shopId);
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Order history fetched successfully!",
-    data: result,
-  });
-});
+//   const result = await ShopServices.followShop(userId, shopId);
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Order history fetched successfully!",
+//     data: result,
+//   });
+// });
 
-const unfollowShop = catchAsync(async (req: Request, res: Response) => {
-  const userId = req.user?.id; // Assuming user ID is in the request
-  const { shopId } = req.params;
+// const unfollowShop = catchAsync(async (req: Request, res: Response) => {
+//   const userId = req.user?.id; // Assuming user ID is in the request
+//   const { shopId } = req.params;
 
-  const result = await ShopServices.unfollowShop(userId, shopId);
+//   const result = await ShopServices.unfollowShop(userId, shopId);
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Order history fetched successfully!",
-    data: result,
-  });
-});
-const getShopFollowers = catchAsync(async (req: Request, res: Response) => {
-  const { shopId } = req.params;
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Order history fetched successfully!",
+//     data: result,
+//   });
+// });
+// const getShopFollowers = catchAsync(async (req: Request, res: Response) => {
+//   const { shopId } = req.params;
 
-  const result = await ShopServices.getShopFollowers(shopId);
+//   const result = await ShopServices.getShopFollowers(shopId);
 
-  sendResponse(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: "Order history fetched successfully!",
-    data: result,
-  });
-});
+//   sendResponse(res, {
+//     statusCode: httpStatus.OK,
+//     success: true,
+//     message: "Order history fetched successfully!",
+//     data: result,
+//   });
+// });
 
 export const ShopController = {
   createShop,
@@ -125,8 +125,8 @@ export const ShopController = {
   getVendorShops,
   deleteShop,
   getShopOrderHistory,
-  followShop,
-  unfollowShop,
-  getShopFollowers,
+  // followShop,
+  // unfollowShop,
+  // getShopFollowers,
   getSingleShopData,
 };

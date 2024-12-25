@@ -16,10 +16,22 @@ router.post("/", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, vali
 // Get all shops for the vendor
 router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin), shop_controller_1.ShopController.getVendorShops);
 // Shop-specific actions
-router.get("/:shopId/followers", (0, Auth_1.default)(user_interface_1.UserRole.Admin, user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.getShopFollowers);
+// router.get(
+//   "/:shopId/followers",
+//   Auth(UserRole.Admin, UserRole.Vendor),
+//   ShopController.getShopFollowers
+// );
 router.get("/:shopId/orders", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.getShopOrderHistory);
-router.post("/:shopId/follow", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.followShop);
-router.post("/:shopId/unfollow", (0, Auth_1.default)(user_interface_1.UserRole.Customer, user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.unfollowShop);
+// router.post(
+//   "/:shopId/follow",
+//   Auth(UserRole.Customer, UserRole.Vendor),
+//   ShopController.followShop
+// );
+// router.post(
+//   "/:shopId/unfollow",
+//   Auth(UserRole.Customer, UserRole.Vendor),
+//   ShopController.unfollowShop
+// );
 // Get a single shop
 router.get("/:shopId", shop_controller_1.ShopController.getSingleShopData);
 // Update shop details
