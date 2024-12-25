@@ -156,6 +156,7 @@ const followShopToggle = async (userId: string, shopId: string) => {
 
   // Fetch user and shop documents
   const user = await User.findById(userObjectId);
+
   if (!user) {
     throw new ApiError(httpStatus.NOT_FOUND, "User not found");
   }

@@ -89,8 +89,9 @@ const getUserFollowedShops = catchAsync(async (req: Request, res: Response) => {
 
 const toggleShopFollow = catchAsync(async (req: Request, res: Response) => {
   const { shopId } = req.params;
-  const { userId } = req.user;
-  const result = await UserService.followShopToggle(shopId, userId);
+  const userId = req.user?._id;
+
+  const result = await UserService.followShopToggle(userId, shopId);
   const statusMessage = result.isFollowed ? "followed" : "unfollowed";
 
   sendResponse(res, {

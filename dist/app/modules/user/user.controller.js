@@ -87,9 +87,10 @@ const getUserFollowedShops = (0, catchAsync_1.default)((req, res) => __awaiter(v
     });
 }));
 const toggleShopFollow = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _b;
     const { shopId } = req.params;
-    const { userId } = req.user;
-    const result = yield user_service_1.UserService.followShopToggle(shopId, userId);
+    const userId = (_b = req.user) === null || _b === void 0 ? void 0 : _b._id;
+    const result = yield user_service_1.UserService.followShopToggle(userId, shopId);
     const statusMessage = result.isFollowed ? "followed" : "unfollowed";
     (0, sendResponse_1.default)(res, {
         success: true,
