@@ -12,12 +12,3 @@ export type IPayment = {
   updatedAt: Date;
 };
 
-export type ICoupon = {
-  id: string;
-  code: string;
-  discount: number;
-  validFrom: Date;
-  validUntil: Date;
-  createdAt: Date;
-  updatedAt: Date;
-};
