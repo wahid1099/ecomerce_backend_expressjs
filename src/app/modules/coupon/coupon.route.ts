@@ -13,8 +13,8 @@ router.get(
   couponController.getCouponById
 );
 
-router.post(
-  "/apply-coupon/:couponId",
+router.get(
+  "/validate-coupon/:couponId",
   Auth(UserRole.Customer, UserRole.Admin, UserRole.Vendor),
   couponController.validateCoupon
 );
