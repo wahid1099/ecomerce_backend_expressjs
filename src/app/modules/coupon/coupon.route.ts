@@ -14,6 +14,12 @@ router.get(
 );
 
 router.post(
+  "/apply-coupon/:couponId",
+  Auth(UserRole.Customer, UserRole.Admin, UserRole.Vendor),
+  couponController.validateCoupon
+);
+
+router.post(
   "/create-coupon",
   Auth(UserRole.Admin, UserRole.Vendor),
   couponController.createCoupon

@@ -59,10 +59,23 @@ const deleteCoupon = async (couponId: string) => {
   return coupon;
 };
 
+const validateCoupon = async (code: string) => {
+  const coupon = await Coupon.findOne({ code });
+  if (!coupon) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Invalid coupon code");
+  }
+  const now = new Date();
+  if (now < coupon.validFrom || now > coupon.validUntil) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Coupon code is not valid");
+  }
+  return coupon;
+};
+
 export const couponService = {
   createCoupon,
   getCoupons,
   getCouponById,
   deleteCoupon,
   updateCoupon,
+  validateCoupon,
 };

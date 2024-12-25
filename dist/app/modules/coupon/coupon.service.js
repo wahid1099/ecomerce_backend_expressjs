@@ -58,10 +58,22 @@ const deleteCoupon = (couponId) => __awaiter(void 0, void 0, void 0, function* (
     yield coupon_model_1.default.deleteOne({ _id: couponId });
     return coupon;
 });
+const validateCoupon = (code) => __awaiter(void 0, void 0, void 0, function* () {
+    const coupon = yield coupon_model_1.default.findOne({ code });
+    if (!coupon) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Invalid coupon code");
+    }
+    const now = new Date();
+    if (now < coupon.validFrom || now > coupon.validUntil) {
+        throw new ApiError_1.default(http_status_1.default.BAD_REQUEST, "Coupon code is not valid");
+    }
+    return coupon;
+});
 exports.couponService = {
     createCoupon,
     getCoupons,
     getCouponById,
     deleteCoupon,
     updateCoupon,
+    validateCoupon,
 };

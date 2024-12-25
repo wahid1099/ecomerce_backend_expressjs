@@ -60,10 +60,22 @@ const deleteCoupon = catchAsync(async (req, res) => {
   });
 });
 
+const validateCoupon = catchAsync(async (req, res) => {
+  const { code } = req.params;
+  const result = await couponService.validateCoupon(code);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Coupon validated successfully",
+    data: result,
+  });
+});
 export const couponController = {
   createCoupon,
   getCoupons,
   updateCoupon,
   deleteCoupon,
   getCouponById,
+  validateCoupon,
 };
