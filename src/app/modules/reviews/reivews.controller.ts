@@ -2,6 +2,7 @@ import catchAsync from "../../../shared/catchAsync";
 import sendResponse from "../../../shared/sendResponse";
 import { Request, Response } from "express";
 import { ReviewService } from "./reviews.service";
+import httpStatus from "http-status";
 
 const createReviewController = catchAsync(
   async (req: Request, res: Response) => {
@@ -18,11 +19,12 @@ const createReviewController = catchAsync(
 
 const getAllReviews = catchAsync(async (req: Request, res: Response) => {
   const result = await ReviewService.getAllReviewsFromDb();
+  console.log(result);
 
   sendResponse(res, {
-    statusCode: httpStatus.CREATED,
+    statusCode: httpStatus.OK,
     success: true,
-    message: "Review created successfully!",
+    message: "Review fetched successfully!",
     data: result,
   });
 });

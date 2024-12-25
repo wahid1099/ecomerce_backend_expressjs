@@ -47,6 +47,7 @@ const getAllReviewsFromDb = async () => {
     "order",
     "product",
   ]);
+
   if (!reviews.length) {
     throw new ApiError(httpStatus.NOT_FOUND, "No Reviews Found!");
   }

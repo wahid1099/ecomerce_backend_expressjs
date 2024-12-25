@@ -16,10 +16,11 @@ exports.ReivewController = void 0;
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const reviews_service_1 = require("./reviews.service");
+const http_status_1 = __importDefault(require("http-status"));
 const createReviewController = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield reviews_service_1.ReviewService.createReviewIntoDb(req.body);
     (0, sendResponse_1.default)(res, {
-        statusCode: httpStatus.CREATED,
+        statusCode: http_status_1.default.CREATED,
         success: true,
         message: "Review created successfully!",
         data: result,
@@ -27,10 +28,11 @@ const createReviewController = (0, catchAsync_1.default)((req, res) => __awaiter
 }));
 const getAllReviews = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield reviews_service_1.ReviewService.getAllReviewsFromDb();
+    console.log(result);
     (0, sendResponse_1.default)(res, {
-        statusCode: httpStatus.CREATED,
+        statusCode: http_status_1.default.OK,
         success: true,
-        message: "Review created successfully!",
+        message: "Review fetched successfully!",
         data: result,
     });
 }));
