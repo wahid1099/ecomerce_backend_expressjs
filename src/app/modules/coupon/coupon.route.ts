@@ -14,8 +14,8 @@ router.get(
 );
 
 router.get(
-  "/validate-coupon/:couponId",
-  Auth(UserRole.Customer, UserRole.Admin, UserRole.Vendor),
+  "/validate-coupon/:code",
+  //   Auth(UserRole.Customer, UserRole.Admin, UserRole.Vendor),
   couponController.validateCoupon
 );
 
