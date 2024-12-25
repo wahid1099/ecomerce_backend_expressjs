@@ -46,7 +46,7 @@ const UserSchemaUpdate = z.object({
     .max(100, { message: "Password must be less than 100 characters" })
     .optional(),
   role: z
-    .enum(["admin", "vendor", "customer"], { message: "Invalid role" })
+    .enum(["Admin", "Vendor", "Customer"], { message: "Invalid role" })
     .optional(),
   profileImage: z
     .string()
