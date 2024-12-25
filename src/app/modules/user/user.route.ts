@@ -47,8 +47,8 @@ router.patch(
 );
 
 // Delete a user (only for Admin)
-router.delete(
-  "/delete-user/:userId", // Fixed the route here by adding the missing "/"
+router.patch(
+  "/deactivate-user/:userId", // Fixed the route here by adding the missing "/"
   Auth(UserRole.Admin),
   UserController.deleteUserfromDb
 );

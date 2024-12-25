@@ -24,6 +24,6 @@ router.patch("/update-my-profile/:userId", (0, Auth_1.default)(user_interface_1.
 // Suspend/Unsuspend a vendor (only for Admin)
 router.patch("/suspend-vendor/:vendorId", (0, Auth_1.default)(user_interface_1.UserRole.Admin), user_controller_1.UserController.suspendVendor);
 // Delete a user (only for Admin)
-router.delete("/delete-user/:userId", // Fixed the route here by adding the missing "/"
+router.patch("/deactivate-user/:userId", // Fixed the route here by adding the missing "/"
 (0, Auth_1.default)(user_interface_1.UserRole.Admin), user_controller_1.UserController.deleteUserfromDb);
 exports.userRoutes = router;
