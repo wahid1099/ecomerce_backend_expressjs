@@ -39,3 +39,4 @@ router.patch("/:shopId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), 
 // Delete a shop
 router.delete("/:shopId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.deleteShop);
 exports.ShopRoutes = router;
+//tt
