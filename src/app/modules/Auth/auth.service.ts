@@ -150,6 +150,9 @@ const resetPassword = async (
   token: string,
   payload: { id: string; password: string }
 ) => {
+  if (!token) {
+    throw new ApiError(httpStatus.FORBIDDEN, "Token not provided!");
+  }
   const decodedData = jwtHelpers.verifyToken(
     token,
     config.jwt.reset_pass_secret as Secret

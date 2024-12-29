@@ -129,6 +129,9 @@ const forgotPassword = (payload) => __awaiter(void 0, void 0, void 0, function* 
     return { message: "Password reset link sent to your email." };
 });
 const resetPassword = (token, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    if (!token) {
+        throw new ApiError_1.default(http_status_1.default.FORBIDDEN, "Token not provided!");
+    }
     const decodedData = jwthelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.reset_pass_secret);
     if (!decodedData) {
         throw new ApiError_1.default(http_status_1.default.FORBIDDEN, "Invalid reset password token!");
