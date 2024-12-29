@@ -80,6 +80,16 @@ const getShopOrderHistory = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getAllShops = catchAsync(async (req: Request, res: Response) => {
+  const result = await ShopServices.getAllShopsFromDb();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "All shops fetched successfully!",
+    data: result,
+  });
+});
+
 // const followShop = catchAsync(async (req: Request, res: Response) => {
 //   const userId = req.user?.id; // Assuming user ID is in the request
 //   const { shopId } = req.params;
@@ -125,6 +135,7 @@ export const ShopController = {
   getVendorShops,
   deleteShop,
   getShopOrderHistory,
+  getAllShops,
   // followShop,
   // unfollowShop,
   // getShopFollowers,

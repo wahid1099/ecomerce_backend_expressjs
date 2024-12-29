@@ -15,8 +15,8 @@ router.post(
   ShopController.createShop
 );
 
-// Get all shops for the vendor
-router.get("/", Auth(UserRole.Admin), ShopController.getVendorShops);
+// Get all shops for the admin
+router.get("/", Auth(UserRole.Admin), ShopController.getAllShops);
 
 // Shop-specific actions
 // router.get(

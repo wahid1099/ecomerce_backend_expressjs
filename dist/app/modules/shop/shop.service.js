@@ -90,6 +90,10 @@ const getSingleShopFromDb = (shopId) => __awaiter(void 0, void 0, void 0, functi
     }
     return shopData;
 });
+const getAllShopsFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
+    const shopData = yield shop_model_1.Shop.find().populate("products");
+    return shopData;
+});
 exports.ShopServices = {
     createShop,
     updateShop,
@@ -100,4 +104,5 @@ exports.ShopServices = {
     // unfollowShop,
     // getShopFollowers,
     getSingleShopFromDb,
+    getAllShopsFromDb,
 };

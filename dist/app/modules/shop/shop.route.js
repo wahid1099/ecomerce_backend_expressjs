@@ -13,8 +13,8 @@ const shop_validation_1 = require("./shop.validation");
 const router = express_1.default.Router();
 // Create a new shop
 router.post("/", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(shop_validation_1.ShopValidationSchema.createShopSchema), shop_controller_1.ShopController.createShop);
-// Get all shops for the vendor
-router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin), shop_controller_1.ShopController.getVendorShops);
+// Get all shops for the admin
+router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin), shop_controller_1.ShopController.getAllShops);
 // Shop-specific actions
 // router.get(
 //   "/:shopId/followers",

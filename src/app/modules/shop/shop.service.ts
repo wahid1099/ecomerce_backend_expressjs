@@ -116,6 +116,11 @@ const getSingleShopFromDb = async (shopId: string) => {
   return shopData;
 };
 
+const getAllShopsFromDb = async () => {
+  const shopData = await Shop.find().populate("products");
+  return shopData;
+};
+
 export const ShopServices = {
   createShop,
   updateShop,
@@ -126,4 +131,5 @@ export const ShopServices = {
   // unfollowShop,
   // getShopFollowers,
   getSingleShopFromDb,
+  getAllShopsFromDb,
 };
