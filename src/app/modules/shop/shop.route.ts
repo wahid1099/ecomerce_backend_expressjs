@@ -14,7 +14,7 @@ router.post(
   validateRequest(ShopValidationSchema.createShopSchema),
   ShopController.createShop
 );
-router.post(
+router.patch(
   "/blacklist-shop/:shopId",
   Auth(UserRole.Admin),
   ShopController.BlaskListShop
