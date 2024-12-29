@@ -15,7 +15,7 @@ router.post(
   ShopController.createShop
 );
 router.post(
-  "/blacklist-shop/shopId",
+  "/blacklist-shop/:shopId",
   Auth(UserRole.Admin),
   ShopController.BlaskListShop
 );
