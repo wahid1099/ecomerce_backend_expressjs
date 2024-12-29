@@ -94,6 +94,22 @@ const getAllShopsFromDb = () => __awaiter(void 0, void 0, void 0, function* () {
     const shopData = yield shop_model_1.Shop.find().populate("products");
     return shopData;
 });
+const BlackListShopInDb = (vendorId) => __awaiter(void 0, void 0, void 0, function* () {
+    // Check if the user exists and is a vendor
+    const shop = yield shop_model_1.Shop.findById(vendorId);
+    if (!shop) {
+        throw new ApiError_1.default(http_status_1.default.NOT_FOUND, "Shop not found");
+    }
+    // Toggle the `isSuspended` status
+    if (shop.isBlacklisted) {
+        shop.isBlacklisted = false; // Unsuspend the vendor
+    }
+    else {
+        shop.isBlacklisted = true; // Suspend the vendor
+    }
+    yield shop.save();
+    return shop;
+});
 exports.ShopServices = {
     createShop,
     updateShop,
@@ -105,4 +121,5 @@ exports.ShopServices = {
     // getShopFollowers,
     getSingleShopFromDb,
     getAllShopsFromDb,
+    BlackListShopInDb,
 };

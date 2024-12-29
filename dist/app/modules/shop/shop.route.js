@@ -13,15 +13,23 @@ const shop_validation_1 = require("./shop.validation");
 const router = express_1.default.Router();
 // Create a new shop
 router.post("/", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(shop_validation_1.ShopValidationSchema.createShopSchema), shop_controller_1.ShopController.createShop);
+router.post("/blacklist-shop/shopId", (0, Auth_1.default)(user_interface_1.UserRole.Admin), shop_controller_1.ShopController.BlaskListShop);
 // Get all shops for the admin
 router.get("/", (0, Auth_1.default)(user_interface_1.UserRole.Admin), shop_controller_1.ShopController.getAllShops);
+router.get("/:shopId/orders", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.getShopOrderHistory);
+// Get a single shop
+router.get("/:shopId", shop_controller_1.ShopController.getSingleShopData);
+// Update shop details
+router.patch("/:shopId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(shop_validation_1.ShopValidationSchema.updateShopSchema), shop_controller_1.ShopController.updateShop);
+// Delete a shop
+router.delete("/:shopId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.deleteShop);
+exports.ShopRoutes = router;
 // Shop-specific actions
 // router.get(
 //   "/:shopId/followers",
 //   Auth(UserRole.Admin, UserRole.Vendor),
 //   ShopController.getShopFollowers
 // );
-router.get("/:shopId/orders", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.getShopOrderHistory);
 // router.post(
 //   "/:shopId/follow",
 //   Auth(UserRole.Customer, UserRole.Vendor),
@@ -32,11 +40,3 @@ router.get("/:shopId/orders", (0, Auth_1.default)(user_interface_1.UserRole.Vend
 //   Auth(UserRole.Customer, UserRole.Vendor),
 //   ShopController.unfollowShop
 // );
-// Get a single shop
-router.get("/:shopId", shop_controller_1.ShopController.getSingleShopData);
-// Update shop details
-router.patch("/:shopId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), (0, validaterequest_1.default)(shop_validation_1.ShopValidationSchema.updateShopSchema), shop_controller_1.ShopController.updateShop);
-// Delete a shop
-router.delete("/:shopId", (0, Auth_1.default)(user_interface_1.UserRole.Vendor), shop_controller_1.ShopController.deleteShop);
-exports.ShopRoutes = router;
-//tt

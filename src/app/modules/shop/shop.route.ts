@@ -14,34 +14,20 @@ router.post(
   validateRequest(ShopValidationSchema.createShopSchema),
   ShopController.createShop
 );
+router.post(
+  "/blacklist-shop/shopId",
+  Auth(UserRole.Admin),
+  ShopController.BlaskListShop
+);
 
 // Get all shops for the admin
 router.get("/", Auth(UserRole.Admin), ShopController.getAllShops);
-
-// Shop-specific actions
-// router.get(
-//   "/:shopId/followers",
-//   Auth(UserRole.Admin, UserRole.Vendor),
-//   ShopController.getShopFollowers
-// );
 
 router.get(
   "/:shopId/orders",
   Auth(UserRole.Vendor),
   ShopController.getShopOrderHistory
 );
-
-// router.post(
-//   "/:shopId/follow",
-//   Auth(UserRole.Customer, UserRole.Vendor),
-//   ShopController.followShop
-// );
-
-// router.post(
-//   "/:shopId/unfollow",
-//   Auth(UserRole.Customer, UserRole.Vendor),
-//   ShopController.unfollowShop
-// );
 
 // Get a single shop
 router.get("/:shopId", ShopController.getSingleShopData);
@@ -59,4 +45,20 @@ router.delete("/:shopId", Auth(UserRole.Vendor), ShopController.deleteShop);
 
 export const ShopRoutes = router;
 
-//tt
+// Shop-specific actions
+// router.get(
+//   "/:shopId/followers",
+//   Auth(UserRole.Admin, UserRole.Vendor),
+//   ShopController.getShopFollowers
+// );
+// router.post(
+//   "/:shopId/follow",
+//   Auth(UserRole.Customer, UserRole.Vendor),
+//   ShopController.followShop
+// );
+
+// router.post(
+//   "/:shopId/unfollow",
+//   Auth(UserRole.Customer, UserRole.Vendor),
+//   ShopController.unfollowShop
+// );

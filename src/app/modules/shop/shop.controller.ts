@@ -129,6 +129,19 @@ const getAllShops = catchAsync(async (req: Request, res: Response) => {
 //   });
 // });
 
+const BlaskListShop = catchAsync(async (req: Request, res: Response) => {
+  const { shopId } = req.params;
+
+  const result = await ShopServices.BlackListShopInDb(shopId);
+
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "Shop blocked successfully!",
+    data: result,
+  });
+});
+
 export const ShopController = {
   createShop,
   updateShop,
@@ -140,4 +153,5 @@ export const ShopController = {
   // unfollowShop,
   // getShopFollowers,
   getSingleShopData,
+  BlaskListShop,
 };

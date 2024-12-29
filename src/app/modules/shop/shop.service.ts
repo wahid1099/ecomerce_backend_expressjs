@@ -121,6 +121,26 @@ const getAllShopsFromDb = async () => {
   return shopData;
 };
 
+const BlackListShopInDb = async (vendorId: string) => {
+  // Check if the user exists and is a vendor
+  const shop = await Shop.findById(vendorId);
+
+  if (!shop) {
+    throw new ApiError(httpStatus.NOT_FOUND, "Shop not found");
+  }
+
+  // Toggle the `isSuspended` status
+  if (shop.isBlacklisted) {
+    shop.isBlacklisted = false; // Unsuspend the vendor
+  } else {
+    shop.isBlacklisted = true; // Suspend the vendor
+  }
+
+  await shop.save();
+
+  return shop;
+};
+
 export const ShopServices = {
   createShop,
   updateShop,
@@ -132,4 +152,5 @@ export const ShopServices = {
   // getShopFollowers,
   getSingleShopFromDb,
   getAllShopsFromDb,
+  BlackListShopInDb,
 };
