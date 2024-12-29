@@ -119,11 +119,27 @@ const forgotPassword = async (payload: { email: string }) => {
   await emailSender(
     user.email,
     `
-      <div>
-        <p>Dear User,</p>
-        <p>Your password reset link:</p>
-        <a href="${resetPassLink}">Reset Password</a>
+     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; background-color: #f9f9f9; padding: 20px;">
+  <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);">
+    <div style="background-color: #4f46e5; color: #ffffff; padding: 20px; text-align: center;">
+      <h1 style="margin: 0; font-size: 24px;">Password Reset Request</h1>
+    </div>
+    <div style="padding: 20px;">
+      <p style="margin: 0 0 10px;">Dear User,</p>
+      <p style="margin: 0 0 20px;">We received a request to reset your password. You can reset it by clicking the button below:</p>
+      <div style="text-align: center; margin: 20px 0;">
+        <a href="${resetPassLink}" style="text-decoration: none; background-color: #4f46e5; color: #ffffff; padding: 12px 20px; border-radius: 5px; font-weight: bold; display: inline-block;">Reset Password</a>
       </div>
+      <p style="margin: 0 0 10px;">If you didn't request this change, you can safely ignore this email. Your password will remain the same.</p>
+      <p style="margin: 20px 0 0;">Best regards,</p>
+      <p style="margin: 0;">BD SHOP Team</p>
+    </div>
+    <div style="background-color: #f3f4f6; color: #6b7280; padding: 10px 20px; text-align: center; font-size: 12px;">
+      <p style="margin: 0;">© 2024 BD SHOP. All rights reserved.</p>
+    </div>
+  </div>
+</div>
+
     `
   );
 
