@@ -104,7 +104,7 @@ const getAllProductsForAdmin = catchAsync(
 );
 
 const browseProducts = catchAsync(async (req: Request, res: Response) => {
-  const filters = req.query; // Extract query params for filtering
+  const filters = req.query;
   const paginationOptions = paginationHelper.calculatePagination(req.query);
   const { data, totalItems, totalPages } =
     await ProductService.getPaginatedProducts(filters, paginationOptions);
@@ -112,7 +112,7 @@ const browseProducts = catchAsync(async (req: Request, res: Response) => {
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: "All products fetched successfully for Admin!",
+    message: "All products fetched successfully for user!",
     data: data,
     pagination: {
       totalItems,

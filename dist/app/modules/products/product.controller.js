@@ -104,13 +104,13 @@ const getAllProductsForAdmin = (0, catchAsync_1.default)((req, res) => __awaiter
     });
 }));
 const browseProducts = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const filters = req.query; // Extract query params for filtering
+    const filters = req.query;
     const paginationOptions = paginationHelper_1.paginationHelper.calculatePagination(req.query);
     const { data, totalItems, totalPages } = yield product_service_1.ProductService.getPaginatedProducts(filters, paginationOptions);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_1.default.OK,
         success: true,
-        message: "All products fetched successfully for Admin!",
+        message: "All products fetched successfully for user!",
         data: data,
         pagination: {
             totalItems,
