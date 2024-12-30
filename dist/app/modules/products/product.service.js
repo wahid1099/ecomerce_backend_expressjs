@@ -60,8 +60,18 @@ const getVendorProducts = (shopID) => __awaiter(void 0, void 0, void 0, function
 // Get product details by ID
 const getProductById = (productId) => __awaiter(void 0, void 0, void 0, function* () {
     const product = yield product_model_1.Product.findById(productId).populate([
-        "shop",
-        "reviews",
+        {
+            path: "shop", // Populates the shop field
+        },
+        {
+            path: "reviews", // Populates the reviews field
+            populate: [
+                {
+                    path: "user", // Populates the user inside each review
+                    select: "name image", // Selects only name and image fields of the user
+                },
+            ],
+        },
     ]);
     return product;
 });
